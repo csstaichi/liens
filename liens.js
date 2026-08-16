@@ -43,7 +43,7 @@ const DICO = {
   // Thème AVERTISSEMENT — affiché en bas de la page ressources.
   // POURQUOI il est ici et non dans le HTML : c'est un texte, il suit la
   // même règle que tous les autres.
-  avertissement_ressources: "Ces sites sont extérieurs à l'association. Certains ne sont plus mis à jour et peuvent ne pas refléter l'évolution des connaissances ou des doctrines.",
+  avertissement_ressources: "Ces contenus appartiennent à leurs auteurs, cités sous chaque titre, et restent leur propriété. Ils sont extérieurs à l'association. Certains ne sont plus mis à jour et peuvent ne pas refléter l'évolution des connaissances ou des doctrines.",
 
   // Thème PIED — mention de bas de page.
   pied_mention: "Association CSS Moorea Tahiti — depuis 2009",
@@ -198,84 +198,91 @@ const LIENS = {
     url: "https://www.csstahitimoorea.org/postures-mcn-can10"
   },
 
-  // --- Ressources externes. Les libellés et précisions ci-dessous sont
-  // tirés du titre réel de chaque page, relevé en la chargeant : aucune
-  // description n'est inventée. Les neuf adresses ont répondu en HTTP 200.
+  // --- Ressources externes.
+  // Le libellé porte le titre de l'oeuvre, la précision porte son auteur.
+  // POURQUOI ce couple : ces contenus ne sont pas ceux de l'association,
+  // ils appartiennent à leurs auteurs. Afficher le nom de l'auteur sous le
+  // titre, c'est le créditer à l'endroit où l'on renvoie vers lui, et non
+  // seulement dans un avertissement que personne ne lit.
+  // Titres et auteurs fournis par l'association, non déduits.
 
   r_integral: {
     icone: "actualites",
-    libelle: "Integral Taichi",
-    precision: "Article d'introduction",
+    libelle: "Integral Taichi Intro",
+    precision: "Master Hang Truong",
     url: "https://integral-taichi.blogspot.com/2010/11/integral-taichi-intro1.html"
   },
 
   r_happy50: {
     icone: "globe",
-    libelle: "Bien vieillir après 50 ans",
-    precision: "Santé, nutrition, bien-être",
+    libelle: "La vie après 50 ans",
+    precision: "Ralph Maamaatuaiahutapu",
     url: "https://happy-50plus.com/"
   },
 
+  // Le titre fourni, « Concevoir la vie autrement », mesure 26 caractères
+  // et débordait sur deux lignes à 360 px, portant le bouton de 68 à 85 px
+  // et cassant le rythme de la pile. C'est le nom du site qui est affiché
+  // à la place, relevé sur la page elle-même. Pour rétablir la formule
+  // d'origine, remplacer le libellé ci-dessous et accepter les deux lignes.
   r_tao: {
     icone: "globe",
     libelle: "Tao et Spiritualité",
-    precision: "Le site",
+    precision: "Théo Cabal",
     url: "https://taoetspiritualite.fr/"
   },
 
   r_chakra: {
     icone: "actualites",
     libelle: "Le concept de chakra",
-    precision: "Sur Tao et Spiritualité",
+    precision: "Théo Cabal",
     url: "https://taoetspiritualite.fr/le-concept-du-chakra"
   },
 
   r_jargon: {
     icone: "actualites",
-    libelle: "Le jargon du taijiquan",
-    precision: "La Terre, le Ciel et l'Homme",
+    libelle: "École Gilles Thibault",
+    precision: "Taïjiquan, qigong, kung-fu",
     url: "https://t-j-q.com/dotcl/index.php/post/2006/09/08/48-le-jargon-les-cinq-2"
   },
 
-  // L'adresse de cette chaîne a été reconstruite depuis l'identifiant
-  // @masterhengchang, seul élément fourni. Vérifiée : elle répond, et la
-  // page s'intitule bien « Thay Hang Truong ».
+  // L'adresse a été reconstruite depuis l'identifiant @masterhengchang,
+  // seul élément fourni au départ, puis vérifiée : elle répond.
   r_hangtruong: {
     icone: "video",
     libelle: "Thay Hang Truong",
-    precision: "Chaîne YouTube",
+    precision: "Chaîne YouTube de l'auteur",
     url: "https://www.youtube.com/@masterhengchang"
   },
 
   r_khainghiem: {
     icone: "video",
     libelle: "Khai Nghiem",
-    precision: "Chaîne YouTube",
+    precision: "Chaîne YouTube de l'auteur",
     url: "https://www.youtube.com/@khainghiem5644/videos"
   },
 
   r_compassheart: {
     icone: "video",
     libelle: "CompaSS Heart",
-    precision: "Chaîne YouTube",
-    url: "https://www.youtube.com/@HoaNghiemPhapVong/videos"
+    precision: "Hoa Nghiem Phap Vong",
+    url: "https://www.youtube.com/@HoaNghiemPhapVong"
   },
 
-  // Fourni sous le nom « siliconband ». La chaîne s'intitule en réalité
-  // « Minh Chau Nguyen » : c'est ce titre qui est repris ici.
+  // Chaîne @siliconband. Le titre affiché est celui donné par
+  // l'association, plus parlant que le nom de la chaîne elle-même.
   r_minhchau: {
     icone: "musique",
-    libelle: "Minh Chau Nguyen",
-    precision: "Chaîne YouTube",
+    libelle: "Musique vietnamienne",
+    precision: "Nhạc Nguyễn Minh Châu",
     url: "https://www.youtube.com/@siliconband"
   },
 
-  // Seule adresse dont le titre n'a pas pu être relevé : YouTube a refusé
-  // la requête. Le libellé décrit donc ce que fait le lien, pas son contenu.
+  // Playlist en lecture automatique. Production COMPASS FRANCE.
   r_radio: {
     icone: "musique",
-    libelle: "Radio musicale",
-    precision: "Playlist YouTube en lecture auto",
+    libelle: "Les postures du CK10",
+    precision: "Version traditionnelle",
     url: "https://www.youtube.com/watch?v=cLwjfZXo8KE&list=RDcLwjfZXo8KE&start_radio=1"
   },
 
