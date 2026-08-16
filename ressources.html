@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>CSS Moorea Tahiti — ressources</title>
+<meta name="description" content="Lectures, chaînes vidéo et musiques autour du tai chi et du tao, choisies par l'association.">
+
+<!-- Cette page est prévue pour être intégrée en iframe dans le site de
+     l'association, sous la page de liens. Elle reste consultable seule.
+     Pas de balise robots : la 00.07.00 en portait une sur la page
+     adhérents, et Messenger comme WhatsApp supprimaient alors l'aperçu. -->
+
+<!-- Aperçu de partage, identique aux deux autres pages. Adresse d'image
+     absolue : les robots ne résolvent pas les adresses relatives. -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="CSS Moorea Tahiti">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:url" content="https://csstaichi.github.io/liens/ressources.html">
+<meta property="og:title" content="CSS Moorea Tahiti — ressources">
+<meta property="og:description" content="Lectures, chaînes vidéo et musiques autour du tai chi et du tao.">
+<meta property="og:image" content="https://csstaichi.github.io/liens/assets/partage.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Logo et nom de l'association CSS Moorea Tahiti">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="CSS Moorea Tahiti — ressources">
+<meta name="twitter:description" content="Lectures, chaînes vidéo et musiques autour du tai chi et du tao.">
+<meta name="twitter:image" content="https://csstaichi.github.io/liens/assets/partage.jpg">
+
+<!-- Icône d'onglet et de raccourci sur l'écran d'accueil. -->
+<link rel="icon" type="image/png" href="assets/logo.png">
+<link rel="apple-touch-icon" href="assets/logo.png">
+
+<link rel="stylesheet" href="assets/polices.css">
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+<!-- Pavé 1 : image de fond, identique aux deux autres pages. -->
+<div class="fond"></div>
+
+<!-- Pavé 2 : en-tête. Même logo signature. -->
+<header class="entete">
+
+  <img class="logo" src="assets/logo.png" width="108" height="108"
+       alt="Logo de l'association CSS Moorea Tahiti">
+
+  <p class="sur-titre" data-dico="entete_sur_titre_ressources"></p>
+  <h1 class="titre" data-dico="entete_titre"></h1>
+  <p class="sous-titre" data-dico="entete_sous_titre_ressources"></p>
+</header>
+
+<!-- Pavé 3 : les groupes titrés, remplis par liens.js. -->
+<main class="liens" id="liens"></main>
+
+<!-- Pavé 4 : avertissement sur la fiabilité des sites externes. Le texte
+     vient du dictionnaire, comme tous les autres. -->
+<p class="avertissement" data-dico="avertissement_ressources"></p>
+
+<!-- Pavé 5 : secours sans JavaScript. -->
+<noscript>
+  <div class="secours">
+    <span data-dico="alerte_sans_js">Cette page a besoin de JavaScript pour afficher les liens.</span>
+  </div>
+</noscript>
+
+<!-- Pavé 6 : mention de pied de page. -->
+<footer class="pied" data-dico="pied_mention"></footer>
+
+<!-- Pavé 7 : dictionnaire puis rendu par sections.
+     demarrerSections et non demarrer : cette page affiche des groupes
+     titrés, les deux autres une pile simple. -->
+<script src="liens.js"></script>
+<script>demarrerSections("ressources");</script>
+
+</body>
+</html>

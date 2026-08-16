@@ -284,6 +284,42 @@ body {
 .lien-fleche svg { width: 20px; height: 20px; display: block; }
 
 
+/* Intertitre de groupe, utilisé par la page ressources.
+   Repris de l'habillage du sur-titre de l'en-tête pour que la page reste
+   d'une seule pièce : même graisse, même interlettrage, même turquoise.
+   La marge haute est nulle sur le premier titre, sinon la page démarrerait
+   par un vide. */
+.section {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--lagon-clair);
+  margin: 18px 0 2px 4px;
+
+  opacity: 0;
+  animation: monter 0.42s ease forwards;
+  animation-delay: calc(0.22s + var(--rang) * 0.06s);
+}
+
+.section:first-child { margin-top: 0; }
+
+/* Avertissement de bas de page, page ressources.
+   Encadré discret : il doit se lire sans voler la vedette aux boutons. */
+.avertissement {
+  width: 100%;
+  max-width: var(--colonne);
+  margin-top: 24px;
+  padding: 12px 14px;
+  border: 1px solid rgba(250, 246, 236, 0.16);
+  border-radius: var(--rayon);
+  background: rgba(18, 49, 44, 0.5);
+  font-size: 0.78rem;
+  line-height: 1.45;
+  color: var(--sable);
+}
+
+
 /* ---------------------------------------------------------------------
    SECTION 6 — pied de page et secours sans JavaScript
    --------------------------------------------------------------------- */
@@ -319,6 +355,6 @@ body {
    --------------------------------------------------------------------- */
 @media (prefers-reduced-motion: reduce) {
   .logo { animation: none; opacity: 1; }
-  .lien { animation: none; opacity: 1; }
+  .lien, .section { animation: none; opacity: 1; }
   .lien:hover, .lien:focus-visible { transform: none; }
 }

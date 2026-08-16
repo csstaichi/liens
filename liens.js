@@ -31,6 +31,20 @@ const DICO = {
   entete_sur_titre_adherents: "Espace adhérents",
   entete_sous_titre_adherents: "Tous nos accès au même endroit",
 
+  // Thème ENTETE, page ressources.
+  entete_sur_titre_ressources: "Ressources",
+  entete_sous_titre_ressources: "Lectures, chaînes et musiques",
+
+  // Thème SECTION — les intertitres de la page ressources.
+  section_lire: "À lire",
+  section_regarder: "À regarder",
+  section_ecouter: "À écouter",
+
+  // Thème AVERTISSEMENT — affiché en bas de la page ressources.
+  // POURQUOI il est ici et non dans le HTML : c'est un texte, il suit la
+  // même règle que tous les autres.
+  avertissement_ressources: "Ces sites sont extérieurs à l'association. Certains ne sont plus mis à jour et peuvent ne pas refléter l'évolution des connaissances ou des doctrines.",
+
   // Thème PIED — mention de bas de page.
   pied_mention: "Association CSS Moorea Tahiti — depuis 2009",
 
@@ -184,6 +198,87 @@ const LIENS = {
     url: "https://www.csstahitimoorea.org/postures-mcn-can10"
   },
 
+  // --- Ressources externes. Les libellés et précisions ci-dessous sont
+  // tirés du titre réel de chaque page, relevé en la chargeant : aucune
+  // description n'est inventée. Les neuf adresses ont répondu en HTTP 200.
+
+  r_integral: {
+    icone: "actualites",
+    libelle: "Integral Taichi",
+    precision: "Article d'introduction",
+    url: "https://integral-taichi.blogspot.com/2010/11/integral-taichi-intro1.html"
+  },
+
+  r_happy50: {
+    icone: "globe",
+    libelle: "Bien vieillir après 50 ans",
+    precision: "Santé, nutrition, bien-être",
+    url: "https://happy-50plus.com/"
+  },
+
+  r_tao: {
+    icone: "globe",
+    libelle: "Tao et Spiritualité",
+    precision: "Le site",
+    url: "https://taoetspiritualite.fr/"
+  },
+
+  r_chakra: {
+    icone: "actualites",
+    libelle: "Le concept de chakra",
+    precision: "Sur Tao et Spiritualité",
+    url: "https://taoetspiritualite.fr/le-concept-du-chakra"
+  },
+
+  r_jargon: {
+    icone: "actualites",
+    libelle: "Le jargon du taijiquan",
+    precision: "La Terre, le Ciel et l'Homme",
+    url: "https://t-j-q.com/dotcl/index.php/post/2006/09/08/48-le-jargon-les-cinq-2"
+  },
+
+  // L'adresse de cette chaîne a été reconstruite depuis l'identifiant
+  // @masterhengchang, seul élément fourni. Vérifiée : elle répond, et la
+  // page s'intitule bien « Thay Hang Truong ».
+  r_hangtruong: {
+    icone: "video",
+    libelle: "Thay Hang Truong",
+    precision: "Chaîne YouTube",
+    url: "https://www.youtube.com/@masterhengchang"
+  },
+
+  r_khainghiem: {
+    icone: "video",
+    libelle: "Khai Nghiem",
+    precision: "Chaîne YouTube",
+    url: "https://www.youtube.com/@khainghiem5644/videos"
+  },
+
+  r_compassheart: {
+    icone: "video",
+    libelle: "CompaSS Heart",
+    precision: "Chaîne YouTube",
+    url: "https://www.youtube.com/@HoaNghiemPhapVong/videos"
+  },
+
+  // Fourni sous le nom « siliconband ». La chaîne s'intitule en réalité
+  // « Minh Chau Nguyen » : c'est ce titre qui est repris ici.
+  r_minhchau: {
+    icone: "musique",
+    libelle: "Minh Chau Nguyen",
+    precision: "Chaîne YouTube",
+    url: "https://www.youtube.com/@siliconband"
+  },
+
+  // Seule adresse dont le titre n'a pas pu être relevé : YouTube a refusé
+  // la requête. Le libellé décrit donc ce que fait le lien, pas son contenu.
+  r_radio: {
+    icone: "musique",
+    libelle: "Radio musicale",
+    precision: "Playlist YouTube en lecture auto",
+    url: "https://www.youtube.com/watch?v=cLwjfZXo8KE&list=RDcLwjfZXo8KE&start_radio=1"
+  },
+
   musiques: {
     icone: "musique",
     libelle: "Les musiques",
@@ -233,6 +328,28 @@ const JEUX = {
 
 
 /* ---------------------------------------------------------------------
+   SECTIONS — la page ressources, découpée en groupes titrés.
+   POURQUOI une structure séparée de JEUX plutôt qu'une modification de
+   JEUX : les deux pages existantes utilisent JEUX depuis la 00.01.00 et
+   fonctionnent. On ajoute à côté, on ne touche à rien.
+   Chaque groupe : une clé de DICO pour le titre, puis ses liens.
+   --------------------------------------------------------------------- */
+const SECTIONS = {
+
+  ressources: [
+    { titre: "section_lire",
+      liens: ["r_integral", "r_happy50", "r_tao", "r_chakra", "r_jargon"] },
+
+    { titre: "section_regarder",
+      liens: ["r_hangtruong", "r_khainghiem", "r_compassheart"] },
+
+    { titre: "section_ecouter",
+      liens: ["r_minhchau", "r_radio"] }
+  ]
+};
+
+
+/* ---------------------------------------------------------------------
    construireIcone — assemble un <svg> à partir d'un tracé de ICONES.
    POURQUOI une fonction et non du SVG recopié dans chaque bouton :
    garantit que tous les dessins partagent exactement la même boîte, la
@@ -265,23 +382,64 @@ function poserLiens(idConteneur, nomDuJeu) {
   let html = "";
 
   cles.forEach(function (cle, rang) {
-    const item = LIENS[cle];
-    // Une clé inconnue dans un jeu est ignorée plutôt que rendue vide :
-    // mieux vaut un bouton manquant qu'un bouton mort.
-    if (!item) return;
+    html += construireBouton(cle, rang);
+  });
 
-    html += '<a class="lien" href="' + item.url + '" target="_blank" rel="noopener" '
-          + 'style="--rang:' + rang + '">'
-          + '<span class="lien-ico">' + construireIcone(item.icone) + "</span>"
-          + '<span class="lien-txt">'
-          + '<span class="lien-libelle">' + item.libelle + "</span>"
-          + '<span class="lien-precision">' + item.precision + "</span>"
-          + "</span>"
-          + '<span class="lien-fleche" aria-hidden="true">'
-          + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" '
-          + 'stroke-linecap="round" stroke-linejoin="round">'
-          + '<path d="M9 6l6 6-6 6"/></svg></span>'
-          + "</a>";
+  boite.innerHTML = html;
+}
+
+
+/* ---------------------------------------------------------------------
+   construireBouton — le HTML d'un bouton, extrait de poserLiens pour être
+   partagé avec poserSections.
+   POURQUOI cette extraction : sans elle, il aurait fallu recopier le
+   gabarit du bouton, et les deux copies auraient divergé au premier
+   changement.
+   --------------------------------------------------------------------- */
+function construireBouton(cle, rang) {
+  const item = LIENS[cle];
+  // Une clé inconnue est ignorée plutôt que rendue vide : mieux vaut un
+  // bouton manquant qu'un bouton mort.
+  if (!item) return "";
+
+  return '<a class="lien" href="' + item.url + '" target="_blank" rel="noopener" '
+       + 'style="--rang:' + rang + '">'
+       + '<span class="lien-ico">' + construireIcone(item.icone) + "</span>"
+       + '<span class="lien-txt">'
+       + '<span class="lien-libelle">' + item.libelle + "</span>"
+       + '<span class="lien-precision">' + item.precision + "</span>"
+       + "</span>"
+       + '<span class="lien-fleche" aria-hidden="true">'
+       + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" '
+       + 'stroke-linecap="round" stroke-linejoin="round">'
+       + '<path d="M9 6l6 6-6 6"/></svg></span>'
+       + "</a>";
+}
+
+
+/* ---------------------------------------------------------------------
+   poserSections — écrit une suite de groupes titrés dans le conteneur.
+   Le compteur de rang est continu d'un groupe à l'autre, pour que
+   l'apparition en cascade traverse toute la page au lieu de repartir de
+   zéro à chaque titre.
+   --------------------------------------------------------------------- */
+function poserSections(idConteneur, nomDuJeu) {
+  const boite = document.getElementById(idConteneur);
+  if (!boite) return;
+
+  const groupes = SECTIONS[nomDuJeu] || [];
+  let html = "";
+  let rang = 0;
+
+  groupes.forEach(function (groupe) {
+    const titre = DICO[groupe.titre] || "";
+    html += '<h2 class="section" style="--rang:' + rang + '">' + titre + "</h2>";
+    rang += 1;
+
+    groupe.liens.forEach(function (cle) {
+      html += construireBouton(cle, rang);
+      rang += 1;
+    });
   });
 
   boite.innerHTML = html;
@@ -309,4 +467,15 @@ function poserTextes() {
 function demarrer(nomDuJeu) {
   poserTextes();
   poserLiens("liens", nomDuJeu);
+}
+
+
+/* ---------------------------------------------------------------------
+   demarrerSections — point d'entrée de la page ressources.
+   Séparé de demarrer pour que les deux pages existantes ne dépendent en
+   rien du nouveau code.
+   --------------------------------------------------------------------- */
+function demarrerSections(nomDuJeu) {
+  poserTextes();
+  poserSections("liens", nomDuJeu);
 }
