@@ -71,8 +71,17 @@ body {
   inset: 0;
   z-index: -1;
   background-image: url("assets/fond.jpg");
-  background-size: cover;
-  background-position: center top;
+
+  /* POURQUOI contain et non cover : l'image porte des personnages collés aux
+     bords gauche et droit. En cover, le navigateur agrandit l'image jusqu'à
+     remplir l'écran et rogne ce qui dépasse — mesuré : à 1280 × 900, cover
+     coupait 53 % de la hauteur, et à 360 × 800 il coupait 33 % de la
+     largeur, donc les deux personnages latéraux. contain garantit que
+     l'image entière est toujours visible ; le vide autour est comblé par le
+     vert d'encre du body. */
+  background-size: contain;
+  background-position: center center;
+  background-repeat: no-repeat;
 }
 
 .fond::after {
