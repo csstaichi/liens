@@ -57,32 +57,31 @@ body {
 
 
 /* ---------------------------------------------------------------------
-   SECTION 3 — l'image de fond, en trois calques superposes
+   SECTION 3 — l'image de fond, en deux calques superposes
    POURQUOI un element fixe plutot que background-attachment: fixed :
    iOS ignore purement et simplement background-attachment: fixed depuis
    des annees. Un div en position fixed derriere le contenu donne le meme
    resultat sur tous les telephones.
-   Les trois calques sont, de bas en haut : la copie floue qui remplit
-   l'ecran, l'image nette entiere, puis le voile sombre.
+   Les deux calques sont, de bas en haut : l'image nette, puis le voile
+   sombre. Il y avait un troisieme calque, une copie floue de l'image
+   servant de filet de chargement, retire a la 00.09.00 sur demande.
    --------------------------------------------------------------------- */
 .fond {
   position: fixed;
   inset: 0;
   z-index: -1;
 
-  /* CALQUE 1, le plus bas : une copie floue et très légère de l'image.
-     Elle sert de filet : si l'image nette, dix fois plus lourde, met du
-     temps à arriver en 4G ou échoue, la page affiche tout de suite les
-     bonnes couleurs au lieu d'un aplat vide. Le flou est cuit dans le
-     fichier et non calculé par filter: blur(), qui se recalculerait à
-     chaque défilement sur un calque fixe plein écran. Poids mesuré :
-     4 618 octets, contre 271 521 pour l'image nette. */
-  background-image: url("assets/fond-flou.jpg");
-  background-size: cover;
-  background-position: center center;
+  /* Aplat de couleur uni, plus aucune image floue.
+     La version précédente posait ici une copie floue et légère de l'image,
+     destinée à s'afficher pendant que l'image nette, cent fois plus lourde,
+     arrivait en 4G. Elle était intégralement recouverte par l'image nette
+     une fois celle-ci chargée, mais restait visible pendant le chargement,
+     ce qui donnait l'impression d'une image floue. Retirée. Le fond de
+     départ est désormais le vert d'encre, comme le reste de la page. */
+  background-color: var(--encre);
 }
 
-/* CALQUE 2 : l'image nette. */
+/* CALQUE 1 : l'image nette. */
 .fond::before {
   content: "";
   position: absolute;
@@ -91,23 +90,19 @@ body {
   /* L'image nette remplit toute la fenêtre, en largeur d'abord.
      POURQUOI ce choix, et ce qu'il coûte : l'image range ses personnages en
      deux colonnes latérales séparées par une bande centrale vide. Cette
-     bande a été mesurée sur le fichier : 235 px sur 1024, soit 24 % de la
-     largeur. Pour qu'elle soit assez large pour loger la colonne de boutons
-     (460 px), l'image devrait être affichée sur 1878 px de large ; sur un
-     écran de 1280 px, cela couperait 299 px de chaque côté, donc les
-     personnages eux-mêmes. Les deux exigences — tout voir et ne rien avoir
-     derrière les boutons — sont géométriquement incompatibles avec ce
-     rapport d'image.
-     Le remplissage en largeur est le meilleur compromis mesuré : à
-     1280 × 900, la bande vide affichée atteint 294 px, et les boutons ne
-     recouvrent plus qu'environ 50 px de halo de chaque côté au lieu de
-     recouvrir les corps. */
+     bande a été mesurée sur le fichier : 810 px sur 1800, soit 45 % de la
+     largeur. Affichée en largeur pleine, elle atteint 576 px à 1280 × 900,
+     pour une colonne de boutons de 460 px : les personnages passent
+     entièrement à côté, avec 58 px de marge de chaque côté.
+     Ce que ce cadrage coûte : sur un écran en paysage, le haut et le bas
+     de l'image ne sont pas visibles. C'est le prix à payer pour dégager
+     les personnages, l'image étant en portrait et l'écran en paysage. */
   background-image: url("assets/fond.jpg");
   background-size: cover;
   background-position: center center;
 }
 
-/* CALQUE 3 : le voile sombre, au-dessus des deux images.
+/* CALQUE 2 : le voile sombre, au-dessus de l'image.
    Dégradé et non couleur unie : l'image respire en haut, et le contraste
    est garanti en bas, là où les boutons s'empilent. */
 .fond::after {
