@@ -70,64 +70,41 @@ body {
   inset: 0;
   z-index: -1;
 
-  /* CALQUE 1, le plus bas : une copie floue de l'image, affichée en cover.
-     POURQUOI : l'image est en portrait, l'écran d'un ordinateur est en
-     paysage. Aucun cadrage ne peut à la fois montrer l'image entière et
-     remplir l'écran. En cover seul, on perdait 53 % de la hauteur à
-     1280 × 900 ; en contain seul, il restait deux bandes vides sur les
-     côtés. Ce calque flou remplit ces vides avec les couleurs de l'image
-     elle-même : plus de bande, et l'image reste entière au-dessus.
-     Le flou est cuit dans le fichier, pas calculé par le navigateur : un
-     filter: blur() sur un calque fixe plein écran se recalcule à chaque
-     défilement et rame sur téléphone. Poids mesuré : 4 308 octets. */
+  /* CALQUE 1, le plus bas : une copie floue et très légère de l'image.
+     Elle sert de filet : si l'image nette, dix fois plus lourde, met du
+     temps à arriver en 4G ou échoue, la page affiche tout de suite les
+     bonnes couleurs au lieu d'un aplat vide. Le flou est cuit dans le
+     fichier et non calculé par filter: blur(), qui se recalculerait à
+     chaque défilement sur un calque fixe plein écran. Poids mesuré :
+     4 618 octets, contre 271 521 pour l'image nette. */
   background-image: url("assets/fond-flou.jpg");
   background-size: cover;
   background-position: center center;
 }
 
-/* CALQUE 2 : l'image nette, entière, posée par-dessus le flou.
-   contain garantit qu'aucun personnage n'est coupé, quelle que soit la
-   taille de la fenêtre. Perte mesurée : 0 %. */
+/* CALQUE 2 : l'image nette. */
 .fond::before {
   content: "";
   position: absolute;
-  top: 50%;
-  left: 50%;
+  inset: 0;
 
-  /* La boîte prend EXACTEMENT les proportions de l'image, 1024 × 1536, et se
-     limite à la fenêtre. Elle vaut donc la place que contain occupait, mais
-     cette fois c'est un élément réel, avec des bords à lui.
-     POURQUOI ce détour : le fondu de bords posé sur un élément plein écran
-     ne servait à rien, parce qu'il adoucissait les bords de la FENÊTRE, pas
-     ceux de l'image. Mesuré à 360 × 800 : l'image n'occupait que 540 px de
-     hauteur, ses limites tombaient à 130 px et 670 px, loin des bords
-     estompés. Le trait de jointure restait donc visible.
-     Les deux formules disent la même chose que contain, mais en donnant
-     une taille réelle à la boîte : la largeur ne dépasse ni la fenêtre, ni
-     ce qu'autorise la hauteur disponible au rapport 1024/1536, et
-     réciproquement pour la hauteur. Vérifié au rendu : 360 × 540 sur un
-     écran 360 × 800, et 600 × 900 sur un écran 1280 × 900. */
-  width:  min(100%, calc(100vh * 1024 / 1536));
-  height: min(100%, calc(100vw * 1536 / 1024));
-  transform: translate(-50%, -50%);
-
-  /* cover dans une boîte déjà au bon rapport : rien n'est rogné. */
+  /* L'image nette remplit toute la fenêtre, en largeur d'abord.
+     POURQUOI ce choix, et ce qu'il coûte : l'image range ses personnages en
+     deux colonnes latérales séparées par une bande centrale vide. Cette
+     bande a été mesurée sur le fichier : 235 px sur 1024, soit 24 % de la
+     largeur. Pour qu'elle soit assez large pour loger la colonne de boutons
+     (460 px), l'image devrait être affichée sur 1878 px de large ; sur un
+     écran de 1280 px, cela couperait 299 px de chaque côté, donc les
+     personnages eux-mêmes. Les deux exigences — tout voir et ne rien avoir
+     derrière les boutons — sont géométriquement incompatibles avec ce
+     rapport d'image.
+     Le remplissage en largeur est le meilleur compromis mesuré : à
+     1280 × 900, la bande vide affichée atteint 294 px, et les boutons ne
+     recouvrent plus qu'environ 50 px de halo de chaque côté au lieu de
+     recouvrir les corps. */
   background-image: url("assets/fond.jpg");
   background-size: cover;
   background-position: center center;
-
-  /* Fondu des quatre bords de l'image sur 4 %, soit 41 px sur 1024, très à
-     l'écart des personnages. Les deux dégradés sont croisés pour traiter les
-     quatre bords ; si le navigateur ignore mask-composite, seul le fondu
-     vertical s'applique, ce qui reste meilleur que pas de fondu. */
-  -webkit-mask-image:
-    linear-gradient(to bottom, transparent 0%, #000 4%, #000 96%, transparent 100%),
-    linear-gradient(to right,  transparent 0%, #000 4%, #000 96%, transparent 100%);
-  mask-image:
-    linear-gradient(to bottom, transparent 0%, #000 4%, #000 96%, transparent 100%),
-    linear-gradient(to right,  transparent 0%, #000 4%, #000 96%, transparent 100%);
-  -webkit-mask-composite: source-in;
-  mask-composite: intersect;
 }
 
 /* CALQUE 3 : le voile sombre, au-dessus des deux images.
