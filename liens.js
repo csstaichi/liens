@@ -22,7 +22,7 @@
    valeur doit exister. À mettre à jour à CHAQUE livraison, en même temps
    que le nom du zip, sinon la page ment sur ce qu'elle est.
    --------------------------------------------------------------------- */
-const VERSION = "00.16.00";
+const VERSION = "00.19.00";
 const VERSION_DATE = "16 août 2026";
 
 
@@ -77,6 +77,11 @@ const DICO = {
     demande_whatsapp: "Pour le groupe CSS Adhérents OFFICIEL P.F. : indiquez votre numéro de téléphone.",
 
     // Thème VERSION — repère de version affiché en bas de la page adhérents.
+
+    // Thème TEST — mot affiché à côté du titre d'un bouton en cours de
+    // vérification. Il clignote. À retirer avec le drapeau « test: true »
+    // de l'entrée concernée, quand le lien est confirmé.
+    mention_test: "En test",
 
     // Thème PIED — mention de bas de page.
     pied_mention: "Association CSS Moorea Tahiti — depuis 2009",
@@ -235,7 +240,7 @@ const LIENS = {
     // « test: true » quand ce sera confirmé.
     messenger_groupe: {
         icone: "bulles",
-        libelle: "Groupe Messenger",
+        libelle: "Groupe Messenger CSS géré par Aurore",
         precision: "Taichi Intégral 2026",
         test: true,
         url: "https://www.facebook.com/messages/t/9060096560708706"
@@ -343,17 +348,15 @@ const LIENS = {
         url: "https://www.youtube.com/watch?v=cLwjfZXo8KE&list=RDcLwjfZXo8KE&start_radio=1"
     },
 
-    // Adresse de courriel de l'association.
-    // ADRESSE À VÉRIFIER : elle est reprise telle que fournie,
-    // csstahitimoorea@gmail.com. Le compte GitHub et le compte Google de
-    // l'association utilisent cssmooreatahiti@gmail.com, avec les deux
-    // mots dans l'autre ordre. Si c'est cette seconde adresse qui doit
-    // recevoir les messages, changer la ligne url ET la précision.
+    // Adresse de courriel de l'association, confirmée à la 00.19.00 :
+    // cssmooreatahiti@gmail.com, la même que les comptes GitHub et Google.
+    // La 00.16.00 portait csstahitimoorea@gmail.com, avec les deux mots
+    // dans l'ordre inverse : c'était une erreur, corrigée ici.
     courriel: {
         icone: "enveloppe",
         libelle: "Nous écrire",
-        precision: "csstahitimoorea@gmail.com",
-        url: "mailto:csstahitimoorea@gmail.com"
+        precision: "cssmooreatahiti@gmail.com",
+        url: "mailto:cssmooreatahiti@gmail.com"
     },
 
     musiques: {
@@ -487,15 +490,18 @@ function construireBouton(cle, rang) {
     // bouton manquant qu'un bouton mort.
     if (!item) return "";
 
-    // Le drapeau « test » ajoute une classe, rien de plus : la couleur et
-    // le clignotement sont dans la feuille de style.
-    const marque = item.test ? " lien--test" : "";
+    // Le drapeau « test » ajoute un mot clignotant après le titre. Il ne
+    // touche plus à la bordure du bouton : le cadre orange se confondait
+    // avec les bordures ordinaires et ne disait pas ce qu'il signifiait.
+    const marque = item.test
+        ? ' <span class="lien-test">' + DICO.mention_test + "</span>"
+        : "";
 
-    return '<a class="lien' + marque + '" href="' + item.url + '" target="_blank" rel="noopener" '
+    return '<a class="lien" href="' + item.url + '" target="_blank" rel="noopener" '
         + 'style="--rang:' + rang + '">'
         + '<span class="lien-ico">' + construireIcone(item.icone) + "</span>"
         + '<span class="lien-txt">'
-        + '<span class="lien-libelle">' + item.libelle + "</span>"
+        + '<span class="lien-libelle">' + item.libelle + marque + "</span>"
         + '<span class="lien-precision">' + item.precision + "</span>"
         + "</span>"
         + '<span class="lien-fleche" aria-hidden="true">'

@@ -26,6 +26,11 @@
   --corail:       #D2564A;   /* accent unique, bordure du bloc de secours */
   --orange:       #E68C32;   /* état « en test », provisoire, à retirer */
 
+  /* Couleur derrière les figurines. Redéfinie par la page ressources.
+     Reprise du vert de l'image d'origine, 12-75-44, assombrie pour que le
+     texte blanc reste lisible sans voile par-dessus. */
+  --arriere-plan: #08341C;
+
   /* Seconde gamme, réservée à la page ressources. Elle sort du logo, dont
      l'anneau extérieur est bleu : le portail garde donc ses deux couleurs
      d'origine, le turquoise pour les accès de l'association, le bleu pour
@@ -42,7 +47,12 @@
   /* Mesures. La hauteur de bouton est fixee a 68 px : au-dessus des 44 px
      recommandes pour le tactile, choisie plus haute parce qu'une partie des
      adherents sont ages et visent moins precisement. */
-  --colonne:      460px;     /* largeur maximale de la colonne de contenu */
+  /* Largeur de la colonne portee de 460 a 560 px a la 00.18.00.
+     POURQUOI : « Groupe Whatsapp CSS Adherents OFFICIEL P.F. » fait
+     43 caracteres et coupait apres « CSS », ce qui separait le nom du
+     groupe en deux. A 460 px, le texte disposait de 342 px ; a 560 px il
+     en a 442, mesure faite, et le titre tient sur une seule ligne. */
+  --colonne:      560px;     /* largeur maximale de la colonne de contenu */
   --bouton-haut:  68px;
   --rayon:        14px;
   --marge:        18px;
@@ -61,7 +71,7 @@ body {
   min-height: 100dvh;                 /* evite le saut de barre d'URL mobile */
   font-family: "Karla", "Segoe UI", system-ui, sans-serif;
   color: var(--tiare);
-  background: var(--encre);
+  background: var(--arriere-plan);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -85,14 +95,14 @@ body {
   inset: 0;
   z-index: -1;
 
-  /* Aplat de couleur uni, plus aucune image floue.
-     La version précédente posait ici une copie floue et légère de l'image,
-     destinée à s'afficher pendant que l'image nette, cent fois plus lourde,
-     arrivait en 4G. Elle était intégralement recouverte par l'image nette
-     une fois celle-ci chargée, mais restait visible pendant le chargement,
-     ce qui donnait l'impression d'une image floue. Retirée. Le fond de
-     départ est désormais le vert d'encre, comme le reste de la page. */
-  background-color: var(--encre);
+  /* CALQUE 1 : l'arrière-plan, une couleur unie et rien d'autre.
+     Jusqu'à la 00.16.00, le vert d'arrière-plan était CUIT dans le fichier
+     image : figurines et fond ne formaient qu'un seul JPEG, il était donc
+     impossible de changer l'un sans l'autre.
+     Depuis la 00.17.00, les figurines sont détourées et livrées sur fond
+     transparent. La couleur derrière elles est donc devenue un simple
+     réglage, que chaque page peut redéfinir. */
+  background-color: var(--arriere-plan);
 }
 
 /* CALQUE 1 : l'image nette. */
@@ -101,40 +111,23 @@ body {
   position: absolute;
   inset: 0;
 
-  /* L'image nette remplit toute la fenêtre, en largeur d'abord.
-     POURQUOI ce choix, et ce qu'il coûte : l'image range ses personnages en
-     deux colonnes latérales séparées par une bande centrale vide. Cette
-     bande a été mesurée sur le fichier : 810 px sur 1800, soit 45 % de la
-     largeur. Affichée en largeur pleine, elle atteint 576 px à 1280 × 900,
-     pour une colonne de boutons de 460 px : les personnages passent
-     entièrement à côté, avec 58 px de marge de chaque côté.
-     Ce que ce cadrage coûte : sur un écran en paysage, le haut et le bas
-     de l'image ne sont pas visibles. C'est le prix à payer pour dégager
-     les personnages, l'image étant en portrait et l'écran en paysage. */
-  background-image: url("assets/fond.jpg");
+  /* CALQUE 2 : les figurines seules, sur fond transparent.
+     Détourage possible parce que le fond d'origine était parfaitement uni :
+     mesuré à 12-75-44 sur 73,6 % des pixels, écart-type nul dans la bande
+     centrale.
+     Format WebP et non PNG : à qualité égale, 565 ko contre 3 167 ko.
+     La bande centrale vide reste de 45 % de la largeur, le cadrage en
+     largeur pleine est donc inchangé. */
+  background-image: url("assets/figurines.webp");
   background-size: cover;
   background-position: center center;
 }
 
-/* CALQUE 2 : le voile sombre, au-dessus de l'image.
-   Dégradé et non couleur unie : l'image respire en haut, et le contraste
-   est garanti en bas, là où les boutons s'empilent.
-   Opacités allégées à la 00.15.00, de 55/72/90 % à 34/50/74 %. Les
-   personnages paraissaient ternes : ce n'était pas un flou mais ce voile,
-   qui les recouvrait d'un tiers de noir de plus que nécessaire. Le
-   contraste du texte reste assuré par le fond propre des boutons, qui est
-   opaque à 62 %, et non par le voile. */
-.fond::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    to bottom,
-    rgba(10, 27, 24, 0.34) 0%,
-    rgba(10, 27, 24, 0.50) 38%,
-    rgba(10, 27, 24, 0.74) 100%
-  );
-}
+/* Plus de calque de voile depuis la 00.17.00.
+   Il assombrissait les figurines d'un tiers de noir. Il n'a plus lieu
+   d'être : l'arrière-plan est maintenant une couleur choisie, assez
+   sombre par elle-même pour que le texte blanc reste lisible, et les
+   figurines gardent leur éclat d'origine. */
 
 
 /* ---------------------------------------------------------------------
@@ -216,9 +209,9 @@ body {
 .lien {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
   min-height: var(--bouton-haut);
-  padding: 12px 14px;
+  padding: 12px 13px;
   border: 1px solid var(--bouton-bord);
   border-radius: var(--rayon);
   background: var(--bouton-fond);
@@ -258,8 +251,8 @@ body {
 .lien:active { transform: translateY(0); }
 
 .lien-ico {
-  flex: 0 0 42px;
-  height: 42px;
+  flex: 0 0 40px;
+  height: 40px;
   display: grid;
   place-items: center;
   border-radius: 11px;
@@ -287,7 +280,10 @@ body {
   font-size: 1.02rem;
   font-weight: 700;
   line-height: 1.25;
-  text-wrap: balance;          /* repartit les lignes au lieu d'un mot seul */
+  /* Plus de text-wrap: balance depuis la 00.18.00. En cherchant a egaliser
+     la longueur des lignes, il coupait « Groupe Whatsapp CSS » avant
+     « Adherents OFFICIEL P.F. », separant le nom du groupe. La coupure
+     normale, au dernier mot possible, est plus fidele au titre. */
 }
 
 .lien-precision {
@@ -297,11 +293,11 @@ body {
 }
 
 .lien-fleche {
-  flex: 0 0 20px;
+  flex: 0 0 18px;
   color: rgba(250, 246, 236, 0.42);
 }
 
-.lien-fleche svg { width: 20px; height: 20px; display: block; }
+.lien-fleche svg { width: 18px; height: 18px; display: block; }
 
 
 /* Intertitre de groupe, utilisé par la page ressources.
@@ -349,10 +345,6 @@ body {
    Tout passe par une classe posée sur le body : aucune règle existante
    n'est modifiée, les deux autres pages ne peuvent pas être affectées.
    --------------------------------------------------------------------- */
-.ressources .lien {
-  background: rgba(12, 36, 56, 0.62);
-}
-
 .ressources .lien:hover,
 .ressources .lien:focus-visible {
   border-color: var(--ciel);
@@ -373,50 +365,74 @@ body {
   color: var(--ciel);
 }
 
-/* L'image de fond elle-même change : c'est la même composition, mêmes
-   personnages, même bande centrale vide de 45 %, mais virée du vert au
-   bleu. Un simple voile bleu ne suffisait pas — les figurines restaient
-   vertes et les deux séries se ressemblaient encore une fois intégrées
-   l'une sous l'autre dans le site.
-   Teinte moyenne mesurée : 26-88-44 pour l'originale, 20-60-94 pour
-   celle-ci. */
-.ressources .fond::before {
-  background-image: url("assets/fond-ressources.jpg");
+/* Seul l'ARRIÈRE-PLAN change de couleur : les figurines restent vertes,
+   puisqu'elles sont désormais un calque séparé.
+
+   Fond clair #B6C870 depuis la 00.18.00, sur demande. Il impose de
+   basculer le texte de l'en-tête en sombre : contrastes mesurés sur ce
+   fond, le blanc cassé ne donne que 1,69 pour 1 et le beige 1,00 pour 1,
+   très en dessous du seuil de lisibilité de 4,5. L'encre, elle, donne
+   9,71 pour 1.
+   Les boutons, eux, restent sombres à texte clair : leur fond propre est
+   opaque, la couleur de la page ne les traverse pas. */
+.ressources {
+  --arriere-plan: #B6C870;
+
+  /* Sur fond clair, un bouton translucide laisse passer le jaune-vert et
+     vire à l'olive. Mesuré à l'écran : le fond des boutons, opaque à 62 %,
+     donnait un gris-olive au lieu du bleu nuit voulu. On le rend presque
+     opaque, ce qui rétablit le contraste avec le texte clair. */
+  --bouton-fond:  rgba(10, 30, 48, 0.93);
+  --bouton-bord:  rgba(10, 27, 24, 0.35);
 }
 
-/* Le voile de fond vire au bleu nuit, pour que l'écart se voie dès le
-   premier coup d'oeil et pas seulement sur les boutons. */
-.ressources .fond::after {
-  background: linear-gradient(
-    to bottom,
-    rgba(8, 24, 40, 0.58) 0%,
-    rgba(8, 24, 40, 0.76) 38%,
-    rgba(8, 24, 40, 0.92) 100%
-  );
+.ressources .titre,
+.ressources .sous-titre,
+.ressources .sur-titre,
+.ressources .section,
+.ressources .pied,
+.ressources .version {
+  color: var(--encre);
+}
+
+/* Le logo porte un halo clair, invisible sur fond clair : on lui rend une
+   ombre portée sombre pour qu'il garde ses contours. */
+.ressources .logo {
+  filter: drop-shadow(0 3px 10px rgba(10, 27, 24, 0.45));
 }
 
 .ressources .avertissement {
-  background: rgba(12, 36, 56, 0.5);
+  background: rgba(10, 30, 48, 0.93);
+  border-color: rgba(10, 27, 24, 0.35);
 }
 
 
-/* Bouton EN TEST. Marque temporaire, à retirer quand le lien est confirmé.
-   POURQUOI un clignotement lent et non une couleur fixe : il doit se voir
-   sans détourner du reste, et rappeler qu'il s'agit d'un état provisoire.
-   Le clignotement s'arrête si le système demande la réduction des
-   animations, règle plus bas. */
-.lien--test {
-  border-color: var(--orange);
-  animation: monter 0.42s ease forwards,
-             clignoter 1.6s ease-in-out 1s infinite;
+/* Bouton EN TEST. Marque temporaire, a retirer quand le lien est confirme.
+   POURQUOI un mot et non un cadre colore : le cadre orange se confondait
+   avec les bordures des autres boutons et ne disait pas ce qu'il
+   signifiait. Un mot le dit. Il clignote en opacite, ce qui se voit
+   reellement, alors que la version precedente n'animait qu'une ombre
+   presque invisible : c'est pour cela qu'aucun clignotement n'etait
+   percu. */
+.lien-test {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 1px 6px;
+  border: 1px solid var(--orange);
+  border-radius: 5px;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--orange);
+  vertical-align: middle;
+  animation: clignoter 1.4s ease-in-out infinite;
 }
 
 @keyframes clignoter {
-  0%, 100% { border-color: var(--orange); box-shadow: 0 0 0 0 rgba(230, 140, 50, 0); }
-  50%      { border-color: var(--orange); box-shadow: 0 0 0 3px rgba(230, 140, 50, 0.28); }
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.15; }
 }
-
-.lien--test .lien-ico { color: var(--orange); background: rgba(230, 140, 50, 0.14); }
 
 
 /* Mot « administrateur » de l'encadré, transformé en lien discret.
@@ -533,7 +549,7 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .logo { animation: none; opacity: 1; }
   .lien, .section { animation: none; opacity: 1; }
-  .lien--test { animation: none; opacity: 1; border-color: var(--orange); }
+  .lien-test { animation: none; opacity: 1; }
   .lien-admin { animation: none; color: var(--lagon-clair); }
   .lien:hover, .lien:focus-visible { transform: none; }
 }
