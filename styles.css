@@ -451,6 +451,106 @@ body {
 }
 
 
+/* Bandeau de gratuité, page plannings. Volontairement contrasté : c'est
+   l'argument que l'association a à faire valoir, il doit se lire avant
+   les horaires. */
+.gratuit {
+  display: inline-block;
+  margin-top: 14px;
+  padding: 6px 16px;
+  border: 1px solid var(--lagon-clair);
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--lagon-clair);
+}
+
+
+/* ---------------------------------------------------------------------
+   FICHES DE COURS, page plannings.
+   Même boîte que les boutons, sans le comportement : pas de survol, pas
+   de chevron, pas de curseur main. POURQUOI : ce sont des informations à
+   lire, pas des liens. Leur donner l'apparence exacte d'un bouton
+   tromperait le lecteur, qui cliquerait pour rien.
+   Le liseré de gauche porte la couleur de l'île : turquoise pour Tahiti,
+   bleu ciel pour Moorea. C'est le seul repère de couleur, il suffit à
+   séparer les deux îles d'un coup d'oeil.
+   --------------------------------------------------------------------- */
+.fiche {
+  width: 100%;
+  max-width: var(--colonne);
+  padding: 13px 16px;
+  border: 1px solid var(--bouton-bord);
+  border-left: 3px solid var(--lagon-clair);
+  border-radius: var(--rayon);
+  background: var(--bouton-fond);
+
+  opacity: 0;
+  animation: monter 0.42s ease forwards;
+  animation-delay: calc(0.22s + var(--rang) * 0.06s);
+}
+
+.fiche--moorea { border-left-color: var(--ciel); }
+
+.fiche-jour {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--lagon-clair);
+  margin-bottom: 4px;
+}
+
+.fiche--moorea .fiche-jour { color: var(--ciel); }
+
+.fiche-commune {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 1.06rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--tiare);
+}
+
+.fiche-ico { display: block; color: var(--lagon-clair); }
+.fiche--moorea .fiche-ico { color: var(--ciel); }
+.fiche-ico .ico { width: 17px; height: 17px; }
+
+.fiche-lieu {
+  font-size: 0.85rem;
+  line-height: 1.35;
+  color: var(--sable);
+  margin-top: 2px;
+}
+
+/* L'horaire est l'information qu'on vient chercher : il est mis en avant
+   plus que le lieu, qu'on ne relit qu'une fois. */
+.fiche-horaire {
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: var(--tiare);
+  margin-top: 7px;
+}
+
+.fiche-gens {
+  font-size: 0.78rem;
+  line-height: 1.4;
+  color: rgba(201, 191, 166, 0.8);
+  margin-top: 5px;
+}
+
+/* Numéro de téléphone appelable. */
+.lien-tel {
+  color: var(--lagon-clair);
+  text-decoration: none;
+  border-bottom: 1px dotted var(--lagon-clair);
+  font-weight: 700;
+}
+
+
 /* Encadré « Rejoindre nos conversations », page adhérents.
    Même habillage que l'avertissement de la page ressources, pour rester
    d'une seule pièce, avec un titre en tête. */
@@ -548,7 +648,7 @@ body {
    --------------------------------------------------------------------- */
 @media (prefers-reduced-motion: reduce) {
   .logo { animation: none; opacity: 1; }
-  .lien, .section { animation: none; opacity: 1; }
+  .lien, .section, .fiche { animation: none; opacity: 1; }
   .lien-test { animation: none; opacity: 1; }
   .lien-admin { animation: none; color: var(--lagon-clair); }
   .lien:hover, .lien:focus-visible { transform: none; }

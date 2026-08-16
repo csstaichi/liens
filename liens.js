@@ -22,7 +22,7 @@
    valeur doit exister. À mettre à jour à CHAQUE livraison, en même temps
    que le nom du zip, sinon la page ment sur ce qu'elle est.
    --------------------------------------------------------------------- */
-const VERSION = "00.20.00";
+const VERSION = "00.21.00";
 const VERSION_DATE = "16 août 2026";
 
 
@@ -74,7 +74,7 @@ const DICO = {
     // c'est une autre messagerie qui était visée, changer cette seule ligne.
     demande_lien_admin: "https://wa.me/68989740782",
     demande_messenger: "Pour le groupe Messenger : indiquez votre pseudo Messenger et la photo de votre profil, afin que nous puissions vous identifier.",
-    demande_whatsapp: "Pour le groupe CSS Adhérents OFFICIEL P.F. : indiquez votre numéro de téléphone.",
+    demande_whatsapp: "Pour le groupe CSS ADHÉRENTS OFFICIEL POLYNÉSIE : indiquez votre numéro de téléphone.",
 
     // Thème VERSION — repère de version affiché en bas de la page adhérents.
 
@@ -82,6 +82,26 @@ const DICO = {
     // vérification. Il clignote. À retirer avec le drapeau « test: true »
     // de l'entrée concernée, quand le lien est confirmé.
     mention_test: "En test",
+
+    // Thème PLANNINGS — en-tête, avertissements et contact de la page
+    // des horaires de cours.
+    entete_sur_titre_plannings: "Plannings",
+    entete_sous_titre_plannings: "Nos cours de tai chi, du lundi au samedi",
+
+    plannings_gratuit: "Nos cours sont gratuits",
+
+    avert_titre: "À savoir avant de venir",
+    avert_arue: "Le site de ARUE est momentanément suspendu.",
+    avert_feries: "Pas de cours à PIRAE ni ARUE les jours fériés.",
+    avert_meteo: "Les séances peuvent être déplacées, annulées ou reportées selon la météo, la disponibilité des coachs ou des sites.",
+    avert_whatsapp: "Les cotisants sont prévenus dans le groupe WhatsApp CSS ADHÉRENTS OFFICIEL POLYNÉSIE.",
+
+    contact_titre: "Direction technique et formations",
+    contact_nom: "Yannick GIROUILLE",
+    contact_tel: "87 70 14 60",
+    // Format international, seul reconnu par les téléphones : indicatif
+    // 689 de la Polynésie française, sans espaces ni zéro initial.
+    contact_tel_lien: "tel:+68987701460",
 
     // Thème PIED — mention de bas de page.
     pied_mention: "Association CSS Moorea Tahiti — depuis 2009",
@@ -147,6 +167,14 @@ const ICONES = {
     // verticale et l'anneau incliné. Pour le bouton qui mène à l'ensemble
     // des campagnes de l'association.
     css: '<circle cx="12" cy="12" r="9.2"/><path d="M12.4 4.6c1.5 2.6 1.4 5.1.2 7.4-1.1 2.1-1.3 4.2-.2 6.4"/><ellipse cx="12" cy="13.1" rx="6.4" ry="2.6" transform="rotate(-13 12 13.1)"/>',
+
+    // Calendrier : un cadre, deux anneaux de reliure et une ligne de
+    // separation. Pour la page des horaires.
+    calendrier: '<rect x="3" y="5.5" width="18" height="15" rx="2.5"/><path d="M3 10h18M8 3v4M16 3v4"/>',
+
+    // Epingle de carte : goutte inversee et point central. Pour situer un
+    // lieu de pratique.
+    epingle: '<path d="M12 21s7-5.7 7-11a7 7 0 1 0-14 0c0 5.3 7 11 7 11z"/><circle cx="12" cy="10" r="2.6"/>',
 
     // Enveloppe : un rectangle et le pli du rabat.
     // Pour l'adresse de courriel de l'association.
@@ -215,7 +243,7 @@ const LIENS = {
 
     whatsapp: {
         icone: "bulle",
-        libelle: "Groupe Whatsapp CSS Adhérents OFFICIEL P.F.",
+        libelle: "Groupe Whatsapp CSS ADHÉRENTS OFFICIEL POLYNÉSIE",
         precision: "Entrée validée par les admins, leur écrire pour demander à rejoindre",
         url: "https://chat.whatsapp.com/CkyNlNTTmqr361x3k1Qkaz"
     },
@@ -348,6 +376,17 @@ const LIENS = {
         url: "https://www.youtube.com/watch?v=cLwjfZXo8KE&list=RDcLwjfZXo8KE&start_radio=1"
     },
 
+    // Page des horaires de cours, hébergée avec le portail.
+    // POURQUOI elle ne renvoie pas vers le site de l'association : cette
+    // adresse figure aussi sur la page PUBLIQUE, qui ne doit citer aucune
+    // adresse csstahitimoorea.org.
+    plannings: {
+        icone: "calendrier",
+        libelle: "Nos plannings de cours",
+        precision: "Horaires et lieux, du lundi au samedi",
+        url: "https://csstaichi.github.io/liens/plannings.html"
+    },
+
     // Adresse de courriel de l'association, confirmée à la 00.19.00 :
     // cssmooreatahiti@gmail.com, la même que les comptes GitHub et Google.
     // La 00.16.00 portait csstahitimoorea@gmail.com, avec les deux mots
@@ -381,6 +420,7 @@ const JEUX = {
 
     // PUBLIQUE — aucune adresse csstahitimoorea.org. Sept boutons.
     publique: [
+        "plannings",
         "facebook",
         "cotisation",
         "repas",
@@ -394,6 +434,7 @@ const JEUX = {
     // ADHÉRENTS — dix boutons.
     // Le site arrive en tête : c'est la raison d'être de cette page.
     adherents: [
+        "plannings",
         "site",
         "videos",
         "musiques",
@@ -407,6 +448,50 @@ const JEUX = {
         "courriel"
     ]
 };
+
+
+/* ---------------------------------------------------------------------
+   PLANNINGS — les cours de la semaine.
+   POURQUOI une structure a part et non des entrees de LIENS : ce ne sont
+   pas des liens. Une fiche de cours ne se clique pas, elle se lit. Lui
+   donner l'apparence d'un bouton tromperait le lecteur.
+   Chaque fiche : jour, ile, lieu, precision de lieu, horaire, encadrants.
+   L'ile sert aussi de couleur, pour distinguer Tahiti de Moorea d'un coup
+   d'oeil.
+   POUR MODIFIER UN COURS : une seule fiche a changer ici.
+   --------------------------------------------------------------------- */
+const PLANNINGS = [
+
+    { jour: "Lundi", ile: "tahiti", commune: "FAAA",
+      lieu: "Parc de Motu-Ovini, site de Vaitupa",
+      horaire: "08h00 – 10h00",
+      gens: "Yannick GIROUILLE, directrice technique instructrice, et/ou Josiane LI, assistante remplaçante" },
+
+    { jour: "Mardi", ile: "tahiti", commune: "PIRAE",
+      lieu: "Site de la Croix-Rouge",
+      horaire: "08h00 – 10h00",
+      gens: "Joséphine TEINAORE et Hubert LAU SAN, assistants remplaçants" },
+
+    { jour: "Mercredi", ile: "moorea", commune: "HAAPITI",
+      lieu: "Chez Moea FARNHAM",
+      horaire: "14h00 – 16h00",
+      gens: "Timau MARSAULT, instructrice, et Hélène DIARA, assistante remplaçante" },
+
+    { jour: "Jeudi", ile: "tahiti", commune: "PUNAAUIA",
+      lieu: "Parc Vairai, rond-point de l'Université",
+      horaire: "08h00 – 10h00",
+      gens: "Yannick GIROUILLE, directrice technique instructrice, et/ou Josiane LI, assistante remplaçante" },
+
+    { jour: "Vendredi", ile: "tahiti", commune: "PIRAE",
+      lieu: "Site de la Mairie",
+      horaire: "08h30 – 10h30",
+      gens: "Joséphine TEINAORE et Hubert LAU SAN, assistants remplaçants" },
+
+    { jour: "Samedi", ile: "moorea", commune: "PAOPAO",
+      lieu: "Centre culturel TE PU ATITI'A",
+      horaire: "09h00 – 11h00",
+      gens: "Anick LAU et Nadine GUAIS, instructrices, et Anne-Dominique MEYER, assistante remplaçante" }
+];
 
 
 /* ---------------------------------------------------------------------
@@ -542,6 +627,46 @@ function poserSections(idConteneur, nomDuJeu) {
 
 
 /* ---------------------------------------------------------------------
+   poserPlannings — écrit les fiches de cours dans le conteneur donné.
+   Aucune balise a : ces fiches ne sont pas cliquables, seul le numéro de
+   téléphone du bas de page l'est.
+   --------------------------------------------------------------------- */
+function poserPlannings(idConteneur) {
+    const boite = document.getElementById(idConteneur);
+    if (!boite) return;
+
+    let html = "";
+
+    PLANNINGS.forEach(function (c, rang) {
+        html += '<article class="fiche fiche--' + c.ile + '" style="--rang:' + rang + '">'
+              + '<p class="fiche-jour">' + c.jour + "</p>"
+              + '<p class="fiche-commune">'
+              + '<span class="fiche-ico">' + construireIcone("epingle") + "</span>"
+              + c.commune + "</p>"
+              + '<p class="fiche-lieu">' + c.lieu + "</p>"
+              + '<p class="fiche-horaire">' + c.horaire + "</p>"
+              + '<p class="fiche-gens">' + c.gens + "</p>"
+              + "</article>";
+    });
+
+    boite.innerHTML = html;
+}
+
+
+/* ---------------------------------------------------------------------
+   poserTelephone — rend le numéro de contact appelable d'un doigt.
+   POURQUOI : sur téléphone, recopier un numéro à la main est le meilleur
+   moyen de ne pas appeler du tout.
+   --------------------------------------------------------------------- */
+function poserTelephone() {
+    const el = document.getElementById("telephone");
+    if (!el) return;
+    el.innerHTML = '<a class="lien-tel" href="' + DICO.contact_tel_lien + '">'
+                 + DICO.contact_tel + "</a>";
+}
+
+
+/* ---------------------------------------------------------------------
    poserTextes — remplit les éléments marqués data-dico avec le DICO.
    POURQUOI : c'est ce qui permet de n'écrire aucun libellé en dur dans les
    fichiers HTML. Le HTML ne contient que des emplacements nommés.
@@ -611,6 +736,17 @@ function demarrer(nomDuJeu) {
    demarrerSections — point d'entrée de la page ressources.
    Séparé de demarrer pour que les deux pages existantes ne dépendent en
    rien du nouveau code.
+   --------------------------------------------------------------------- */
+function demarrerPlannings() {
+    poserTextes();
+    poserPlannings("liens");
+    poserTelephone();
+    poserVersion();
+}
+
+
+/* ---------------------------------------------------------------------
+   demarrerSections — point d'entrée de la page ressources.
    --------------------------------------------------------------------- */
 function demarrerSections(nomDuJeu) {
     poserTextes();

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>CSS Moorea Tahiti — plannings des cours</title>
+<meta name="description" content="Horaires et lieux des cours de tai chi de l'association, du lundi au samedi, à Tahiti et à Moorea. Cours gratuits.">
+
+<!-- Aperçu de partage. Image dédiée : elle montre les fiches de cours,
+     pour qu'un lien posté sur Facebook annonce déjà les horaires.
+     Adresse absolue, les robots ne résolvent pas les adresses relatives. -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="CSS Moorea Tahiti">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:url" content="https://csstaichi.github.io/liens/plannings.html">
+<meta property="og:title" content="Nos plannings de cours — CSS Moorea Tahiti">
+<meta property="og:description" content="Horaires et lieux, du lundi au samedi, à Tahiti et à Moorea. Nos cours sont gratuits.">
+<meta property="og:image" content="https://csstaichi.github.io/liens/assets/partage-plannings.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Les horaires des cours de tai chi de CSS Moorea Tahiti">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Nos plannings de cours — CSS Moorea Tahiti">
+<meta name="twitter:description" content="Horaires et lieux, du lundi au samedi, à Tahiti et à Moorea.">
+<meta name="twitter:image" content="https://csstaichi.github.io/liens/assets/partage-plannings.jpg">
+
+<link rel="icon" type="image/png" href="assets/logo.png">
+<link rel="apple-touch-icon" href="assets/logo.png">
+
+<link rel="stylesheet" href="assets/polices.css">
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+<!-- Pavé 1 : arrière-plan et figurines. -->
+<div class="fond"></div>
+
+<!-- Pavé 2 : en-tête. -->
+<header class="entete">
+
+  <img class="logo" src="assets/logo.png" width="116" height="116"
+       alt="Logo de l'association CSS Moorea Tahiti">
+
+  <p class="sur-titre" data-dico="entete_sur_titre_plannings"></p>
+  <h1 class="titre" data-dico="entete_titre"></h1>
+  <p class="sous-titre" data-dico="entete_sous_titre_plannings"></p>
+
+  <!-- La gratuité est l'argument le plus fort de l'association : elle est
+       mise en évidence, pas noyée dans un paragraphe. -->
+  <p class="gratuit" data-dico="plannings_gratuit"></p>
+</header>
+
+<!-- Pavé 3 : les six fiches de cours, posées par liens.js. -->
+<main class="liens" id="liens"></main>
+
+<!-- Pavé 4 : ce qu'il faut savoir avant de se déplacer. Placé APRÈS les
+     horaires : on vient chercher un horaire, les réserves se lisent
+     ensuite. -->
+<section class="demande">
+  <p class="demande-titre" data-dico="avert_titre"></p>
+  <ul>
+    <li data-dico="avert_arue"></li>
+    <li data-dico="avert_feries"></li>
+    <li data-dico="avert_meteo"></li>
+    <li data-dico="avert_whatsapp"></li>
+  </ul>
+</section>
+
+<!-- Pavé 5 : contact de la direction technique. Le numéro est rendu
+     appelable par liens.js. -->
+<section class="demande">
+  <p class="demande-titre" data-dico="contact_titre"></p>
+  <p><span data-dico="contact_nom"></span> — <span id="telephone"></span></p>
+</section>
+
+<!-- Pavé 6 : secours sans JavaScript. -->
+<noscript>
+  <div class="secours">
+    <span data-dico="alerte_sans_js">Cette page a besoin de JavaScript pour afficher les horaires.</span>
+  </div>
+</noscript>
+
+<!-- Pavé 7 : mention de pied de page et repère de version. -->
+<footer class="pied" data-dico="pied_mention"></footer>
+<p class="version" id="version"></p>
+
+<!-- Pavé 8 : dictionnaire puis rendu des fiches. -->
+<script src="liens.js"></script>
+<script>demarrerPlannings();</script>
+
+</body>
+</html>
