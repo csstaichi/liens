@@ -22,7 +22,7 @@
    valeur doit exister. À mettre à jour à CHAQUE livraison, en même temps
    que le nom du zip, sinon la page ment sur ce qu'elle est.
    --------------------------------------------------------------------- */
-const VERSION = "00.15.00";
+const VERSION = "00.16.00";
 const VERSION_DATE = "16 août 2026";
 
 
@@ -143,6 +143,10 @@ const ICONES = {
     // des campagnes de l'association.
     css: '<circle cx="12" cy="12" r="9.2"/><path d="M12.4 4.6c1.5 2.6 1.4 5.1.2 7.4-1.1 2.1-1.3 4.2-.2 6.4"/><ellipse cx="12" cy="13.1" rx="6.4" ry="2.6" transform="rotate(-13 12 13.1)"/>',
 
+    // Enveloppe : un rectangle et le pli du rabat.
+    // Pour l'adresse de courriel de l'association.
+    enveloppe: '<rect x="2.5" y="5" width="19" height="14" rx="2.5"/><path d="M3.5 7.5l8.5 6 8.5-6"/>',
+
     // Onde sonore : cinq barres verticales de hauteurs croissantes puis
     // décroissantes, lues comme un niveau audio.
     musique: '<path d="M5 10v4M9 7v10M12.5 4v16M16 8v8M20 11v2"/>',
@@ -167,7 +171,7 @@ const LIENS = {
     facebook: {
         icone: "actualites",
         libelle: "Notre page Facebook",
-        precision: "Actualités et photos",
+        precision: "Taichi Intégral - CSS Moorea Tahiti : Actualités et photos",
         url: "https://www.facebook.com/TaiChi.CSSMooreaTahiti"
     },
 
@@ -181,14 +185,14 @@ const LIENS = {
     boutique: {
         icone: "sac",
         libelle: "La Boutique de Aurore",
-        precision: "HelloAsso, paiement sécurisé par carte",
+        precision: "HelloAsso, Polos, T-Shirts, Casquettes - paiement sécurisé par carte",
         url: "https://www.helloasso.com/associations/css-moorea-tahiti-compassionate-service-society-moorea/boutiques/css-moorea-tahiti-boutique-helloasso"
     },
 
     cotisation: {
         icone: "carte_bancaire",
         libelle: "Cotisation 2026",
-        precision: "HelloAsso, paiement sécurisé par carte : adhérer, renouveler",
+        precision: "HelloAsso, paiement sécurisé par carte : adhésion annuelle 3000 Fcfp",
         url: "https://www.helloasso.com/associations/css-moorea-tahiti-compassionate-service-society-moorea/adhesions/rcot"
     },
 
@@ -199,15 +203,15 @@ const LIENS = {
     // sans /beta/ figure dans le LISEZ-MOI, à substituer après vérification.
     repas: {
         icone: "bateau",
-        libelle: "Ma'a Tahiti Moorea EVT04 RSM2",
+        libelle: "Ma'a Tahiti Motu Moorea EVT04 RSM2",
         precision: "HelloAsso : samedi 13/09/2026",
         url: "https://www.helloasso.com/beta/associations/css-moorea-tahiti-compassionate-service-society-moorea/adhesions/evt04-rsm2-maa-tahiti-moorea-13-09-2026-n-2"
     },
 
     whatsapp: {
         icone: "bulle",
-        libelle: "CSS Adhérents OFFICIEL P.F.",
-        precision: "Entrée validée par le bureau",
+        libelle: "Groupe Whatsapp CSS Adhérents OFFICIEL P.F.",
+        precision: "Entrée validée par les admins, leur écrire pour demander à rejoindre",
         url: "https://chat.whatsapp.com/CkyNlNTTmqr361x3k1Qkaz"
     },
 
@@ -218,7 +222,7 @@ const LIENS = {
     // puis d'être ajoutée à la main.
     messenger_demande: {
         icone: "bulles",
-        libelle: "Groupe Messenger",
+        libelle: "Groupe Messenger CSS géré par Aurore",
         precision: "Écrivez-nous pour entrer",
         url: "https://m.me/TaiChi.CSSMooreaTahiti"
     },
@@ -339,6 +343,19 @@ const LIENS = {
         url: "https://www.youtube.com/watch?v=cLwjfZXo8KE&list=RDcLwjfZXo8KE&start_radio=1"
     },
 
+    // Adresse de courriel de l'association.
+    // ADRESSE À VÉRIFIER : elle est reprise telle que fournie,
+    // csstahitimoorea@gmail.com. Le compte GitHub et le compte Google de
+    // l'association utilisent cssmooreatahiti@gmail.com, avec les deux
+    // mots dans l'autre ordre. Si c'est cette seconde adresse qui doit
+    // recevoir les messages, changer la ligne url ET la précision.
+    courriel: {
+        icone: "enveloppe",
+        libelle: "Nous écrire",
+        precision: "csstahitimoorea@gmail.com",
+        url: "mailto:csstahitimoorea@gmail.com"
+    },
+
     musiques: {
         icone: "musique",
         libelle: "Les musiques",
@@ -367,7 +384,8 @@ const JEUX = {
         "boutique",
         "campagnes",
         "whatsapp",
-        "messenger_demande"
+        "messenger_demande",
+        "courriel"
     ],
 
     // ADHÉRENTS — dix boutons.
@@ -382,7 +400,8 @@ const JEUX = {
         "campagnes",
         "whatsapp",
         "messenger_groupe",
-        "facebook"
+        "facebook",
+        "courriel"
     ]
 };
 

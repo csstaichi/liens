@@ -75,6 +75,18 @@
 <!-- Pavé 3 : la pile de boutons, remplie par liens.js avec le jeu complet. -->
 <main class="liens" id="liens"></main>
 
+<!-- Pavé 3 bis : comment obtenir l'accès aux deux conversations.
+     Les deux groupes sont en approbation par un administrateur : aucun
+     lien ne permet de demander à entrer, la démarche passe par un
+     message. Tous les textes viennent du dictionnaire. -->
+<section class="demande">
+  <h2 class="demande-titre" data-dico="demande_titre"></h2>
+  <p data-dico="demande_texte"></p>
+  <p class="demande-ligne" data-dico="demande_messenger"></p>
+  <p class="demande-ligne" data-dico="demande_whatsapp"></p>
+</section>
+
+
 <!-- Pavé 4 : secours sans JavaScript. Ici le lien écrit en dur est celui du
      site de l'association, puisque cette page lui est déjà consacrée. -->
 <noscript>
@@ -84,10 +96,13 @@
   </div>
 </noscript>
 
-<!-- Pavé 5 : mention de pied de page. -->
+<!-- Pavé 6 : mention de pied de page. -->
 <footer class="pied" data-dico="pied_mention"></footer>
 
-<!-- Pavé 6 : dictionnaire puis jeu de cette page. -->
+<!-- Numéro de version, posé par liens.js depuis une valeur unique. -->
+<p class="version" id="version"></p>
+
+<!-- Pavé 7 : dictionnaire puis jeu de cette page. -->
 <script src="liens.js"></script>
 <script>demarrer("adherents");</script>
 

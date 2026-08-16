@@ -373,6 +373,17 @@ body {
   color: var(--ciel);
 }
 
+/* L'image de fond elle-même change : c'est la même composition, mêmes
+   personnages, même bande centrale vide de 45 %, mais virée du vert au
+   bleu. Un simple voile bleu ne suffisait pas — les figurines restaient
+   vertes et les deux séries se ressemblaient encore une fois intégrées
+   l'une sous l'autre dans le site.
+   Teinte moyenne mesurée : 26-88-44 pour l'originale, 20-60-94 pour
+   celle-ci. */
+.ressources .fond::before {
+  background-image: url("assets/fond-ressources.jpg");
+}
+
 /* Le voile de fond vire au bleu nuit, pour que l'écart se voie dès le
    premier coup d'oeil et pas seulement sur les boutons. */
 .ressources .fond::after {
