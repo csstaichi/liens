@@ -57,33 +57,82 @@ body {
 
 
 /* ---------------------------------------------------------------------
-   SECTION 3 — l'image de fond
+   SECTION 3 — l'image de fond, en trois calques superposes
    POURQUOI un element fixe plutot que background-attachment: fixed :
    iOS ignore purement et simplement background-attachment: fixed depuis
    des annees. Un div en position fixed derriere le contenu donne le meme
    resultat sur tous les telephones.
-   Le voile est un degrade et non une couleur unie : il laisse l'image
-   respirer en haut et garantit le contraste du texte en bas, la ou les
-   boutons s'empilent.
+   Les trois calques sont, de bas en haut : la copie floue qui remplit
+   l'ecran, l'image nette entiere, puis le voile sombre.
    --------------------------------------------------------------------- */
 .fond {
   position: fixed;
   inset: 0;
   z-index: -1;
-  background-image: url("assets/fond.jpg");
 
-  /* POURQUOI contain et non cover : l'image porte des personnages collés aux
-     bords gauche et droit. En cover, le navigateur agrandit l'image jusqu'à
-     remplir l'écran et rogne ce qui dépasse — mesuré : à 1280 × 900, cover
-     coupait 53 % de la hauteur, et à 360 × 800 il coupait 33 % de la
-     largeur, donc les deux personnages latéraux. contain garantit que
-     l'image entière est toujours visible ; le vide autour est comblé par le
-     vert d'encre du body. */
-  background-size: contain;
+  /* CALQUE 1, le plus bas : une copie floue de l'image, affichée en cover.
+     POURQUOI : l'image est en portrait, l'écran d'un ordinateur est en
+     paysage. Aucun cadrage ne peut à la fois montrer l'image entière et
+     remplir l'écran. En cover seul, on perdait 53 % de la hauteur à
+     1280 × 900 ; en contain seul, il restait deux bandes vides sur les
+     côtés. Ce calque flou remplit ces vides avec les couleurs de l'image
+     elle-même : plus de bande, et l'image reste entière au-dessus.
+     Le flou est cuit dans le fichier, pas calculé par le navigateur : un
+     filter: blur() sur un calque fixe plein écran se recalcule à chaque
+     défilement et rame sur téléphone. Poids mesuré : 4 308 octets. */
+  background-image: url("assets/fond-flou.jpg");
+  background-size: cover;
   background-position: center center;
-  background-repeat: no-repeat;
 }
 
+/* CALQUE 2 : l'image nette, entière, posée par-dessus le flou.
+   contain garantit qu'aucun personnage n'est coupé, quelle que soit la
+   taille de la fenêtre. Perte mesurée : 0 %. */
+.fond::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+
+  /* La boîte prend EXACTEMENT les proportions de l'image, 1024 × 1536, et se
+     limite à la fenêtre. Elle vaut donc la place que contain occupait, mais
+     cette fois c'est un élément réel, avec des bords à lui.
+     POURQUOI ce détour : le fondu de bords posé sur un élément plein écran
+     ne servait à rien, parce qu'il adoucissait les bords de la FENÊTRE, pas
+     ceux de l'image. Mesuré à 360 × 800 : l'image n'occupait que 540 px de
+     hauteur, ses limites tombaient à 130 px et 670 px, loin des bords
+     estompés. Le trait de jointure restait donc visible.
+     Les deux formules disent la même chose que contain, mais en donnant
+     une taille réelle à la boîte : la largeur ne dépasse ni la fenêtre, ni
+     ce qu'autorise la hauteur disponible au rapport 1024/1536, et
+     réciproquement pour la hauteur. Vérifié au rendu : 360 × 540 sur un
+     écran 360 × 800, et 600 × 900 sur un écran 1280 × 900. */
+  width:  min(100%, calc(100vh * 1024 / 1536));
+  height: min(100%, calc(100vw * 1536 / 1024));
+  transform: translate(-50%, -50%);
+
+  /* cover dans une boîte déjà au bon rapport : rien n'est rogné. */
+  background-image: url("assets/fond.jpg");
+  background-size: cover;
+  background-position: center center;
+
+  /* Fondu des quatre bords de l'image sur 4 %, soit 41 px sur 1024, très à
+     l'écart des personnages. Les deux dégradés sont croisés pour traiter les
+     quatre bords ; si le navigateur ignore mask-composite, seul le fondu
+     vertical s'applique, ce qui reste meilleur que pas de fondu. */
+  -webkit-mask-image:
+    linear-gradient(to bottom, transparent 0%, #000 4%, #000 96%, transparent 100%),
+    linear-gradient(to right,  transparent 0%, #000 4%, #000 96%, transparent 100%);
+  mask-image:
+    linear-gradient(to bottom, transparent 0%, #000 4%, #000 96%, transparent 100%),
+    linear-gradient(to right,  transparent 0%, #000 4%, #000 96%, transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
+}
+
+/* CALQUE 3 : le voile sombre, au-dessus des deux images.
+   Dégradé et non couleur unie : l'image respire en haut, et le contraste
+   est garanti en bas, là où les boutons s'empilent. */
 .fond::after {
   content: "";
   position: absolute;
