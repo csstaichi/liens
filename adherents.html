@@ -7,11 +7,20 @@
 <title>CSS Moorea Tahiti — espace adhérents</title>
 <meta name="description" content="Tous les accès de l'association réunis : site, vidéos, musiques, adhésion et conversations.">
 
-<!-- Cette page est diffusée uniquement dans les conversations WhatsApp et
-     Messenger des adhérents. Elle n'est pas secrète, mais elle n'a pas
-     vocation à être référencée : le noindex évite qu'elle remonte dans une
-     recherche publique et vienne concurrencer la page publique. -->
-<meta name="robots" content="noindex, nofollow">
+<!-- PAS de balise robots noindex sur cette page, et c'est délibéré.
+     Elle en portait une jusqu'à la version 00.07.00. Constat fait à
+     l'usage : le compositeur de publication Facebook affichait bien
+     l'aperçu, mais Messenger et WhatsApp ne montraient aucune image. Ces
+     deux applications utilisent un robot d'aperçu distinct, qui respecte
+     le noindex et supprime le cartouche.
+     Or cette page est diffusée exclusivement dans ces deux conversations :
+     y perdre l'aperçu revenait à le perdre partout où il sert.
+     Le risque d'indexation reste faible : aucun site ne pointe vers cette
+     adresse, et Google découvre surtout par les liens entrants.
+     POUR REVENIR EN ARRIÈRE, si l'indexation devient gênante : remettre
+     la ligne ci-dessous, en sachant que l'aperçu disparaîtra à nouveau.
+     <meta name="robots" content="noindex, nofollow">
+-->
 
 <!-- Mêmes polices auto-hébergées que la page publique. -->
 <!-- Aperçu affiché par Facebook, Messenger et WhatsApp quand l'adresse est
