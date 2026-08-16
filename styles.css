@@ -23,7 +23,20 @@
   --lagon-clair:  #6ECFBE;   /* turquoise clair, icones et fleches */
   --tiare:        #FAF6EC;   /* blanc casse, texte principal */
   --sable:        #C9BFA6;   /* beige, texte secondaire */
-  --corail:       #D2564A;   /* accent unique, trace du cercle */
+  --corail:       #D2564A;   /* accent unique, bordure du bloc de secours */
+
+  /* Seconde gamme, réservée à la page ressources. Elle sort du logo, dont
+     l'anneau extérieur est bleu : le portail garde donc ses deux couleurs
+     d'origine, le turquoise pour les accès de l'association, le bleu pour
+     les contenus qui lui sont extérieurs. */
+  --ciel:         #7FB6E8;   /* bleu clair, icônes et titres ressources */
+
+  /* Habillage du bouton. Ces deux jetons existent pour que .lien ne porte
+     pas ses couleurs en dur et reste redéfinissable. ILS DOIVENT RESTER
+     DÉCLARÉS : sans eux, la règle border et la règle background de .lien
+     deviennent invalides, et les boutons perdent fond et bordure. */
+  --bouton-fond:  rgba(18, 49, 44, 0.62);
+  --bouton-bord:  rgba(250, 246, 236, 0.18);
 
   /* Mesures. La hauteur de bouton est fixee a 68 px : au-dessus des 44 px
      recommandes pour le tactile, choisie plus haute parce qu'une partie des
@@ -205,9 +218,9 @@ body {
   gap: 14px;
   min-height: var(--bouton-haut);
   padding: 12px 14px;
-  border: 1px solid rgba(250, 246, 236, 0.18);
+  border: 1px solid var(--bouton-bord);
   border-radius: var(--rayon);
-  background: rgba(18, 49, 44, 0.62);
+  background: var(--bouton-fond);
   backdrop-filter: blur(7px);
   -webkit-backdrop-filter: blur(7px);
   color: var(--tiare);
@@ -264,10 +277,16 @@ body {
   gap: 2px;
 }
 
+/* Le titre n'est plus contraint a une ligne.
+   POURQUOI ce changement : ces boutons portent des titres d'oeuvres, qui
+   appartiennent a leurs auteurs. Les raccourcir pour tenir sur une ligne
+   revient a les alterer. La hauteur du bouton s'adapte, la pile perd un
+   peu de regularite, c'est le prix d'un titre exact. */
 .lien-libelle {
   font-size: 1.02rem;
   font-weight: 700;
   line-height: 1.25;
+  text-wrap: balance;          /* repartit les lignes au lieu d'un mot seul */
 }
 
 .lien-precision {
@@ -317,6 +336,55 @@ body {
   font-size: 0.78rem;
   line-height: 1.45;
   color: var(--sable);
+}
+
+
+/* ---------------------------------------------------------------------
+   SECTION 5 bis — habillage propre à la page ressources
+   POURQUOI une seconde gamme de couleur : les deux listes se suivent sur
+   la même page du site de l'association, l'une sous l'autre. Sans écart
+   visuel, un lecteur croit lire une seule liste de vingt boutons. Le bleu
+   dit « ces contenus ne sont pas à nous ».
+   Tout passe par une classe posée sur le body : aucune règle existante
+   n'est modifiée, les deux autres pages ne peuvent pas être affectées.
+   --------------------------------------------------------------------- */
+.ressources .lien {
+  background: rgba(12, 36, 56, 0.62);
+}
+
+.ressources .lien:hover,
+.ressources .lien:focus-visible {
+  border-color: var(--ciel);
+  background: rgba(22, 62, 96, 0.58);
+}
+
+.ressources .lien:focus-visible {
+  outline-color: var(--ciel);
+}
+
+.ressources .lien-ico {
+  background: rgba(127, 182, 232, 0.14);
+  color: var(--ciel);
+}
+
+.ressources .sur-titre,
+.ressources .section {
+  color: var(--ciel);
+}
+
+/* Le voile de fond vire au bleu nuit, pour que l'écart se voie dès le
+   premier coup d'oeil et pas seulement sur les boutons. */
+.ressources .fond::after {
+  background: linear-gradient(
+    to bottom,
+    rgba(8, 24, 40, 0.58) 0%,
+    rgba(8, 24, 40, 0.76) 38%,
+    rgba(8, 24, 40, 0.92) 100%
+  );
+}
+
+.ressources .avertissement {
+  background: rgba(12, 36, 56, 0.5);
 }
 
 
