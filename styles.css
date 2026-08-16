@@ -24,6 +24,7 @@
   --tiare:        #FAF6EC;   /* blanc casse, texte principal */
   --sable:        #C9BFA6;   /* beige, texte secondaire */
   --corail:       #D2564A;   /* accent unique, bordure du bloc de secours */
+  --orange:       #E68C32;   /* état « en test », provisoire, à retirer */
 
   /* Seconde gamme, réservée à la page ressources. Elle sort du logo, dont
      l'anneau extérieur est bleu : le portail garde donc ses deux couleurs
@@ -117,16 +118,21 @@ body {
 
 /* CALQUE 2 : le voile sombre, au-dessus de l'image.
    Dégradé et non couleur unie : l'image respire en haut, et le contraste
-   est garanti en bas, là où les boutons s'empilent. */
+   est garanti en bas, là où les boutons s'empilent.
+   Opacités allégées à la 00.15.00, de 55/72/90 % à 34/50/74 %. Les
+   personnages paraissaient ternes : ce n'était pas un flou mais ce voile,
+   qui les recouvrait d'un tiers de noir de plus que nécessaire. Le
+   contraste du texte reste assuré par le fond propre des boutons, qui est
+   opaque à 62 %, et non par le voile. */
 .fond::after {
   content: "";
   position: absolute;
   inset: 0;
   background: linear-gradient(
     to bottom,
-    rgba(10, 27, 24, 0.55) 0%,
-    rgba(10, 27, 24, 0.72) 38%,
-    rgba(10, 27, 24, 0.90) 100%
+    rgba(10, 27, 24, 0.34) 0%,
+    rgba(10, 27, 24, 0.50) 38%,
+    rgba(10, 27, 24, 0.74) 100%
   );
 }
 
@@ -144,26 +150,21 @@ body {
 }
 
 .logo {
-  width: 108px;
-  height: 108px;
+  width: 116px;
+  height: 116px;
   margin: 0 auto 16px;
   display: block;
-  border-radius: 50%;
 
-  /* POURQUOI un disque clair derrière le logo : l'intérieur du PNG est
-     transparent et son anneau extérieur est bleu nuit. Posé directement sur
-     le fond vert d'encre, cet anneau disparaîtrait et le dessin flotterait
-     sans limite. Le disque restitue le fond blanc pour lequel le logo a été
-     dessiné. Valeur mesurée sur le fichier : intérieur alpha 0, anneau
-     extérieur RVB 4-17-28. */
-  background: var(--tiare);
+  /* Plus de disque clair derrière le logo depuis la 00.15.00.
+     POURQUOI il n'a plus lieu d'être : le logo néon porte son propre halo
+     lumineux et son fond est entièrement transparent, mesuré sur le
+     fichier. Le disque ajoutait deux zones blanches — la pastille et
+     l'intérieur du cercle — qui écrasaient le halo au lieu de le servir. */
 
-  /* Halo léger : détache le disque de la photo de fond sans ajouter de
-     bordure visible, qui ferait un deuxième anneau concurrent. */
-  box-shadow: 0 6px 26px rgba(0, 0, 0, 0.42);
+  /* Ombre portée douce, pour détacher le logo de l'image de fond sans
+     ajouter de contour concurrent au cercle du dessin. */
+  filter: drop-shadow(0 4px 14px rgba(0, 0, 0, 0.55));
 
-  /* Apparition sobre : le logo monte et se révèle, sans rotation ni rebond,
-     pour ne pas transformer un emblème d'association en animation. */
   opacity: 0;
   animation: poser 0.7s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
 }
@@ -388,6 +389,103 @@ body {
 }
 
 
+/* Bouton EN TEST. Marque temporaire, à retirer quand le lien est confirmé.
+   POURQUOI un clignotement lent et non une couleur fixe : il doit se voir
+   sans détourner du reste, et rappeler qu'il s'agit d'un état provisoire.
+   Le clignotement s'arrête si le système demande la réduction des
+   animations, règle plus bas. */
+.lien--test {
+  border-color: var(--orange);
+  animation: monter 0.42s ease forwards,
+             clignoter 1.6s ease-in-out 1s infinite;
+}
+
+@keyframes clignoter {
+  0%, 100% { border-color: var(--orange); box-shadow: 0 0 0 0 rgba(230, 140, 50, 0); }
+  50%      { border-color: var(--orange); box-shadow: 0 0 0 3px rgba(230, 140, 50, 0.28); }
+}
+
+.lien--test .lien-ico { color: var(--orange); background: rgba(230, 140, 50, 0.14); }
+
+
+/* Mot « administrateur » de l'encadré, transformé en lien discret.
+   Il clignote pour signaler qu'il est cliquable, sans être souligné ni
+   coloré comme un lien ordinaire : l'encadré reste une phrase à lire. */
+.lien-admin {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px dotted rgba(110, 207, 190, 0.5);
+  animation: pulser 1.8s ease-in-out infinite;
+}
+
+@keyframes pulser {
+  0%, 100% { color: var(--sable); }
+  50%      { color: var(--lagon-clair); }
+}
+
+
+/* Encadré « Rejoindre nos conversations », page adhérents.
+   Même habillage que l'avertissement de la page ressources, pour rester
+   d'une seule pièce, avec un titre en tête. */
+.demande {
+  width: 100%;
+  max-width: var(--colonne);
+  margin-top: 22px;
+  padding: 14px 16px;
+  border: 1px solid rgba(250, 246, 236, 0.16);
+  border-radius: var(--rayon);
+  background: rgba(18, 49, 44, 0.5);
+}
+
+.demande-titre {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--lagon-clair);
+  margin-bottom: 8px;
+}
+
+.demande p {
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: var(--sable);
+}
+
+/* Les deux consignes sont détachées du texte d'introduction par un léger
+   retrait et une puce, pour qu'on voie d'un coup d'oeil qu'il y en a deux
+   et non une seule. */
+.demande-ligne {
+  margin-top: 8px;
+  padding-left: 14px;
+  position: relative;
+}
+
+.demande-ligne::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--lagon-clair);
+}
+
+/* Repère de version, en bas à droite.
+   Volontairement peu contrasté : il sert au suivi des mises à jour, pas à
+   la lecture courante. */
+.version {
+  width: 100%;
+  max-width: var(--colonne);
+  margin-top: 14px;
+  text-align: right;
+  font-size: 0.68rem;
+  letter-spacing: 0.03em;
+  color: rgba(201, 191, 166, 0.5);
+}
+
+
 /* ---------------------------------------------------------------------
    SECTION 6 — pied de page et secours sans JavaScript
    --------------------------------------------------------------------- */
@@ -424,5 +522,7 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .logo { animation: none; opacity: 1; }
   .lien, .section { animation: none; opacity: 1; }
+  .lien--test { animation: none; opacity: 1; border-color: var(--orange); }
+  .lien-admin { animation: none; color: var(--lagon-clair); }
   .lien:hover, .lien:focus-visible { transform: none; }
 }
