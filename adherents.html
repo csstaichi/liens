@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>CSS Moorea Tahiti — espace adhérents</title>
+<meta name="description" content="Tous les accès de l'association réunis : site, vidéos, musiques, adhésion et conversations.">
+
+<!-- Cette page est diffusée uniquement dans les conversations WhatsApp et
+     Messenger des adhérents. Elle n'est pas secrète, mais elle n'a pas
+     vocation à être référencée : le noindex évite qu'elle remonte dans une
+     recherche publique et vienne concurrencer la page publique. -->
+<meta name="robots" content="noindex, nofollow">
+
+<!-- Mêmes polices auto-hébergées que la page publique. -->
+<link rel="stylesheet" href="assets/polices.css">
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+<!-- Pavé 1 : image de fond, identique à la page publique. -->
+<div class="fond"></div>
+
+<!-- Pavé 2 : en-tête. Même logo signature ; sur-titre et sous-titre
+     différents, ils disent à l'adhérent qu'il est au bon endroit. -->
+<header class="entete">
+
+  <img class="logo" src="assets/logo.png" width="108" height="108"
+       alt="Logo de l'association CSS Moorea Tahiti">
+
+  <p class="sur-titre" data-dico="entete_sur_titre_adherents"></p>
+  <h1 class="titre" data-dico="entete_titre"></h1>
+  <p class="sous-titre" data-dico="entete_sous_titre_adherents"></p>
+</header>
+
+<!-- Pavé 3 : la pile de boutons, remplie par liens.js avec le jeu complet. -->
+<main class="liens" id="liens"></main>
+
+<!-- Pavé 4 : secours sans JavaScript. Ici le lien écrit en dur est celui du
+     site de l'association, puisque cette page lui est déjà consacrée. -->
+<noscript>
+  <div class="secours">
+    <span data-dico="alerte_sans_js">Cette page a besoin de JavaScript pour afficher les liens.</span><br>
+    <a href="https://www.csstahitimoorea.org/accueil">csstahitimoorea.org</a>
+  </div>
+</noscript>
+
+<!-- Pavé 5 : mention de pied de page. -->
+<footer class="pied" data-dico="pied_mention"></footer>
+
+<!-- Pavé 6 : dictionnaire puis jeu de cette page. -->
+<script src="liens.js"></script>
+<script>demarrer("adherents");</script>
+
+</body>
+</html>

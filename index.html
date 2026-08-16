@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Titre et description : c'est ce qui s'affiche quand quelqu'un colle
+     l'adresse dans un message. Le nom du site internet n'y figure pas,
+     conformément à la règle de cette page publique. -->
+<title>CSS Moorea Tahiti — nos liens</title>
+<meta name="description" content="Tai chi à Moorea et Tahiti : actualités, adhésion, événements et conversations de l'association.">
+
+<!-- Polices auto-hébergées, aucun appel à un domaine tiers.
+     Fraunces pour le titre : sérif contemporain à contraste doux, lu
+     lentement, en accord avec la discipline. Karla pour le texte :
+     grotesque à hauteur d'x généreuse, lisible en petit corps. -->
+<link rel="stylesheet" href="assets/polices.css">
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+<!-- Pavé 1 : l'image de fond, en position fixe derrière tout le reste. -->
+<div class="fond"></div>
+
+<!-- Pavé 2 : l'en-tête. Le logo de l'association est l'élément signature.
+     Les attributs width et height sont posés pour que le navigateur
+     réserve la place avant le chargement de l'image : sans eux, le titre
+     saute vers le bas quand le logo arrive. -->
+<header class="entete">
+
+  <img class="logo" src="assets/logo.png" width="108" height="108"
+       alt="Logo de l'association CSS Moorea Tahiti">
+
+  <p class="sur-titre" data-dico="entete_sur_titre_public"></p>
+  <h1 class="titre" data-dico="entete_titre"></h1>
+  <p class="sous-titre" data-dico="entete_sous_titre_public"></p>
+</header>
+
+<!-- Pavé 3 : la pile de boutons. Vide dans le fichier : elle est remplie
+     par liens.js à partir du jeu « publique ». -->
+<main class="liens" id="liens"></main>
+
+<!-- Pavé 4 : secours si JavaScript est désactivé. Un seul lien y est écrit
+     en dur, celui de la page Facebook : c'est le point de contact de
+     l'association et il ne révèle rien de réservé. -->
+<noscript>
+  <div class="secours">
+    <span data-dico="alerte_sans_js">Cette page a besoin de JavaScript pour afficher les liens.</span><br>
+    <span data-dico="alerte_sans_js_secours">Écrivez-nous sur notre page Facebook :</span><br>
+    <a href="https://www.facebook.com/TaiChi.CSSMooreaTahiti">facebook.com/TaiChi.CSSMooreaTahiti</a>
+  </div>
+</noscript>
+
+<!-- Pavé 5 : mention de pied de page. -->
+<footer class="pied" data-dico="pied_mention"></footer>
+
+<!-- Pavé 6 : chargement du dictionnaire puis appel du jeu de cette page.
+     Le nom du jeu est le seul réglage propre à ce fichier. -->
+<script src="liens.js"></script>
+<script>demarrer("publique");</script>
+
+</body>
+</html>
