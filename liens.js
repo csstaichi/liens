@@ -22,8 +22,20 @@
    valeur doit exister. À mettre à jour à CHAQUE livraison, en même temps
    que le nom du zip, sinon la page ment sur ce qu'elle est.
    --------------------------------------------------------------------- */
-const VERSION = "00.24.00";
+const VERSION = "00.27.00";
 const VERSION_DATE = "16 août 2026";
+
+
+/* ---------------------------------------------------------------------
+   CONDOLEANCES_URL — adresse du guichet qui lit et écrit les messages du
+   livre de condoléances.
+   À REMPLACER par l'adresse obtenue en publiant le script Apps Script en
+   application web. Elle ressemble à :
+       https://script.google.com/macros/s/AKfyc.../exec
+   Tant qu'elle vaut la chaîne vide, la page affiche un message d'attente
+   au lieu d'une erreur.
+   --------------------------------------------------------------------- */
+const CONDOLEANCES_URL = "";
 
 
 /* ---------------------------------------------------------------------
@@ -113,6 +125,33 @@ const DICO = {
     // 689 de la Polynésie française, sans espaces ni zéro initial.
     contact_tel_lien: "tel:+68987701460",
 
+    // Thème CONDOLEANCES — livre ouvert après le décès du mari de notre
+    // directrice technique. Ton volontairement sobre et sans effet.
+    entete_sur_titre_condoleances: "Livre de condoléances",
+    entete_sous_titre_condoleances: "En hommage au mari de Yannick GIROUILLE",
+
+    condo_intro: "L'association et ses adhérents adressent à Yannick, à sa famille et à ses proches leurs sincères condoléances et tout leur soutien dans cette douloureuse épreuve.",
+
+    condo_obseques_titre: "Veillée et obsèques",
+    condo_veillee: "Veillée le vendredi 21 août à partir de 18h, à Minchiu.",
+    condo_inhumation: "Obsèques et inhumation le samedi 22 août à 10h, au cimetière chinois du repos éternel, à Arue.",
+
+    condo_ecrire_titre: "Déposer un message",
+    condo_ecrire_intro: "Votre message paraîtra aussitôt sur cette page. Aucune inscription n'est demandée.",
+    condo_champ_prenom: "Prénom",
+    condo_champ_nom: "Nom",
+    condo_champ_message: "Votre message",
+    condo_champ_motif: "Un motif pour accompagner votre message",
+    condo_bouton: "Déposer mon message",
+    condo_envoi: "Envoi en cours…",
+    condo_merci: "Merci. Votre message est déposé.",
+    condo_erreur: "L'envoi n'a pas abouti. Réessayez dans un instant.",
+    condo_manque: "Merci d'indiquer votre prénom, votre nom et votre message.",
+    condo_chargement: "Chargement des messages…",
+    condo_non_configure: "Le livre n'est pas encore ouvert. Revenez dans quelques instants.",
+    condo_compte_un: "message déposé",
+    condo_compte_plusieurs: "messages déposés",
+
     // Thème PIED — mention de bas de page.
     pied_mention: "Association CSS Moorea Tahiti — depuis 2009",
 
@@ -185,6 +224,31 @@ const ICONES = {
     // Epingle de carte : goutte inversee et point central. Pour situer un
     // lieu de pratique.
     epingle: '<path d="M12 21s7-5.7 7-11a7 7 0 1 0-14 0c0 5.3 7 11 7 11z"/><circle cx="12" cy="10" r="2.6"/>',
+
+    // --- Motifs du livre de condoléances. Dessinés au trait, dans la
+    // même graisse que les autres icônes. Aucun émoji : un émoji change
+    // d'aspect d'un téléphone à l'autre, et le registre demandé ici est
+    // celui du recueillement, pas celui de la conversation.
+
+    // Tiare, fleur emblématique de la Polynésie : cinq pétales autour
+    // d'un cœur.
+    tiare: '<circle cx="12" cy="12" r="2.1"/><path d="M12 9.9c0-2.6.9-4.6 2.6-5.2 1.4-.5 2.4 1 1.6 2.4-.8 1.5-2.3 2.4-4.2 2.8"/><path d="M14.1 12c2.6 0 4.6.9 5.2 2.6.5 1.4-1 2.4-2.4 1.6-1.5-.8-2.4-2.3-2.8-4.2"/><path d="M12 14.1c0 2.6-.9 4.6-2.6 5.2-1.4.5-2.4-1-1.6-2.4.8-1.5 2.3-2.4 4.2-2.8"/><path d="M9.9 12c-2.6 0-4.6-.9-5.2-2.6-.5-1.4 1-2.4 2.4-1.6 1.5.8 2.4 2.3 2.8 4.2"/>',
+
+    // Cœur, tracé d'un seul geste.
+    coeur: '<path d="M12 20s-7.4-4.6-7.4-9.6A4.4 4.4 0 0 1 12 7.7a4.4 4.4 0 0 1 7.4 2.7c0 5-7.4 9.6-7.4 9.6z"/>',
+
+    // Feuille de purau, nervure centrale et contour.
+    feuille: '<path d="M20 4c0 8.8-4.4 13.2-9.6 13.2A6.4 6.4 0 0 1 4 10.8C4 5.6 8.4 4 20 4z"/><path d="M17.5 6.5C12 9 8.5 13 6.5 20"/>',
+
+    // Vague, trois ondulations : le lagon qui continue.
+    vague: '<path d="M2.5 8.5c2-2 3.7-2 5.5 0s3.5 2 5.5 0 3.7-2 5.5 0 3.5 2 2.5 0"/><path d="M2.5 13c2-2 3.7-2 5.5 0s3.5 2 5.5 0 3.7-2 5.5 0"/><path d="M2.5 17.5c2-2 3.7-2 5.5 0s3.5 2 5.5 0 3.7-2 5.5 0"/>',
+
+    // Frise de tapa, motif de chevrons entre deux filets.
+    tapa: '<path d="M2.5 6.5h19M2.5 17.5h19"/><path d="M3 14l3-4 3 4 3-4 3 4 3-4 3 4"/>',
+
+    // Mains jointes, geste de recueillement : deux courbes qui se
+    // rejoignent en pointe.
+    mains: '<path d="M12 20.5V9.5"/><path d="M12 9.5c-1.6-3.4-3.6-5.2-6-5.4-.6 4.4 1.3 8.2 6 11.4"/><path d="M12 9.5c1.6-3.4 3.6-5.2 6-5.4.6 4.4-1.3 8.2-6 11.4"/>',
 
     // Enveloppe : un rectangle et le pli du rabat.
     // Pour l'adresse de courriel de l'association.
@@ -731,6 +795,179 @@ function poserTelephone() {
     if (!el) return;
     el.innerHTML = '<a class="lien-tel" href="' + DICO.contact_tel_lien + '">'
                  + DICO.contact_tel + "</a>";
+}
+
+
+/* =====================================================================
+   LIVRE DE CONDOLEANCES
+   ---------------------------------------------------------------------
+   Les messages ne sont PAS dans ce fichier : ils vivent dans une feuille
+   Google, lue et écrite par un script publié en application web. C'est ce
+   qui permet à un message de paraître dans la seconde, sans mise en ligne
+   et sans que le visiteur ait le moindre compte.
+   Modération : la colonne « visible » de la feuille. Passer une ligne à
+   « non » retire le message au rechargement suivant.
+   ===================================================================== */
+
+
+/* ---------------------------------------------------------------------
+   echapper — neutralise le HTML d'un texte venu de l'extérieur.
+   POURQUOI c'est indispensable ici, et nulle part ailleurs : partout dans
+   ce portail, les textes viennent du dictionnaire, écrit par
+   l'association. Ici ils viennent d'inconnus. Un message contenant une
+   balise serait sinon exécuté par le navigateur des autres visiteurs.
+   --------------------------------------------------------------------- */
+function echapper(texte) {
+    return String(texte)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+}
+
+
+/* ---------------------------------------------------------------------
+   construireCondoleance — une carte de message signé.
+   Les retours à la ligne du message sont conservés : quelqu'un qui écrit
+   sa signature sur une ligne à part le fait exprès.
+   --------------------------------------------------------------------- */
+function construireCondoleance(m, rang) {
+    const texte = echapper(m.message).replace(/\n/g, "<br>");
+
+    return '<article class="mot" style="--rang:' + Math.min(rang, 12) + '">'
+         + '<span class="mot-motif">' + construireIcone(m.motif) + "</span>"
+         + '<p class="mot-texte">' + texte + "</p>"
+         + '<p class="mot-signe">'
+         + '<span class="mot-nom">' + echapper(m.prenom) + " " + echapper(m.nom) + "</span>"
+         + (m.date ? '<span class="mot-date">' + echapper(m.date) + "</span>" : "")
+         + "</p>"
+         + "</article>";
+}
+
+
+/* ---------------------------------------------------------------------
+   chargerCondoleances — lit le registre et remplit la page.
+   En cas d'échec, on le dit sobrement plutôt que de laisser une page
+   vide : sur une page de deuil, un écran blanc est déjà une faute.
+   --------------------------------------------------------------------- */
+async function chargerCondoleances() {
+    const boite = document.getElementById("messages");
+    const compteur = document.getElementById("compteur");
+    if (!boite) return;
+
+    if (!CONDOLEANCES_URL) {
+        boite.innerHTML = '<p class="mot-attente">' + DICO.condo_non_configure + "</p>";
+        return;
+    }
+
+    boite.innerHTML = '<p class="mot-attente">' + DICO.condo_chargement + "</p>";
+
+    try {
+        const reponse = await fetch(CONDOLEANCES_URL, { method: "GET" });
+        const donnees = await reponse.json();
+        const liste = donnees.messages || [];
+
+        boite.innerHTML = liste.map(construireCondoleance).join("");
+
+        if (compteur) {
+            compteur.textContent = liste.length + " "
+                + (liste.length > 1 ? DICO.condo_compte_plusieurs : DICO.condo_compte_un);
+        }
+    } catch (err) {
+        boite.innerHTML = '<p class="mot-attente">' + DICO.condo_erreur + "</p>";
+    }
+}
+
+
+/* ---------------------------------------------------------------------
+   envoyerCondoleance — dépose un message dans le registre.
+   Le corps part en text/plain : c'est ce qui évite la requête
+   préliminaire CORS, qu'Apps Script ne sait pas traiter. Le contenu reste
+   du JSON, seul l'en-tête change.
+   --------------------------------------------------------------------- */
+async function envoyerCondoleance(evenement) {
+    evenement.preventDefault();
+
+    const etat = document.getElementById("etat");
+    const bouton = document.getElementById("envoyer");
+    const lire = (id) => (document.getElementById(id) || {}).value || "";
+
+    const donnees = {
+        prenom: lire("prenom").trim(),
+        nom: lire("nom").trim(),
+        message: lire("message").trim(),
+        motif: (document.querySelector('input[name="motif"]:checked') || {}).value || "tiare",
+        // Champ piège, masqué par la feuille de style. Un humain ne le
+        // remplit jamais ; un robot presque toujours.
+        site: lire("site")
+    };
+
+    if (!donnees.prenom || !donnees.nom || !donnees.message) {
+        etat.textContent = DICO.condo_manque;
+        etat.className = "etat etat--erreur";
+        return;
+    }
+
+    bouton.disabled = true;
+    etat.textContent = DICO.condo_envoi;
+    etat.className = "etat";
+
+    try {
+        const reponse = await fetch(CONDOLEANCES_URL, {
+            method: "POST",
+            headers: { "Content-Type": "text/plain;charset=utf-8" },
+            body: JSON.stringify(donnees)
+        });
+        const resultat = await reponse.json();
+
+        if (!resultat.ok) throw new Error(resultat.erreur || "refus");
+
+        etat.textContent = DICO.condo_merci;
+        etat.className = "etat etat--merci";
+        document.getElementById("formulaire").reset();
+        await chargerCondoleances();
+    } catch (err) {
+        etat.textContent = DICO.condo_erreur;
+        etat.className = "etat etat--erreur";
+    } finally {
+        bouton.disabled = false;
+    }
+}
+
+
+/* ---------------------------------------------------------------------
+   poserMotifs — les six motifs proposés, sous forme de choix illustrés.
+   Le premier est coché par défaut : personne ne doit être bloqué par ce
+   champ.
+   --------------------------------------------------------------------- */
+function poserMotifs() {
+    const boite = document.getElementById("motifs");
+    if (!boite) return;
+
+    const liste = ["tiare", "coeur", "feuille", "vague", "tapa", "mains"];
+    boite.innerHTML = liste.map(function (nom, i) {
+        return '<label class="motif">'
+             + '<input type="radio" name="motif" value="' + nom + '"'
+             + (i === 0 ? " checked" : "") + ">"
+             + '<span class="motif-dessin">' + construireIcone(nom) + "</span>"
+             + "</label>";
+    }).join("");
+}
+
+
+/* ---------------------------------------------------------------------
+   demarrerCondoleances — point d'entrée de la page.
+   --------------------------------------------------------------------- */
+function demarrerCondoleances() {
+    poserTextes();
+    poserMotifs();
+    poserVersion();
+
+    const f = document.getElementById("formulaire");
+    if (f) f.addEventListener("submit", envoyerCondoleance);
+
+    chargerCondoleances();
 }
 
 

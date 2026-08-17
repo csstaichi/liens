@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Livre de condoléances — CSS Moorea Tahiti</title>
+<meta name="description" content="Livre de condoléances ouvert par l'association CSS Moorea Tahiti en hommage au mari de Yannick GIROUILLE.">
+
+<!-- Aperçu de partage volontairement SOBRE : c'est la seule page du
+     portail dont la carte ne montre pas des boutons. Un cartouche gai
+     posé sur un lien de condoléances serait une faute. L'image dédiée
+     n'existe pas encore : on retombe donc sur celle du portail, neutre.
+     Voir le LISEZ-MOI si une image propre est souhaitée. -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="CSS Moorea Tahiti">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:url" content="https://csstaichi.github.io/liens/condoleances.html">
+<meta property="og:title" content="Livre de condoléances — CSS Moorea Tahiti">
+<meta property="og:description" content="Déposez un message pour Yannick, sa famille et ses proches.">
+<meta property="og:image" content="https://csstaichi.github.io/liens/assets/partage.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Livre de condoléances — CSS Moorea Tahiti">
+<meta name="twitter:description" content="Déposez un message pour Yannick, sa famille et ses proches.">
+<meta name="twitter:image" content="https://csstaichi.github.io/liens/assets/partage.jpg">
+
+<link rel="icon" type="image/png" href="assets/logo.png">
+<link rel="apple-touch-icon" href="assets/logo.png">
+
+<link rel="stylesheet" href="assets/polices.css">
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<!-- La classe « condoleances » assombrit le fond et atténue les
+     figurines : le vert vif du portail n'a pas sa place ici. -->
+<body class="condoleances">
+
+<!-- Pavé 1 : arrière-plan et figurines atténuées. -->
+<div class="fond"></div>
+
+<!-- Pavé 2 : en-tête. -->
+<header class="entete">
+
+  <img class="logo" src="assets/logo.png" width="116" height="116"
+       alt="Logo de l'association CSS Moorea Tahiti">
+
+  <p class="sur-titre" data-dico="entete_sur_titre_condoleances"></p>
+  <h1 class="titre" data-dico="entete_titre"></h1>
+  <p class="sous-titre" data-dico="entete_sous_titre_condoleances"></p>
+</header>
+
+<!-- Pavé 3 : mot d'introduction. -->
+<p class="condo-intro" data-dico="condo_intro"></p>
+
+<!-- Pavé 4 : veillée et obsèques. Information factuelle, séparée des
+     messages pour rester trouvable. -->
+<section class="condo-dates">
+  <p class="demande-titre" data-dico="condo_obseques_titre"></p>
+  <p data-dico="condo_veillee"></p>
+  <p data-dico="condo_inhumation"></p>
+</section>
+
+<!-- Pavé 5 : nombre de messages, puis les messages eux-mêmes, lus dans
+     le registre par liens.js. -->
+<p class="condo-compteur" id="compteur"></p>
+<main class="liens" id="messages"></main>
+
+<!-- Pavé 6 : formulaire de dépôt.
+     Pas de balise form imbriquée dans autre chose, pas de rechargement :
+     l'envoi se fait sans quitter la page, et le message apparaît aussitôt
+     au-dessus. -->
+<section class="condo-form">
+  <p class="demande-titre" data-dico="condo_ecrire_titre"></p>
+  <p data-dico="condo_ecrire_intro"></p>
+
+  <form id="formulaire" novalidate>
+
+    <div class="champ">
+      <label for="prenom" data-dico="condo_champ_prenom"></label>
+      <input type="text" id="prenom" name="prenom" maxlength="60" autocomplete="given-name">
+    </div>
+
+    <div class="champ">
+      <label for="nom" data-dico="condo_champ_nom"></label>
+      <input type="text" id="nom" name="nom" maxlength="60" autocomplete="family-name">
+    </div>
+
+    <div class="champ">
+      <label for="message" data-dico="condo_champ_message"></label>
+      <textarea id="message" name="message" maxlength="1200"></textarea>
+    </div>
+
+    <div class="champ">
+      <label data-dico="condo_champ_motif"></label>
+      <div class="motifs" id="motifs"></div>
+    </div>
+
+    <!-- Champ piège contre les robots. Invisible à l'écran, ignoré par
+         les lecteurs d'écran, jamais rempli par un humain. -->
+    <div class="piege" aria-hidden="true">
+      <label for="site">Ne pas remplir</label>
+      <input type="text" id="site" name="site" tabindex="-1" autocomplete="off">
+    </div>
+
+    <button type="submit" class="bouton-envoi" id="envoyer" data-dico="condo_bouton"></button>
+    <p class="etat" id="etat" role="status"></p>
+  </form>
+</section>
+
+<!-- Pavé 7 : secours sans JavaScript. -->
+<noscript>
+  <div class="secours">
+    <span data-dico="alerte_sans_js">Cette page a besoin de JavaScript pour afficher les messages.</span>
+  </div>
+</noscript>
+
+<!-- Pavé 8 : mention de pied de page et repère de version. -->
+<footer class="pied" data-dico="pied_mention"></footer>
+<p class="version" id="version"></p>
+
+<!-- Pavé 9 : dictionnaire puis ouverture du registre. -->
+<script src="liens.js"></script>
+<script>demarrerCondoleances();</script>
+
+</body>
+</html>
