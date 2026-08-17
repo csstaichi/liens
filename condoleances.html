@@ -72,8 +72,11 @@
      l'envoi se fait sans quitter la page, et le message apparaît aussitôt
      au-dessus. -->
 <section class="condo-form">
-  <p class="demande-titre" data-dico="condo_ecrire_titre"></p>
-  <p data-dico="condo_ecrire_intro"></p>
+  <!-- Titre et intro portent un identifiant : ils changent de texte
+       quand le formulaire sert à MODIFIER un message au lieu d'en
+       déposer un neuf. C'est habillerFormulaire() qui les écrit. -->
+  <p class="demande-titre" id="form-titre"></p>
+  <p id="form-intro"></p>
 
   <form id="formulaire" novalidate>
 
@@ -85,6 +88,9 @@
     <div class="champ">
       <label for="nom" data-dico="condo_champ_nom"></label>
       <input type="text" id="nom" name="nom" maxlength="60" autocomplete="family-name">
+      <!-- Mention du caractère facultatif : elle est placée sous le second
+           champ, donc lue après les deux, et non au-dessus du premier. -->
+      <p class="champ-aide" data-dico="condo_champ_nom_libre"></p>
     </div>
 
     <div class="champ">
@@ -105,6 +111,11 @@
     </div>
 
     <button type="submit" class="bouton-envoi" id="envoyer" data-dico="condo_bouton"></button>
+
+    <!-- Bouton d'abandon d'une modification. Masqué tant qu'aucun message
+         n'est en cours de modification. -->
+    <button type="button" class="bouton-annuler" id="annuler" hidden></button>
+
     <p class="etat" id="etat" role="status"></p>
   </form>
 </section>

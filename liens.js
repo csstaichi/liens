@@ -22,7 +22,7 @@
    valeur doit exister. À mettre à jour à CHAQUE livraison, en même temps
    que le nom du zip, sinon la page ment sur ce qu'elle est.
    --------------------------------------------------------------------- */
-const VERSION = "00.27.00";
+const VERSION = "00.28.00";
 const VERSION_DATE = "16 août 2026";
 
 
@@ -34,6 +34,8 @@ const VERSION_DATE = "16 août 2026";
        https://script.google.com/macros/s/AKfyc.../exec
    Tant qu'elle vaut la chaîne vide, la page affiche un message d'attente
    au lieu d'une erreur.
+   ATTENTION : republier le script Apps Script produit une NOUVELLE adresse.
+   Celle-ci est donc à revérifier après toute modification de Code.gs.
    --------------------------------------------------------------------- */
 const CONDOLEANCES_URL = "https://script.google.com/macros/s/AKfycbwzxGArSt_95p59gVqkmWtQoOCFaA2vGASlOJDSqdTGV6aPLsLUjRYVDBHtP-q1dD2ulw/exec";
 
@@ -140,17 +142,41 @@ const DICO = {
     condo_ecrire_intro: "Votre message paraîtra aussitôt sur cette page. Aucune inscription n'est demandée.",
     condo_champ_prenom: "Prénom",
     condo_champ_nom: "Nom",
+    // Le nom est facultatif depuis la 00.28.00 : quelqu'un peut vouloir
+    // écrire sans se nommer. Sa ligne paraît alors sous une mention neutre.
+    condo_champ_nom_libre: "Ces deux champs sont facultatifs. Laissés vides, votre message paraîtra sous la mention « Nom masqué ».",
+    condo_anonyme: "Nom masqué",
     condo_champ_message: "Votre message",
     condo_champ_motif: "Un motif pour accompagner votre message",
     condo_bouton: "Déposer mon message",
     condo_envoi: "Envoi en cours…",
     condo_merci: "Merci. Votre message est déposé.",
     condo_erreur: "L'envoi n'a pas abouti. Réessayez dans un instant.",
-    condo_manque: "Merci d'indiquer votre prénom, votre nom et votre message.",
+    condo_manque: "Merci d'écrire votre message.",
     condo_chargement: "Chargement des messages…",
     condo_non_configure: "Le livre n'est pas encore ouvert. Revenez dans quelques instants.",
     condo_compte_un: "message déposé",
     condo_compte_plusieurs: "messages déposés",
+
+    // Modification d'un message déjà déposé. Ouverte à tous, sans clé ni
+    // identification : c'est le choix retenu, assumé, et compensé par
+    // l'onglet « historique » de la feuille, qui garde chaque version
+    // écrasée.
+    condo_modifier: "Modifier mon message",
+    condo_modif_titre: "Modifier ce message",
+    condo_modif_intro: "Corrigez le texte, le nom ou le motif, puis enregistrez. La version précédente est conservée dans le registre de l'association.",
+    condo_modif_bouton: "Enregistrer les modifications",
+    condo_modif_annuler: "Annuler",
+    condo_modif_merci: "Merci. Le message est modifié.",
+
+    // Libellés des six motifs proposés. Ils sont affichés SOUS chaque
+    // vignette : un dessin de 48 px ne se nomme pas tout seul.
+    motif_coeur: "Cœur",
+    motif_ruban: "Ruban",
+    motif_chrysantheme: "Chrysanthème",
+    motif_couronne: "Couronne",
+    motif_arbre: "Arbre",
+    motif_billets: "Billets",
 
     // Thème PIED — mention de bas de page.
     pied_mention: "Association CSS Moorea Tahiti — depuis 2009",
@@ -225,30 +251,53 @@ const ICONES = {
     // lieu de pratique.
     epingle: '<path d="M12 21s7-5.7 7-11a7 7 0 1 0-14 0c0 5.3 7 11 7 11z"/><circle cx="12" cy="10" r="2.6"/>',
 
-    // --- Motifs du livre de condoléances. Dessinés au trait, dans la
-    // même graisse que les autres icônes. Aucun émoji : un émoji change
-    // d'aspect d'un téléphone à l'autre, et le registre demandé ici est
-    // celui du recueillement, pas celui de la conversation.
+    /* --- Motifs du livre de condoléances -----------------------------
+       Refondus à la 00.28.00. Les six motifs polynésiens de la 00.27.00
+       (tiare, feuille, vague, tapa, mains, et l'ancien cœur au trait
+       simple) sont RETIRÉS : trop maigres à l'écran, et étrangers au code
+       funéraire chinois du lieu d'inhumation.
+       POURQUOI ces six-là : ils reprennent les usages du deuil chinois,
+       où le blanc est la couleur du deuil et le rouge est proscrit. Les
+       tracés étant monochromes et prenant la couleur du texte, aucun
+       rouge ne peut apparaître par construction.
+       Ils sont dessinés plus denses que les icônes de boutons : ils sont
+       affichés à 48 px dans le formulaire, contre 24 px pour un bouton.
+       --------------------------------------------------------------- */
 
-    // Tiare, fleur emblématique de la Polynésie : cinq pétales autour
-    // d'un cœur.
-    tiare: '<circle cx="12" cy="12" r="2.1"/><path d="M12 9.9c0-2.6.9-4.6 2.6-5.2 1.4-.5 2.4 1 1.6 2.4-.8 1.5-2.3 2.4-4.2 2.8"/><path d="M14.1 12c2.6 0 4.6.9 5.2 2.6.5 1.4-1 2.4-2.4 1.6-1.5-.8-2.4-2.3-2.8-4.2"/><path d="M12 14.1c0 2.6-.9 4.6-2.6 5.2-1.4.5-2.4-1-1.6-2.4.8-1.5 2.3-2.4 4.2-2.8"/><path d="M9.9 12c-2.6 0-4.6-.9-5.2-2.6-.5-1.4 1-2.4 2.4-1.6 1.5.8 2.4 2.3 2.8 4.2"/>',
+    // Cœur blanc. Contour plein, plus un court reflet intérieur qui lui
+    // donne du volume sans ajouter de couleur.
+    coeur: '<path d="M12 20.6c-1.3-1-7.6-5-7.6-9.9A4.5 4.5 0 0 1 12 7.9a4.5 4.5 0 0 1 7.6 2.8c0 4.9-6.3 8.9-7.6 9.9z"/><path d="M12 17.4c-.9-.8-5-3.5-5-6.6a2.8 2.8 0 0 1 5-1.7 2.8 2.8 0 0 1 5 1.7c0 3.1-4.1 5.8-5 6.6z"/>',
 
-    // Cœur, tracé d'un seul geste.
-    coeur: '<path d="M12 20s-7.4-4.6-7.4-9.6A4.4 4.4 0 0 1 12 7.7a4.4 4.4 0 0 1 7.4 2.7c0 5-7.4 9.6-7.4 9.6z"/>',
+    // Ruban de deuil. Deux pans qui se croisent au milieu et remontent en
+    // boucle. C'est la forme universelle du ruban de condoléances.
+    ruban: '<path d="M8.4 21.4c1.1-3.6 2.3-6.4 3.6-8.5 1.8-3 3.2-5.2 2.7-6.9-.4-1.4-1.7-2.1-2.9-1.7"/><path d="M15.6 21.4c-1.1-3.6-2.3-6.4-3.6-8.5-1.8-3-3.2-5.2-2.7-6.9.4-1.4 1.7-2.1 2.9-1.7"/>',
 
-    // Feuille de purau, nervure centrale et contour.
-    feuille: '<path d="M20 4c0 8.8-4.4 13.2-9.6 13.2A6.4 6.4 0 0 1 4 10.8C4 5.6 8.4 4 20 4z"/><path d="M17.5 6.5C12 9 8.5 13 6.5 20"/>',
+    // Chrysanthème, la fleur funéraire de référence en Chine. Cœur plein,
+    // douze pétales courts, douze pointes longues en couronne extérieure.
+    // Le remplissage du cœur est ce qui le distingue de la couronne à
+    // petite taille.
+    chrysantheme: '<circle cx="12" cy="12" r="2.1" fill="currentColor" stroke="none"/><path d="M13.66 5.82L14.36 3.21M16.53 7.47L18.43 5.57M18.18 10.34L20.79 9.64M18.18 13.66L20.79 14.36M16.53 16.53L18.43 18.43M13.66 18.18L14.36 20.79M10.34 18.18L9.64 20.79M7.47 16.53L5.57 18.43M5.82 13.66L3.21 14.36M5.82 10.34L3.21 9.64M7.47 7.47L5.57 5.57M10.34 5.82L9.64 3.21"/><path d="M12 8.9Q11.22 7.06 12 5.4Q12.78 7.06 12 8.9ZM13.55 9.32Q13.79 7.33 15.3 6.28Q15.15 8.11 13.55 9.32ZM14.68 10.45Q15.89 8.85 17.72 8.7Q16.67 10.21 14.68 10.45ZM15.1 12Q16.94 11.22 18.6 12Q16.94 12.78 15.1 12ZM14.68 13.55Q16.67 13.79 17.72 15.3Q15.89 15.15 14.68 13.55ZM13.55 14.68Q15.15 15.89 15.3 17.72Q13.79 16.67 13.55 14.68ZM12 15.1Q12.78 16.94 12 18.6Q11.22 16.94 12 15.1ZM10.45 14.68Q10.21 16.67 8.7 17.72Q8.85 15.89 10.45 14.68ZM9.32 13.55Q8.11 15.15 6.28 15.3Q7.33 13.79 9.32 13.55ZM8.9 12Q7.06 12.78 5.4 12Q7.06 11.22 8.9 12ZM9.32 10.45Q7.33 10.21 6.28 8.7Q8.11 8.85 9.32 10.45ZM10.45 9.32Q8.85 8.11 8.7 6.28Q10.21 7.33 10.45 9.32Z"/>',
 
-    // Vague, trois ondulations : le lagon qui continue.
-    vague: '<path d="M2.5 8.5c2-2 3.7-2 5.5 0s3.5 2 5.5 0 3.7-2 5.5 0 3.5 2 2.5 0"/><path d="M2.5 13c2-2 3.7-2 5.5 0s3.5 2 5.5 0 3.7-2 5.5 0"/><path d="M2.5 17.5c2-2 3.7-2 5.5 0s3.5 2 5.5 0 3.7-2 5.5 0"/>',
+    // Couronne mortuaire : quatorze feuilles inclinées en anneau. Le vide
+    // central est ce qui la fait lire comme une couronne et non comme une
+    // fleur.
+    couronne: '<path d="M10.05 5.03Q12.36 5.49 13.95 3.77Q11.64 3.31 10.05 5.03ZM13.79 4.99Q15.56 6.54 17.81 5.84Q16.04 4.29 13.79 4.99ZM17.06 6.83Q17.81 9.05 20.11 9.57Q19.35 7.35 17.06 6.83ZM18.97 10.05Q18.51 12.36 20.23 13.95Q20.69 11.64 18.97 10.05ZM19.01 13.79Q17.46 15.56 18.16 17.81Q19.71 16.04 19.01 13.79ZM17.17 17.06Q14.95 17.81 14.43 20.11Q16.65 19.35 17.17 17.06ZM13.95 18.97Q11.64 18.51 10.05 20.23Q12.36 20.69 13.95 18.97ZM10.21 19.01Q8.44 17.46 6.19 18.16Q7.96 19.71 10.21 19.01ZM6.94 17.17Q6.19 14.95 3.89 14.43Q4.65 16.65 6.94 17.17ZM5.03 13.95Q5.49 11.64 3.77 10.05Q3.31 12.36 5.03 13.95ZM4.99 10.21Q6.54 8.44 5.84 6.19Q4.29 7.96 4.99 10.21ZM6.83 6.94Q9.05 6.19 9.57 3.89Q7.35 4.65 6.83 6.94Z"/>',
 
-    // Frise de tapa, motif de chevrons entre deux filets.
-    tapa: '<path d="M2.5 6.5h19M2.5 17.5h19"/><path d="M3 14l3-4 3 4 3-4 3 4 3-4 3 4"/>',
+    // Arbre du souvenir : houppier festonné en neuf bosses, tronc,
+    // deux branches et la ligne de sol. Le feston est ce qui évite le
+    // rond posé sur un bâton.
+    arbre: '<path d="M4.6 10.2Q3 8.98 5.05 8.01Q3.86 6.58 6.33 6.09Q5.66 4.39 8.3 4.66Q8.47 2.73 10.72 3.9Q12 2.1 13.28 3.9Q15.53 2.73 15.7 4.66Q18.34 4.39 17.67 6.09Q20.14 6.58 18.95 8.01Q21 8.98 19.4 10.2"/><path d="M4.6 10.2c0 3.5 3.3 6 7.4 6s7.4-2.5 7.4-6"/><path d="M12 20.6v-8.2M12 14.4 9.4 11.9M12 12.9l2.5-2.3"/><path d="M6.8 20.9h10.4"/>',
 
-    // Mains jointes, geste de recueillement : deux courbes qui se
-    // rejoignent en pointe.
-    mains: '<path d="M12 20.5V9.5"/><path d="M12 9.5c-1.6-3.4-3.6-5.2-6-5.4-.6 4.4 1.3 8.2 6 11.4"/><path d="M12 9.5c1.6-3.4 3.6-5.2 6-5.4.6 4.4-1.3 8.2-6 11.4"/>',
+    // Billets brûlés. Papier-monnaie funéraire offert au défunt : deux
+    // feuillets en éventail et trois flammes. Le seul motif du jeu qui
+    // nomme explicitement le rite.
+    billets: '<path d="M4.9 15.4L13.9 13.4L15.3 19.5L6.3 21.5Z"/><path d="M9 15L18.2 16.2L17.5 21.9L8.3 20.7Z"/><circle cx="13.3" cy="18.5" r="1.15"/><path d="M12 3.8c1.3 1.7 1.9 3 1.9 4.1a1.9 1.9 0 0 1-3.8 0c0-1.1.6-2.4 1.9-4.1z"/><path d="M7 7.6c.9 1.2 1.4 2.1 1.4 2.9a1.4 1.4 0 0 1-2.8 0c0-.8.5-1.7 1.4-2.9z"/><path d="M17 7.6c.9 1.2 1.4 2.1 1.4 2.9a1.4 1.4 0 0 1-2.8 0c0-.8.5-1.7 1.4-2.9z"/>',
+
+    // Motif « non saisi ». JAMAIS proposé dans le formulaire : c'est la
+    // valeur de repli, celle qui dit qu'aucun choix n'a été fait. Elle
+    // remplace l'ancien repli sur le premier motif de la liste, qui
+    // inventait un choix que personne n'avait exprimé.
+    sans: '<circle cx="12" cy="12" r="8.8"/><path d="M9.6 9.7a2.5 2.5 0 0 1 4.9.7c0 1.7-2.5 2-2.5 3.7"/><path d="M12 17.5h.01"/>',
 
     // Enveloppe : un rectangle et le pli du rabat.
     // Pour l'adresse de courriel de l'association.
@@ -542,66 +591,54 @@ const PLANNINGS = [
     // le nom s'affiche alors sans lien d'appel.
     // Format d'appel : indicatif 689, puis les huit chiffres sans espace.
 
-    {
-        jour: "Lundi", ile: "tahiti", commune: "FAAA",
-        lieu: "Parc de Motu-Ovini, site de Vaitupa",
-        horaire: "08h00 – 10h00",
-        gens: [
-            { nom: "Yannick GIROUILLE", role: "directrice technique instructrice", tel: "87 71 40 10" },
-            { nom: "Josiane LI", role: "assistante remplaçante", tel: "87 74 13 26" }
-        ]
-    },
+    { jour: "Lundi", ile: "tahiti", commune: "FAAA",
+      lieu: "Parc de Motu-Ovini, site de Vaitupa",
+      horaire: "08h00 – 10h00",
+      gens: [
+        { nom: "Yannick GIROUILLE", role: "directrice technique instructrice", tel: "87 71 40 10" },
+        { nom: "Josiane LI",        role: "assistante remplaçante",            tel: "87 74 13 26" }
+      ] },
 
-    {
-        jour: "Mardi", ile: "tahiti", commune: "PIRAE",
-        lieu: "Site de la Croix-Rouge",
-        horaire: "08h00 – 10h00",
-        gens: [
-            { nom: "Joséphine TEINAORE", role: "assistante remplaçante", tel: "87 74 44 17" },
-            { nom: "Hubert LAU SAN", role: "assistant remplaçant", tel: "87 27 54 38" }
-        ]
-    },
+    { jour: "Mardi", ile: "tahiti", commune: "PIRAE",
+      lieu: "Site de la Croix-Rouge",
+      horaire: "08h00 – 10h00",
+      gens: [
+        { nom: "Joséphine TEINAORE", role: "assistante remplaçante", tel: "87 74 44 17" },
+        { nom: "Hubert LAU SAN",     role: "assistant remplaçant",   tel: "87 27 54 38" }
+      ] },
 
-    {
-        jour: "Mercredi", ile: "moorea", commune: "HAAPITI",
-        lieu: "Chez Moea FARNHAM",
-        horaire: "14h00 – 16h00",
-        gens: [
-            { nom: "Timau MARSAULT", role: "instructrice", tel: "87 75 18 29" },
-            { nom: "Hélène DIARA", role: "assistante remplaçante", tel: "" }
-        ]
-    },
+    { jour: "Mercredi", ile: "moorea", commune: "HAAPITI",
+      lieu: "Chez Moea FARNHAM",
+      horaire: "14h00 – 16h00",
+      gens: [
+        { nom: "Timau MARSAULT", role: "instructrice",           tel: "87 75 18 29" },
+        { nom: "Hélène DIARA",   role: "assistante remplaçante", tel: "" }
+      ] },
 
-    {
-        jour: "Jeudi", ile: "tahiti", commune: "PUNAAUIA",
-        lieu: "Parc Vairai, rond-point de l'Université",
-        horaire: "08h00 – 10h00",
-        gens: [
-            { nom: "Yannick GIROUILLE", role: "directrice technique instructrice", tel: "87 71 40 10" },
-            { nom: "Josiane LI", role: "assistante remplaçante", tel: "87 74 13 26" }
-        ]
-    },
+    { jour: "Jeudi", ile: "tahiti", commune: "PUNAAUIA",
+      lieu: "Parc Vairai, rond-point de l'Université",
+      horaire: "08h00 – 10h00",
+      gens: [
+        { nom: "Yannick GIROUILLE", role: "directrice technique instructrice", tel: "87 71 40 10" },
+        { nom: "Josiane LI",        role: "assistante remplaçante",            tel: "87 74 13 26" }
+      ] },
 
-    {
-        jour: "Vendredi", ile: "tahiti", commune: "PIRAE",
-        lieu: "Site de la Mairie",
-        horaire: "08h30 – 10h30",
-        gens: [
-            { nom: "Joséphine TEINAORE", role: "assistante remplaçante", tel: "87 74 44 17" },
-            { nom: "Hubert LAU SAN", role: "assistant remplaçant", tel: "87 27 54 38" }
-        ]
-    },
+    { jour: "Vendredi", ile: "tahiti", commune: "PIRAE",
+      lieu: "Site de la Mairie",
+      horaire: "08h30 – 10h30",
+      gens: [
+        { nom: "Joséphine TEINAORE", role: "assistante remplaçante", tel: "87 74 44 17" },
+        { nom: "Hubert LAU SAN",     role: "assistant remplaçant",   tel: "87 27 54 38" }
+      ] },
 
-    {
-        jour: "Samedi", ile: "moorea", commune: "PAOPAO",
-        lieu: "Centre culturel TE PU ATITI'A",
-        horaire: "09h00 – 11h00",
-        gens: [
-            { nom: "Anick LAU", role: "instructrice", tel: "87 79 03 39" },
-            { nom: "Nadine GUAIS", role: "instructrice", tel: "87 74 88 67" },
-            { nom: "Anne-Dominique MEYER", role: "assistante remplaçante", tel: "" }
-        ]
-    }
+    { jour: "Samedi", ile: "moorea", commune: "PAOPAO",
+      lieu: "Centre culturel TE PU ATITI'A",
+      horaire: "09h00 – 11h00",
+      gens: [
+        { nom: "Anick LAU",              role: "instructrice",           tel: "87 79 03 39" },
+        { nom: "Nadine GUAIS",           role: "instructrice",           tel: "87 74 88 67" },
+        { nom: "Anne-Dominique MEYER",   role: "assistante remplaçante", tel: "" }
+      ] }
 ];
 
 
@@ -751,14 +788,14 @@ function poserPlannings(idConteneur) {
 
     PLANNINGS.forEach(function (c, rang) {
         html += '<article class="fiche fiche--' + c.ile + '" style="--rang:' + rang + '">'
-            + '<p class="fiche-jour">' + c.jour + "</p>"
-            + '<p class="fiche-commune">'
-            + '<span class="fiche-ico">' + construireIcone("epingle") + "</span>"
-            + c.commune + "</p>"
-            + '<p class="fiche-lieu">' + c.lieu + "</p>"
-            + '<p class="fiche-horaire">' + c.horaire + "</p>"
-            + construireGens(c.gens)
-            + "</article>";
+              + '<p class="fiche-jour">' + c.jour + "</p>"
+              + '<p class="fiche-commune">'
+              + '<span class="fiche-ico">' + construireIcone("epingle") + "</span>"
+              + c.commune + "</p>"
+              + '<p class="fiche-lieu">' + c.lieu + "</p>"
+              + '<p class="fiche-horaire">' + c.horaire + "</p>"
+              + construireGens(c.gens)
+              + "</article>";
     });
 
     boite.innerHTML = html;
@@ -780,8 +817,8 @@ function construireGens(gens) {
 
     gens.forEach(function (g) {
         html += "<li>"
-            + '<span class="gens-nom">' + g.nom + "</span>"
-            + '<span class="gens-role">' + g.role + "</span>";
+              + '<span class="gens-nom">' + g.nom + "</span>"
+              + '<span class="gens-role">' + g.role + "</span>";
 
         if (g.tel) {
             // Indicatif 689 et suppression des espaces : c'est la seule
@@ -806,7 +843,7 @@ function poserTelephone() {
     const el = document.getElementById("telephone");
     if (!el) return;
     el.innerHTML = '<a class="lien-tel" href="' + DICO.contact_tel_lien + '">'
-        + DICO.contact_tel + "</a>";
+                 + DICO.contact_tel + "</a>";
 }
 
 
@@ -840,21 +877,67 @@ function echapper(texte) {
 
 
 /* ---------------------------------------------------------------------
+   MOTIFS_PROPOSES — les six motifs offerts au choix, dans l'ordre
+   d'affichage. Cette liste doit rester IDENTIQUE à la constante MOTIFS
+   de Code.gs : c'est le guichet qui a le dernier mot à l'enregistrement,
+   un motif absent de sa liste serait ramené au repli.
+
+   MOTIF_DEFAUT — le motif « non saisi », jamais proposé. Il sert quand la
+   cellule est vide, quand le motif est inconnu, ou quand le formulaire est
+   envoyé sans choix. POURQUOI ne pas retomber sur le premier de la liste,
+   comme jusqu'à la 00.27.00 : cela attribuait à quelqu'un un choix qu'il
+   n'avait pas fait.
+   --------------------------------------------------------------------- */
+const MOTIFS_PROPOSES = ["coeur", "ruban", "chrysantheme", "couronne", "arbre", "billets"];
+const MOTIF_DEFAUT = "sans";
+
+
+/* ---------------------------------------------------------------------
+   MESSAGES — dernière liste lue au guichet, gardée en mémoire.
+   POURQUOI : quand quelqu'un clique « Modifier mon message », il faut
+   retrouver le texte et le motif de la ligne sans redemander le registre.
+
+   LIGNE_EN_COURS — numéro de la ligne en cours de modification dans la
+   feuille. Zéro signifie « dépôt d'un message neuf ». C'est ce seul
+   nombre qui distingue les deux usages du même formulaire.
+   --------------------------------------------------------------------- */
+let MESSAGES = [];
+let LIGNE_EN_COURS = 0;
+
+
+/* ---------------------------------------------------------------------
+   nomAffiche — le nom sous lequel paraît un message.
+   Prénom et nom sont facultatifs depuis la 00.28.00. Quand les deux sont
+   vides, on n'affiche NI une ligne blanche NI le mot « anonyme », qui
+   sonne comme un reproche : on affiche « Nom masqué », qui dit un choix.
+   --------------------------------------------------------------------- */
+function nomAffiche(m) {
+    const nom = ((m.prenom || "") + " " + (m.nom || "")).trim();
+    return nom || DICO.condo_anonyme;
+}
+
+
+/* ---------------------------------------------------------------------
    construireCondoleance — une carte de message signé.
    Les retours à la ligne du message sont conservés : quelqu'un qui écrit
    sa signature sur une ligne à part le fait exprès.
+   Le bouton de modification est posé sur CHAQUE carte, sans condition :
+   c'est la consigne, personne n'a à prouver qu'il est l'auteur.
    --------------------------------------------------------------------- */
 function construireCondoleance(m, rang) {
     const texte = echapper(m.message).replace(/\n/g, "<br>");
+    const motif = MOTIFS_PROPOSES.indexOf(m.motif) === -1 ? MOTIF_DEFAUT : m.motif;
 
     return '<article class="mot" style="--rang:' + Math.min(rang, 12) + '">'
-        + '<span class="mot-motif">' + construireIcone(m.motif) + "</span>"
-        + '<p class="mot-texte">' + texte + "</p>"
-        + '<p class="mot-signe">'
-        + '<span class="mot-nom">' + echapper(m.prenom) + " " + echapper(m.nom) + "</span>"
-        + (m.date ? '<span class="mot-date">' + echapper(m.date) + "</span>" : "")
-        + "</p>"
-        + "</article>";
+         + '<span class="mot-motif">' + construireIcone(motif) + "</span>"
+         + '<p class="mot-texte">' + texte + "</p>"
+         + '<p class="mot-signe">'
+         + '<span class="mot-nom">' + echapper(nomAffiche(m)) + "</span>"
+         + (m.date ? '<span class="mot-date">' + echapper(m.date) + "</span>" : "")
+         + "</p>"
+         + '<button type="button" class="mot-modifier" data-ligne="' + m.ligne + '">'
+         + DICO.condo_modifier + "</button>"
+         + "</article>";
 }
 
 
@@ -878,13 +961,21 @@ async function chargerCondoleances() {
     try {
         const reponse = await fetch(CONDOLEANCES_URL, { method: "GET" });
         const donnees = await reponse.json();
-        const liste = donnees.messages || [];
+        MESSAGES = donnees.messages || [];
 
-        boite.innerHTML = liste.map(construireCondoleance).join("");
+        boite.innerHTML = MESSAGES.map(construireCondoleance).join("");
+
+        // Un seul écouteur posé sur le conteneur, et non un par carte :
+        // les cartes sont réécrites à chaque rechargement, des écouteurs
+        // individuels seraient à reposer à chaque fois.
+        boite.onclick = function (ev) {
+            const b = ev.target.closest(".mot-modifier");
+            if (b) ouvrirModification(Number(b.getAttribute("data-ligne")));
+        };
 
         if (compteur) {
-            compteur.textContent = liste.length + " "
-                + (liste.length > 1 ? DICO.condo_compte_plusieurs : DICO.condo_compte_un);
+            compteur.textContent = MESSAGES.length + " "
+                + (MESSAGES.length > 1 ? DICO.condo_compte_plusieurs : DICO.condo_compte_un);
         }
     } catch (err) {
         boite.innerHTML = '<p class="mot-attente">' + DICO.condo_erreur + "</p>";
@@ -893,10 +984,81 @@ async function chargerCondoleances() {
 
 
 /* ---------------------------------------------------------------------
-   envoyerCondoleance — dépose un message dans le registre.
-   Le corps part en text/plain : c'est ce qui évite la requête
-   préliminaire CORS, qu'Apps Script ne sait pas traiter. Le contenu reste
-   du JSON, seul l'en-tête change.
+   ouvrirModification — recharge le formulaire avec un message existant.
+   Le formulaire est le MÊME que celui du dépôt : deux formulaires
+   distincts finiraient par diverger. Seuls changent son titre, le libellé
+   du bouton et la présence du bouton d'annulation.
+   --------------------------------------------------------------------- */
+function ouvrirModification(ligne) {
+    const m = MESSAGES.filter(function (x) { return Number(x.ligne) === ligne; })[0];
+    if (!m) return;
+
+    LIGNE_EN_COURS = ligne;
+
+    document.getElementById("prenom").value  = m.prenom || "";
+    document.getElementById("nom").value     = m.nom || "";
+    document.getElementById("message").value = m.message || "";
+
+    const choix = document.querySelector('input[name="motif"][value="' + m.motif + '"]');
+    if (choix) {
+        choix.checked = true;
+    } else {
+        // Le message n'a pas de motif, ou en porte un qui n'est plus
+        // proposé : on ne coche rien, pour ne pas décider à sa place.
+        const coches = document.querySelectorAll('input[name="motif"]:checked');
+        coches.forEach(function (c) { c.checked = false; });
+    }
+
+    habillerFormulaire();
+    document.getElementById("etat").textContent = "";
+    document.querySelector(".condo-form").scrollIntoView({ behavior: "smooth", block: "start" });
+    document.getElementById("message").focus();
+}
+
+
+/* ---------------------------------------------------------------------
+   annulerModification — revient au dépôt d'un message neuf.
+   --------------------------------------------------------------------- */
+function annulerModification() {
+    LIGNE_EN_COURS = 0;
+    document.getElementById("formulaire").reset();
+    document.getElementById("etat").textContent = "";
+    document.getElementById("etat").className = "etat";
+    habillerFormulaire();
+}
+
+
+/* ---------------------------------------------------------------------
+   habillerFormulaire — met le titre, l'intro, le bouton et l'annulation
+   au bon état selon LIGNE_EN_COURS. Un seul endroit décide de tout cela.
+   --------------------------------------------------------------------- */
+function habillerFormulaire() {
+    const enModif = LIGNE_EN_COURS > 0;
+    const poser = (id, texte) => {
+        const e = document.getElementById(id);
+        if (e) e.textContent = texte;
+    };
+
+    poser("form-titre", enModif ? DICO.condo_modif_titre : DICO.condo_ecrire_titre);
+    poser("form-intro", enModif ? DICO.condo_modif_intro : DICO.condo_ecrire_intro);
+    poser("envoyer",    enModif ? DICO.condo_modif_bouton : DICO.condo_bouton);
+
+    const annuler = document.getElementById("annuler");
+    if (annuler) {
+        annuler.textContent = DICO.condo_modif_annuler;
+        annuler.hidden = !enModif;
+    }
+
+    const cadre = document.querySelector(".condo-form");
+    if (cadre) cadre.classList.toggle("condo-form--modif", enModif);
+}
+
+
+/* ---------------------------------------------------------------------
+   envoyerCondoleance — dépose un message, ou enregistre la modification
+   d'un message existant. Le corps part en text/plain : c'est ce qui évite
+   la requête préliminaire CORS, qu'Apps Script ne sait pas traiter. Le
+   contenu reste du JSON, seul l'en-tête change.
    --------------------------------------------------------------------- */
 async function envoyerCondoleance(evenement) {
     evenement.preventDefault();
@@ -904,18 +1066,24 @@ async function envoyerCondoleance(evenement) {
     const etat = document.getElementById("etat");
     const bouton = document.getElementById("envoyer");
     const lire = (id) => (document.getElementById(id) || {}).value || "";
+    const coche = document.querySelector('input[name="motif"]:checked');
 
     const donnees = {
+        action: LIGNE_EN_COURS > 0 ? "modifier" : "ajouter",
+        ligne: LIGNE_EN_COURS,
         prenom: lire("prenom").trim(),
         nom: lire("nom").trim(),
         message: lire("message").trim(),
-        motif: (document.querySelector('input[name="motif"]:checked') || {}).value || "tiare",
+        // Aucun motif coché : on envoie le motif « non saisi », et non le
+        // premier de la liste.
+        motif: coche ? coche.value : MOTIF_DEFAUT,
         // Champ piège, masqué par la feuille de style. Un humain ne le
         // remplit jamais ; un robot presque toujours.
         site: lire("site")
     };
 
-    if (!donnees.prenom || !donnees.nom || !donnees.message) {
+    // Seul le message est exigé. Prénom et nom sont facultatifs.
+    if (!donnees.message) {
         etat.textContent = DICO.condo_manque;
         etat.className = "etat etat--erreur";
         return;
@@ -935,9 +1103,12 @@ async function envoyerCondoleance(evenement) {
 
         if (!resultat.ok) throw new Error(resultat.erreur || "refus");
 
-        etat.textContent = DICO.condo_merci;
+        etat.textContent = LIGNE_EN_COURS > 0 ? DICO.condo_modif_merci : DICO.condo_merci;
         etat.className = "etat etat--merci";
+
+        LIGNE_EN_COURS = 0;
         document.getElementById("formulaire").reset();
+        habillerFormulaire();
         await chargerCondoleances();
     } catch (err) {
         etat.textContent = DICO.condo_erreur;
@@ -949,21 +1120,23 @@ async function envoyerCondoleance(evenement) {
 
 
 /* ---------------------------------------------------------------------
-   poserMotifs — les six motifs proposés, sous forme de choix illustrés.
-   Le premier est coché par défaut : personne ne doit être bloqué par ce
-   champ.
+   poserMotifs — les six motifs proposés, sous forme de choix illustrés,
+   chacun nommé sous sa vignette.
+   AUCUN n'est coché au départ : un motif coché d'office serait un choix
+   fait à la place du déposant. Sans choix, le message reçoit le motif
+   « non saisi ».
    --------------------------------------------------------------------- */
 function poserMotifs() {
     const boite = document.getElementById("motifs");
     if (!boite) return;
 
-    const liste = ["tiare", "coeur", "feuille", "vague", "tapa", "mains"];
-    boite.innerHTML = liste.map(function (nom, i) {
+    boite.innerHTML = MOTIFS_PROPOSES.map(function (nom) {
         return '<label class="motif">'
-            + '<input type="radio" name="motif" value="' + nom + '"'
-            + (i === 0 ? " checked" : "") + ">"
-            + '<span class="motif-dessin">' + construireIcone(nom) + "</span>"
-            + "</label>";
+             + '<input type="radio" name="motif" value="' + nom + '">'
+             + '<span class="motif-dessin">' + construireIcone(nom)
+             + '<span class="motif-nom">' + DICO["motif_" + nom] + "</span>"
+             + "</span>"
+             + "</label>";
     }).join("");
 }
 
@@ -975,9 +1148,13 @@ function demarrerCondoleances() {
     poserTextes();
     poserMotifs();
     poserVersion();
+    habillerFormulaire();
 
     const f = document.getElementById("formulaire");
     if (f) f.addEventListener("submit", envoyerCondoleance);
+
+    const a = document.getElementById("annuler");
+    if (a) a.addEventListener("click", annulerModification);
 
     chargerCondoleances();
 }
