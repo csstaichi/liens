@@ -22,7 +22,7 @@
    valeur doit exister. À mettre à jour à CHAQUE livraison, en même temps
    que le nom du zip, sinon la page ment sur ce qu'elle est.
    --------------------------------------------------------------------- */
-const VERSION = "00.34.00";
+const VERSION = "00.36.00";
 const VERSION_DATE = "17 août 2026";
 
 
@@ -142,9 +142,15 @@ const DICO = {
     condo_ecrire_intro: "Votre message paraîtra aussitôt sur cette page. Aucune inscription n'est demandée.",
     condo_champ_prenom: "Prénom",
     condo_champ_nom: "Nom",
-    // Le nom est facultatif depuis la 00.28.00 : quelqu'un peut vouloir
-    // écrire sans se nommer. Sa ligne paraît alors sous une mention neutre.
-    condo_champ_nom_libre: "Ces deux champs sont facultatifs. Laissés vides, votre message paraîtra sous la mention « Nom masqué ».",
+    // ATTENTION, la clé s'appelle encore « _libre » pour une raison
+    // d'historique : elle portait, de la 00.28.00 à la 00.34.00, la mention
+    // du caractère facultatif des deux champs. Le nom est REDEVENU exigé à
+    // la 00.35.00, l'association comptant 207 membres : un prénom seul ne
+    // désigne personne. La clé est conservée telle quelle pour ne perdre
+    // aucun identifiant, seul son texte a changé.
+    condo_champ_nom_libre: "Le nom de famille est nécessaire : l'association compte plus de deux cents membres, un prénom seul ne suffit pas à vous reconnaître. Il paraîtra en majuscules.",
+    // Conservé comme filet, jamais atteint par le formulaire : il ne sert
+    // plus que si une cellule de la feuille était vidée à la main.
     condo_anonyme: "Nom masqué",
     condo_champ_message: "Votre message",
     condo_champ_motif: "Un motif pour accompagner votre message",
@@ -152,7 +158,7 @@ const DICO = {
     condo_envoi: "Envoi en cours…",
     condo_merci: "Merci. Votre message est déposé.",
     condo_erreur: "L'envoi n'a pas abouti. Réessayez dans un instant.",
-    condo_manque: "Merci d'écrire votre message.",
+    condo_manque: "Merci d'indiquer votre prénom, votre nom et votre message.",
     condo_chargement: "Chargement des messages…",
     condo_non_configure: "Le livre n'est pas encore ouvert. Revenez dans quelques instants.",
     condo_compte_un: "message déposé",
@@ -891,10 +897,27 @@ let LIGNE_EN_COURS = 0;
 
 
 /* ---------------------------------------------------------------------
+   majusculeNom — met un nom de famille en capitales.
+   POURQUOI une fonction et non un simple .toUpperCase() en ligne : le
+   passage en capitales doit être fait au MÊME endroit pour l'envoi et
+   pour la modification, sinon un message modifié ressortirait en
+   minuscules alors que son voisin serait en capitales.
+   toLocaleUpperCase("fr") et non toUpperCase() : la variante française
+   conserve les accents des capitales, « épouse » devenant « ÉPOUSE » et
+   non « EPOUSE ». C'est la forme correcte en français, et la seule qui
+   respecte les patronymes polynésiens accentués.
+   --------------------------------------------------------------------- */
+function majusculeNom(valeur) {
+    return String(valeur || "").trim().toLocaleUpperCase("fr");
+}
+
+
+/* ---------------------------------------------------------------------
    nomAffiche — le nom sous lequel paraît un message.
-   Prénom et nom sont facultatifs depuis la 00.28.00. Quand les deux sont
-   vides, on n'affiche NI une ligne blanche NI le mot « anonyme », qui
-   sonne comme un reproche : on affiche « Nom masqué », qui dit un choix.
+   Le formulaire exige désormais les deux champs. Le repli « Nom masqué »
+   est conservé pour un seul cas : une cellule de la feuille vidée à la
+   main. On n'affiche NI une ligne blanche NI le mot « anonyme », qui
+   sonne comme un reproche.
    --------------------------------------------------------------------- */
 function nomAffiche(m) {
     const nom = ((m.prenom || "") + " " + (m.nom || "")).trim();
@@ -920,7 +943,10 @@ function construireCondoleance(m, rang) {
          + '<span class="mot-nom">' + echapper(nomAffiche(m)) + "</span>"
          + (m.date ? '<span class="mot-date">' + echapper(m.date) + "</span>" : "")
          + "</p>"
-         + (Number.isFinite(Number(m.ligne))
+         // Le bouton n'apparaît que si le guichet fournit le numéro de
+         // ligne ET que la colonne « modifiable » ne dit pas « non ».
+         // Cacher un bouton n'interdit rien : c'est Code.gs qui interdit.
+         + (Number.isFinite(Number(m.ligne)) && m.modifiable !== "non"
               ? '<button type="button" class="mot-modifier" data-ligne="' + m.ligne + '">'
                 + DICO.condo_modifier + "</button>"
               : "")
@@ -993,7 +1019,7 @@ function ouvrirModification(ligne) {
     LIGNE_EN_COURS = ligne;
 
     document.getElementById("prenom").value  = m.prenom || "";
-    document.getElementById("nom").value     = m.nom || "";
+    document.getElementById("nom").value     = majusculeNom(m.nom);
     document.getElementById("message").value = m.message || "";
 
     const choix = document.querySelector('input[name="motif"][value="' + m.motif + '"]');
@@ -1069,7 +1095,9 @@ async function envoyerCondoleance(evenement) {
         action: LIGNE_EN_COURS > 0 ? "modifier" : "ajouter",
         ligne: LIGNE_EN_COURS,
         prenom: lire("prenom").trim(),
-        nom: lire("nom").trim(),
+        // Capitales posées ici, avant l'envoi, pour que ce qui part au
+        // guichet soit déjà la forme définitive.
+        nom: majusculeNom(lire("nom")),
         message: lire("message").trim(),
         // Aucun motif coché : on envoie le motif « non saisi », et non le
         // premier de la liste.
@@ -1079,8 +1107,9 @@ async function envoyerCondoleance(evenement) {
         site: lire("site")
     };
 
-    // Seul le message est exigé. Prénom et nom sont facultatifs.
-    if (!donnees.message) {
+    // Les trois champs sont exigés depuis la 00.36.00. Ce contrôle-ci
+    // n'est qu'un confort : c'est le guichet qui refuse pour de bon.
+    if (!donnees.prenom || !donnees.nom || !donnees.message) {
         etat.textContent = DICO.condo_manque;
         etat.className = "etat etat--erreur";
         return;
