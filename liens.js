@@ -22,7 +22,7 @@
    valeur doit exister. À mettre à jour à CHAQUE livraison, en même temps
    que le nom du zip, sinon la page ment sur ce qu'elle est.
    --------------------------------------------------------------------- */
-const VERSION = "00.21.00";
+const VERSION = "00.24.00";
 const VERSION_DATE = "16 août 2026";
 
 
@@ -68,10 +68,15 @@ const DICO = {
     demande_texte: "L'entrée dans les deux groupes est validée par un administrateur. Écrivez-nous pour en faire la demande.",
     demande_mot_lien: "administrateur",
 
-    // ADRESSE À VÉRIFIER : construite depuis le numéro 89 74 07 82, préfixé
-    // de l'indicatif 689 de la Polynésie française. wa.me ouvre WhatsApp sur
-    // la conversation directe. Si le numéro n'est pas sur WhatsApp, ou si
-    // c'est une autre messagerie qui était visée, changer cette seule ligne.
+    // Lien du mot « administrateur ».
+    // ADRESSE CONSERVÉE MALGRÉ UN DÉFAUT CONNU, sur consigne : WhatsApp
+    // affiche « villa Serbeloni » au lieu du nom de Teva MEYER. Le NUMÉRO
+    // est bon, c'est le nom affiché qui est faux. Reliquat probable d'un
+    // profil WhatsApp Business ou d'une fiche d'établissement Google
+    // rattachée à ce numéro : WhatsApp montre alors le nom commercial
+    // vérifié, sans tenir compte des corrections faites côté Google.
+    // Cela se corrige dans WhatsApp Business, pas ici. Ne pas remplacer
+    // ce lien sans instruction.
     demande_lien_admin: "https://wa.me/68989740782",
     demande_messenger: "Pour le groupe Messenger : indiquez votre pseudo Messenger et la photo de votre profil, afin que nous puissions vous identifier.",
     demande_whatsapp: "Pour le groupe CSS ADHÉRENTS OFFICIEL POLYNÉSIE : indiquez votre numéro de téléphone.",
@@ -89,6 +94,11 @@ const DICO = {
     entete_sous_titre_plannings: "Nos cours de tai chi, du lundi au samedi",
 
     plannings_gratuit: "Nos cours sont gratuits",
+
+    // Message le plus important de la page apres les horaires : une seule
+    // adhesion ouvre les six cours. Il est place JUSTE SOUS le bandeau de
+    // gratuite, avant les fiches, parce qu'il change la facon de les lire.
+    plannings_acces: "Une adhésion CSS est valable pour pratiquer indifféremment sur TOUS les sites. Elle donne accès à TOUS les cours, autant de fois par semaine que vous le souhaitez.",
 
     avert_titre: "À savoir avant de venir",
     avert_arue: "Le site de ARUE est momentanément suspendu.",
@@ -462,36 +472,62 @@ const JEUX = {
    --------------------------------------------------------------------- */
 const PLANNINGS = [
 
+    // Les numéros viennent de la publication Facebook du 28 mai 2026.
+    // Ceux qui n'y figuraient pas sont laissés vides : mieux vaut pas de
+    // numéro qu'un numéro inventé. Le champ tel accepte la chaîne vide,
+    // le nom s'affiche alors sans lien d'appel.
+    // Format d'appel : indicatif 689, puis les huit chiffres sans espace.
+
     { jour: "Lundi", ile: "tahiti", commune: "FAAA",
       lieu: "Parc de Motu-Ovini, site de Vaitupa",
       horaire: "08h00 – 10h00",
-      gens: "Yannick GIROUILLE, directrice technique instructrice, et/ou Josiane LI, assistante remplaçante" },
+      gens: [
+        { nom: "Yannick GIROUILLE", role: "directrice technique instructrice", tel: "87 71 40 10" },
+        { nom: "Josiane LI",        role: "assistante remplaçante",            tel: "87 74 13 26" }
+      ] },
 
     { jour: "Mardi", ile: "tahiti", commune: "PIRAE",
       lieu: "Site de la Croix-Rouge",
       horaire: "08h00 – 10h00",
-      gens: "Joséphine TEINAORE et Hubert LAU SAN, assistants remplaçants" },
+      gens: [
+        { nom: "Joséphine TEINAORE", role: "assistante remplaçante", tel: "87 74 44 17" },
+        { nom: "Hubert LAU SAN",     role: "assistant remplaçant",   tel: "87 27 54 38" }
+      ] },
 
     { jour: "Mercredi", ile: "moorea", commune: "HAAPITI",
       lieu: "Chez Moea FARNHAM",
       horaire: "14h00 – 16h00",
-      gens: "Timau MARSAULT, instructrice, et Hélène DIARA, assistante remplaçante" },
+      gens: [
+        { nom: "Timau MARSAULT", role: "instructrice",           tel: "87 75 18 29" },
+        { nom: "Hélène DIARA",   role: "assistante remplaçante", tel: "" }
+      ] },
 
     { jour: "Jeudi", ile: "tahiti", commune: "PUNAAUIA",
       lieu: "Parc Vairai, rond-point de l'Université",
       horaire: "08h00 – 10h00",
-      gens: "Yannick GIROUILLE, directrice technique instructrice, et/ou Josiane LI, assistante remplaçante" },
+      gens: [
+        { nom: "Yannick GIROUILLE", role: "directrice technique instructrice", tel: "87 71 40 10" },
+        { nom: "Josiane LI",        role: "assistante remplaçante",            tel: "87 74 13 26" }
+      ] },
 
     { jour: "Vendredi", ile: "tahiti", commune: "PIRAE",
       lieu: "Site de la Mairie",
       horaire: "08h30 – 10h30",
-      gens: "Joséphine TEINAORE et Hubert LAU SAN, assistants remplaçants" },
+      gens: [
+        { nom: "Joséphine TEINAORE", role: "assistante remplaçante", tel: "87 74 44 17" },
+        { nom: "Hubert LAU SAN",     role: "assistant remplaçant",   tel: "87 27 54 38" }
+      ] },
 
     { jour: "Samedi", ile: "moorea", commune: "PAOPAO",
       lieu: "Centre culturel TE PU ATITI'A",
       horaire: "09h00 – 11h00",
-      gens: "Anick LAU et Nadine GUAIS, instructrices, et Anne-Dominique MEYER, assistante remplaçante" }
+      gens: [
+        { nom: "Anick LAU",              role: "instructrice",           tel: "87 79 03 39" },
+        { nom: "Nadine GUAIS",           role: "instructrice",           tel: "87 74 88 67" },
+        { nom: "Anne-Dominique MEYER",   role: "assistante remplaçante", tel: "" }
+      ] }
 ];
+
 
 
 /* ---------------------------------------------------------------------
@@ -645,11 +681,43 @@ function poserPlannings(idConteneur) {
               + c.commune + "</p>"
               + '<p class="fiche-lieu">' + c.lieu + "</p>"
               + '<p class="fiche-horaire">' + c.horaire + "</p>"
-              + '<p class="fiche-gens">' + c.gens + "</p>"
+              + construireGens(c.gens)
               + "</article>";
     });
 
     boite.innerHTML = html;
+}
+
+
+/* ---------------------------------------------------------------------
+   construireGens — la liste des encadrants d'un cours.
+   Chaque nom est suivi de son rôle et, quand il est connu, de son numéro
+   rendu appelable d'un doigt.
+   POURQUOI le numéro est cliquable : c'est ce qu'on cherche quand on
+   hésite à se déplacer un jour de pluie, et recopier huit chiffres à la
+   main est le meilleur moyen de renoncer à appeler.
+   --------------------------------------------------------------------- */
+function construireGens(gens) {
+    if (!gens || !gens.length) return "";
+
+    let html = '<ul class="fiche-gens">';
+
+    gens.forEach(function (g) {
+        html += "<li>"
+              + '<span class="gens-nom">' + g.nom + "</span>"
+              + '<span class="gens-role">' + g.role + "</span>";
+
+        if (g.tel) {
+            // Indicatif 689 et suppression des espaces : c'est la seule
+            // forme que les téléphones composent sans erreur.
+            const brut = "+689" + g.tel.replace(/\s/g, "");
+            html += '<a class="gens-tel" href="tel:' + brut + '">' + g.tel + "</a>";
+        }
+
+        html += "</li>";
+    });
+
+    return html + "</ul>";
 }
 
 

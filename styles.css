@@ -468,6 +468,26 @@ body {
 }
 
 
+/* Message d'accès, page plannings.
+   Encadré plein et non discret : c'est l'argument que les adhérents
+   ignorent le plus souvent, il doit se lire avant les horaires et non
+   après. Le turquoise le rattache aux fiches Tahiti sans les concurrencer,
+   la barre de gauche lui donne le poids d'une affirmation. */
+.acces-tous {
+  width: 100%;
+  max-width: var(--colonne);
+  margin-bottom: 4px;
+  padding: 13px 16px;
+  border: 1px solid rgba(110, 207, 190, 0.35);
+  border-left: 3px solid var(--lagon-clair);
+  border-radius: var(--rayon);
+  background: rgba(110, 207, 190, 0.10);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--tiare);
+}
+
+
 /* ---------------------------------------------------------------------
    FICHES DE COURS, page plannings.
    Même boîte que les boutons, sans le comportement : pas de survol, pas
@@ -535,11 +555,54 @@ body {
   margin-top: 7px;
 }
 
+/* Encadrants du cours. Une ligne par personne : nom, rôle, numéro.
+   Liste et non paragraphe : on cherche UNE personne dans la liste, pas à
+   lire une phrase. Le numéro est aligné à droite, c'est la colonne que
+   l'oeil parcourt. */
 .fiche-gens {
-  font-size: 0.78rem;
-  line-height: 1.4;
-  color: rgba(201, 191, 166, 0.8);
-  margin-top: 5px;
+  list-style: none;
+  margin-top: 9px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(250, 246, 236, 0.10);
+}
+
+.fiche-gens li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 8px;
+  padding: 3px 0;
+}
+
+.gens-nom {
+  font-size: 0.83rem;
+  font-weight: 700;
+  color: var(--sable);
+}
+
+.gens-role {
+  flex: 1 1 auto;
+  font-size: 0.74rem;
+  color: rgba(201, 191, 166, 0.62);
+}
+
+/* Le numéro touche la même cible tactile que les boutons : il est
+   volontairement large et espacé, pour être atteint au pouce. */
+.gens-tel {
+  flex: 0 0 auto;
+  padding: 2px 8px;
+  border: 1px solid rgba(110, 207, 190, 0.35);
+  border-radius: 6px;
+  font-size: 0.79rem;
+  font-weight: 700;
+  color: var(--lagon-clair);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.fiche--moorea .gens-tel {
+  border-color: rgba(127, 182, 232, 0.35);
+  color: var(--ciel);
 }
 
 /* Numéro de téléphone appelable. */
