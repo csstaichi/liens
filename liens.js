@@ -35,7 +35,7 @@ const VERSION_DATE = "16 août 2026";
    Tant qu'elle vaut la chaîne vide, la page affiche un message d'attente
    au lieu d'une erreur.
    --------------------------------------------------------------------- */
-const CONDOLEANCES_URL = "";
+const CONDOLEANCES_URL = "https://script.google.com/macros/s/AKfycbwzxGArSt_95p59gVqkmWtQoOCFaA2vGASlOJDSqdTGV6aPLsLUjRYVDBHtP-q1dD2ulw/exec";
 
 
 /* ---------------------------------------------------------------------
@@ -542,54 +542,66 @@ const PLANNINGS = [
     // le nom s'affiche alors sans lien d'appel.
     // Format d'appel : indicatif 689, puis les huit chiffres sans espace.
 
-    { jour: "Lundi", ile: "tahiti", commune: "FAAA",
-      lieu: "Parc de Motu-Ovini, site de Vaitupa",
-      horaire: "08h00 – 10h00",
-      gens: [
-        { nom: "Yannick GIROUILLE", role: "directrice technique instructrice", tel: "87 71 40 10" },
-        { nom: "Josiane LI",        role: "assistante remplaçante",            tel: "87 74 13 26" }
-      ] },
+    {
+        jour: "Lundi", ile: "tahiti", commune: "FAAA",
+        lieu: "Parc de Motu-Ovini, site de Vaitupa",
+        horaire: "08h00 – 10h00",
+        gens: [
+            { nom: "Yannick GIROUILLE", role: "directrice technique instructrice", tel: "87 71 40 10" },
+            { nom: "Josiane LI", role: "assistante remplaçante", tel: "87 74 13 26" }
+        ]
+    },
 
-    { jour: "Mardi", ile: "tahiti", commune: "PIRAE",
-      lieu: "Site de la Croix-Rouge",
-      horaire: "08h00 – 10h00",
-      gens: [
-        { nom: "Joséphine TEINAORE", role: "assistante remplaçante", tel: "87 74 44 17" },
-        { nom: "Hubert LAU SAN",     role: "assistant remplaçant",   tel: "87 27 54 38" }
-      ] },
+    {
+        jour: "Mardi", ile: "tahiti", commune: "PIRAE",
+        lieu: "Site de la Croix-Rouge",
+        horaire: "08h00 – 10h00",
+        gens: [
+            { nom: "Joséphine TEINAORE", role: "assistante remplaçante", tel: "87 74 44 17" },
+            { nom: "Hubert LAU SAN", role: "assistant remplaçant", tel: "87 27 54 38" }
+        ]
+    },
 
-    { jour: "Mercredi", ile: "moorea", commune: "HAAPITI",
-      lieu: "Chez Moea FARNHAM",
-      horaire: "14h00 – 16h00",
-      gens: [
-        { nom: "Timau MARSAULT", role: "instructrice",           tel: "87 75 18 29" },
-        { nom: "Hélène DIARA",   role: "assistante remplaçante", tel: "" }
-      ] },
+    {
+        jour: "Mercredi", ile: "moorea", commune: "HAAPITI",
+        lieu: "Chez Moea FARNHAM",
+        horaire: "14h00 – 16h00",
+        gens: [
+            { nom: "Timau MARSAULT", role: "instructrice", tel: "87 75 18 29" },
+            { nom: "Hélène DIARA", role: "assistante remplaçante", tel: "" }
+        ]
+    },
 
-    { jour: "Jeudi", ile: "tahiti", commune: "PUNAAUIA",
-      lieu: "Parc Vairai, rond-point de l'Université",
-      horaire: "08h00 – 10h00",
-      gens: [
-        { nom: "Yannick GIROUILLE", role: "directrice technique instructrice", tel: "87 71 40 10" },
-        { nom: "Josiane LI",        role: "assistante remplaçante",            tel: "87 74 13 26" }
-      ] },
+    {
+        jour: "Jeudi", ile: "tahiti", commune: "PUNAAUIA",
+        lieu: "Parc Vairai, rond-point de l'Université",
+        horaire: "08h00 – 10h00",
+        gens: [
+            { nom: "Yannick GIROUILLE", role: "directrice technique instructrice", tel: "87 71 40 10" },
+            { nom: "Josiane LI", role: "assistante remplaçante", tel: "87 74 13 26" }
+        ]
+    },
 
-    { jour: "Vendredi", ile: "tahiti", commune: "PIRAE",
-      lieu: "Site de la Mairie",
-      horaire: "08h30 – 10h30",
-      gens: [
-        { nom: "Joséphine TEINAORE", role: "assistante remplaçante", tel: "87 74 44 17" },
-        { nom: "Hubert LAU SAN",     role: "assistant remplaçant",   tel: "87 27 54 38" }
-      ] },
+    {
+        jour: "Vendredi", ile: "tahiti", commune: "PIRAE",
+        lieu: "Site de la Mairie",
+        horaire: "08h30 – 10h30",
+        gens: [
+            { nom: "Joséphine TEINAORE", role: "assistante remplaçante", tel: "87 74 44 17" },
+            { nom: "Hubert LAU SAN", role: "assistant remplaçant", tel: "87 27 54 38" }
+        ]
+    },
 
-    { jour: "Samedi", ile: "moorea", commune: "PAOPAO",
-      lieu: "Centre culturel TE PU ATITI'A",
-      horaire: "09h00 – 11h00",
-      gens: [
-        { nom: "Anick LAU",              role: "instructrice",           tel: "87 79 03 39" },
-        { nom: "Nadine GUAIS",           role: "instructrice",           tel: "87 74 88 67" },
-        { nom: "Anne-Dominique MEYER",   role: "assistante remplaçante", tel: "" }
-      ] }
+    {
+        jour: "Samedi", ile: "moorea", commune: "PAOPAO",
+        lieu: "Centre culturel TE PU ATITI'A",
+        horaire: "09h00 – 11h00",
+        gens: [
+            { nom: "Anick LAU", role: "instructrice", tel: "87 79 03 39" },
+            { nom: "Nadine GUAIS", role: "instructrice", tel: "87 74 88 67" },
+            { nom: "Anne-Dominique MEYER", role: "assistante remplaçante", tel: "" }
+        ]
+    }
 ];
 
 
@@ -739,14 +751,14 @@ function poserPlannings(idConteneur) {
 
     PLANNINGS.forEach(function (c, rang) {
         html += '<article class="fiche fiche--' + c.ile + '" style="--rang:' + rang + '">'
-              + '<p class="fiche-jour">' + c.jour + "</p>"
-              + '<p class="fiche-commune">'
-              + '<span class="fiche-ico">' + construireIcone("epingle") + "</span>"
-              + c.commune + "</p>"
-              + '<p class="fiche-lieu">' + c.lieu + "</p>"
-              + '<p class="fiche-horaire">' + c.horaire + "</p>"
-              + construireGens(c.gens)
-              + "</article>";
+            + '<p class="fiche-jour">' + c.jour + "</p>"
+            + '<p class="fiche-commune">'
+            + '<span class="fiche-ico">' + construireIcone("epingle") + "</span>"
+            + c.commune + "</p>"
+            + '<p class="fiche-lieu">' + c.lieu + "</p>"
+            + '<p class="fiche-horaire">' + c.horaire + "</p>"
+            + construireGens(c.gens)
+            + "</article>";
     });
 
     boite.innerHTML = html;
@@ -768,8 +780,8 @@ function construireGens(gens) {
 
     gens.forEach(function (g) {
         html += "<li>"
-              + '<span class="gens-nom">' + g.nom + "</span>"
-              + '<span class="gens-role">' + g.role + "</span>";
+            + '<span class="gens-nom">' + g.nom + "</span>"
+            + '<span class="gens-role">' + g.role + "</span>";
 
         if (g.tel) {
             // Indicatif 689 et suppression des espaces : c'est la seule
@@ -794,7 +806,7 @@ function poserTelephone() {
     const el = document.getElementById("telephone");
     if (!el) return;
     el.innerHTML = '<a class="lien-tel" href="' + DICO.contact_tel_lien + '">'
-                 + DICO.contact_tel + "</a>";
+        + DICO.contact_tel + "</a>";
 }
 
 
@@ -836,13 +848,13 @@ function construireCondoleance(m, rang) {
     const texte = echapper(m.message).replace(/\n/g, "<br>");
 
     return '<article class="mot" style="--rang:' + Math.min(rang, 12) + '">'
-         + '<span class="mot-motif">' + construireIcone(m.motif) + "</span>"
-         + '<p class="mot-texte">' + texte + "</p>"
-         + '<p class="mot-signe">'
-         + '<span class="mot-nom">' + echapper(m.prenom) + " " + echapper(m.nom) + "</span>"
-         + (m.date ? '<span class="mot-date">' + echapper(m.date) + "</span>" : "")
-         + "</p>"
-         + "</article>";
+        + '<span class="mot-motif">' + construireIcone(m.motif) + "</span>"
+        + '<p class="mot-texte">' + texte + "</p>"
+        + '<p class="mot-signe">'
+        + '<span class="mot-nom">' + echapper(m.prenom) + " " + echapper(m.nom) + "</span>"
+        + (m.date ? '<span class="mot-date">' + echapper(m.date) + "</span>" : "")
+        + "</p>"
+        + "</article>";
 }
 
 
@@ -948,10 +960,10 @@ function poserMotifs() {
     const liste = ["tiare", "coeur", "feuille", "vague", "tapa", "mains"];
     boite.innerHTML = liste.map(function (nom, i) {
         return '<label class="motif">'
-             + '<input type="radio" name="motif" value="' + nom + '"'
-             + (i === 0 ? " checked" : "") + ">"
-             + '<span class="motif-dessin">' + construireIcone(nom) + "</span>"
-             + "</label>";
+            + '<input type="radio" name="motif" value="' + nom + '"'
+            + (i === 0 ? " checked" : "") + ">"
+            + '<span class="motif-dessin">' + construireIcone(nom) + "</span>"
+            + "</label>";
     }).join("");
 }
 
