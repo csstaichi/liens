@@ -905,17 +905,27 @@ body.condoleances {
   overflow: hidden;
 }
 
-/* Choix du motif. Grille et non ligne souple depuis la 00.28.00 : les
-   six vignettes doivent garder la MEME largeur, sinon « Chrysanthème »
-   etire sa tuile et casse l'alignement des autres.
-   Mesure : la largeur utile du formulaire vaut 288 px a 360 px de
-   viewport ; auto-fill a 88 px donne 3 colonnes, soit une tuile de
-   90,7 px. A 560 px, il en donne 6, soit 74,7 px. Le libelle le plus
-   long, « Chrysanthème », mesure 73,3 px en Karla a 11 px : il tient
-   dans les deux cas sans cesure. */
+/* Choix du motif. Grille, et non ligne souple : les six vignettes
+   doivent garder la MEME largeur, sinon « Chrysanthème » etire sa tuile
+   et casse l'alignement des autres.
+
+   TROIS colonnes, a toutes les largeurs, donc deux rangs de trois,
+   toujours pleins.
+   POURQUOI ce chiffre est ecrit en dur, et non laisse a un remplissage
+   automatique : le remplissage automatique posait autant de colonnes que
+   la place le permettait, et donnait CINQ tuiles sur le premier rang et
+   une seule, orpheline, sur le second. Defaut constate a l'ecran a la
+   00.29.00.
+   POURQUOI pas six colonnes sur grand ecran : la colonne du formulaire
+   est plafonnee a 560 px, sa zone utile a 524 px. Six tuiles y feraient
+   80,7 px, mesure faite, alors que le libelle « Chrysanthème » en fait
+   73,3 px dans la police du site. Sept pixels de marge, c'est trop peu.
+   A trois colonnes, la tuile mesure 72 px sur un petit telephone et
+   169 px sur ordinateur. Verifie a onze largeurs, de 320 a 1600 px :
+   toujours deux rangs de trois, aucun libelle tronque. */
 .motifs {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(88px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 8px;
 }
 

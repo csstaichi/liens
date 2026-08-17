@@ -22,7 +22,7 @@
    valeur doit exister. À mettre à jour à CHAQUE livraison, en même temps
    que le nom du zip, sinon la page ment sur ce qu'elle est.
    --------------------------------------------------------------------- */
-const VERSION = "00.29.00";
+const VERSION = "00.30.00";
 const VERSION_DATE = "16 août 2026";
 
 
