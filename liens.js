@@ -22,7 +22,7 @@
    valeur doit exister. À mettre à jour à CHAQUE livraison, en même temps
    que le nom du zip, sinon la page ment sur ce qu'elle est.
    --------------------------------------------------------------------- */
-const VERSION = "00.28.00";
+const VERSION = "00.29.00";
 const VERSION_DATE = "16 août 2026";
 
 
@@ -251,52 +251,16 @@ const ICONES = {
     // lieu de pratique.
     epingle: '<path d="M12 21s7-5.7 7-11a7 7 0 1 0-14 0c0 5.3 7 11 7 11z"/><circle cx="12" cy="10" r="2.6"/>',
 
-    /* --- Motifs du livre de condoléances -----------------------------
-       Refondus à la 00.28.00. Les six motifs polynésiens de la 00.27.00
-       (tiare, feuille, vague, tapa, mains, et l'ancien cœur au trait
-       simple) sont RETIRÉS : trop maigres à l'écran, et étrangers au code
-       funéraire chinois du lieu d'inhumation.
-       POURQUOI ces six-là : ils reprennent les usages du deuil chinois,
-       où le blanc est la couleur du deuil et le rouge est proscrit. Les
-       tracés étant monochromes et prenant la couleur du texte, aucun
-       rouge ne peut apparaître par construction.
-       Ils sont dessinés plus denses que les icônes de boutons : ils sont
-       affichés à 48 px dans le formulaire, contre 24 px pour un bouton.
-       --------------------------------------------------------------- */
-
-    // Cœur blanc. Contour plein, plus un court reflet intérieur qui lui
-    // donne du volume sans ajouter de couleur.
-    coeur: '<path d="M12 20.6c-1.3-1-7.6-5-7.6-9.9A4.5 4.5 0 0 1 12 7.9a4.5 4.5 0 0 1 7.6 2.8c0 4.9-6.3 8.9-7.6 9.9z"/><path d="M12 17.4c-.9-.8-5-3.5-5-6.6a2.8 2.8 0 0 1 5-1.7 2.8 2.8 0 0 1 5 1.7c0 3.1-4.1 5.8-5 6.6z"/>',
-
-    // Ruban de deuil. Deux pans qui se croisent au milieu et remontent en
-    // boucle. C'est la forme universelle du ruban de condoléances.
-    ruban: '<path d="M8.4 21.4c1.1-3.6 2.3-6.4 3.6-8.5 1.8-3 3.2-5.2 2.7-6.9-.4-1.4-1.7-2.1-2.9-1.7"/><path d="M15.6 21.4c-1.1-3.6-2.3-6.4-3.6-8.5-1.8-3-3.2-5.2-2.7-6.9.4-1.4 1.7-2.1 2.9-1.7"/>',
-
-    // Chrysanthème, la fleur funéraire de référence en Chine. Cœur plein,
-    // douze pétales courts, douze pointes longues en couronne extérieure.
-    // Le remplissage du cœur est ce qui le distingue de la couronne à
-    // petite taille.
-    chrysantheme: '<circle cx="12" cy="12" r="2.1" fill="currentColor" stroke="none"/><path d="M13.66 5.82L14.36 3.21M16.53 7.47L18.43 5.57M18.18 10.34L20.79 9.64M18.18 13.66L20.79 14.36M16.53 16.53L18.43 18.43M13.66 18.18L14.36 20.79M10.34 18.18L9.64 20.79M7.47 16.53L5.57 18.43M5.82 13.66L3.21 14.36M5.82 10.34L3.21 9.64M7.47 7.47L5.57 5.57M10.34 5.82L9.64 3.21"/><path d="M12 8.9Q11.22 7.06 12 5.4Q12.78 7.06 12 8.9ZM13.55 9.32Q13.79 7.33 15.3 6.28Q15.15 8.11 13.55 9.32ZM14.68 10.45Q15.89 8.85 17.72 8.7Q16.67 10.21 14.68 10.45ZM15.1 12Q16.94 11.22 18.6 12Q16.94 12.78 15.1 12ZM14.68 13.55Q16.67 13.79 17.72 15.3Q15.89 15.15 14.68 13.55ZM13.55 14.68Q15.15 15.89 15.3 17.72Q13.79 16.67 13.55 14.68ZM12 15.1Q12.78 16.94 12 18.6Q11.22 16.94 12 15.1ZM10.45 14.68Q10.21 16.67 8.7 17.72Q8.85 15.89 10.45 14.68ZM9.32 13.55Q8.11 15.15 6.28 15.3Q7.33 13.79 9.32 13.55ZM8.9 12Q7.06 12.78 5.4 12Q7.06 11.22 8.9 12ZM9.32 10.45Q7.33 10.21 6.28 8.7Q8.11 8.85 9.32 10.45ZM10.45 9.32Q8.85 8.11 8.7 6.28Q10.21 7.33 10.45 9.32Z"/>',
-
-    // Couronne mortuaire : quatorze feuilles inclinées en anneau. Le vide
-    // central est ce qui la fait lire comme une couronne et non comme une
-    // fleur.
-    couronne: '<path d="M10.05 5.03Q12.36 5.49 13.95 3.77Q11.64 3.31 10.05 5.03ZM13.79 4.99Q15.56 6.54 17.81 5.84Q16.04 4.29 13.79 4.99ZM17.06 6.83Q17.81 9.05 20.11 9.57Q19.35 7.35 17.06 6.83ZM18.97 10.05Q18.51 12.36 20.23 13.95Q20.69 11.64 18.97 10.05ZM19.01 13.79Q17.46 15.56 18.16 17.81Q19.71 16.04 19.01 13.79ZM17.17 17.06Q14.95 17.81 14.43 20.11Q16.65 19.35 17.17 17.06ZM13.95 18.97Q11.64 18.51 10.05 20.23Q12.36 20.69 13.95 18.97ZM10.21 19.01Q8.44 17.46 6.19 18.16Q7.96 19.71 10.21 19.01ZM6.94 17.17Q6.19 14.95 3.89 14.43Q4.65 16.65 6.94 17.17ZM5.03 13.95Q5.49 11.64 3.77 10.05Q3.31 12.36 5.03 13.95ZM4.99 10.21Q6.54 8.44 5.84 6.19Q4.29 7.96 4.99 10.21ZM6.83 6.94Q9.05 6.19 9.57 3.89Q7.35 4.65 6.83 6.94Z"/>',
-
-    // Arbre du souvenir : houppier festonné en neuf bosses, tronc,
-    // deux branches et la ligne de sol. Le feston est ce qui évite le
-    // rond posé sur un bâton.
-    arbre: '<path d="M4.6 10.2Q3 8.98 5.05 8.01Q3.86 6.58 6.33 6.09Q5.66 4.39 8.3 4.66Q8.47 2.73 10.72 3.9Q12 2.1 13.28 3.9Q15.53 2.73 15.7 4.66Q18.34 4.39 17.67 6.09Q20.14 6.58 18.95 8.01Q21 8.98 19.4 10.2"/><path d="M4.6 10.2c0 3.5 3.3 6 7.4 6s7.4-2.5 7.4-6"/><path d="M12 20.6v-8.2M12 14.4 9.4 11.9M12 12.9l2.5-2.3"/><path d="M6.8 20.9h10.4"/>',
-
-    // Billets brûlés. Papier-monnaie funéraire offert au défunt : deux
-    // feuillets en éventail et trois flammes. Le seul motif du jeu qui
-    // nomme explicitement le rite.
-    billets: '<path d="M4.9 15.4L13.9 13.4L15.3 19.5L6.3 21.5Z"/><path d="M9 15L18.2 16.2L17.5 21.9L8.3 20.7Z"/><circle cx="13.3" cy="18.5" r="1.15"/><path d="M12 3.8c1.3 1.7 1.9 3 1.9 4.1a1.9 1.9 0 0 1-3.8 0c0-1.1.6-2.4 1.9-4.1z"/><path d="M7 7.6c.9 1.2 1.4 2.1 1.4 2.9a1.4 1.4 0 0 1-2.8 0c0-.8.5-1.7 1.4-2.9z"/><path d="M17 7.6c.9 1.2 1.4 2.1 1.4 2.9a1.4 1.4 0 0 1-2.8 0c0-.8.5-1.7 1.4-2.9z"/>',
-
-    // Motif « non saisi ». JAMAIS proposé dans le formulaire : c'est la
-    // valeur de repli, celle qui dit qu'aucun choix n'a été fait. Elle
-    // remplace l'ancien repli sur le premier motif de la liste, qui
-    // inventait un choix que personne n'avait exprimé.
+    /* --- Motif du livre de condoléances resté au trait -----------------
+       Les SIX motifs proposés ne sont plus des tracés mais des images,
+       déclarées dans MOTIFS_IMAGE et rangées dans assets/motifs.
+       POURQUOI ce changement à la 00.29.00 : dessinés au trait, ils
+       restaient maigres et se ressemblaient tous. Les images fournies par
+       l'association sont autrement plus lisibles à 56 px.
+       Seul « sans » reste un tracé : il ne représente rien, il dit
+       l'absence de choix, et un point d'interrogation au trait le dit
+       mieux qu'une image.
+       ----------------------------------------------------------------- */
     sans: '<circle cx="12" cy="12" r="8.8"/><path d="M9.6 9.7a2.5 2.5 0 0 1 4.9.7c0 1.7-2.5 2-2.5 3.7"/><path d="M12 17.5h.01"/>',
 
     // Enveloppe : un rectangle et le pli du rabat.
@@ -893,6 +857,27 @@ const MOTIF_DEFAUT = "sans";
 
 
 /* ---------------------------------------------------------------------
+   construireMotif — rend le motif d'un message ou d'une vignette.
+   Les six motifs proposés sont des IMAGES, dans assets/motifs, au format
+   webp, 168 px de côté, fond transparent.
+   POURQUOI des images et non des tracés : les tracés au trait, essayés à
+   la 00.28.00, restaient maigres et se confondaient entre eux à 56 px.
+   Les images viennent du fonds de l'association ; leur emploi relève donc
+   de sa décision, pas de la mienne.
+   Le motif « sans » reste un tracé : il n'illustre rien, il signale une
+   absence de choix.
+   --------------------------------------------------------------------- */
+function construireMotif(cle) {
+    if (cle === MOTIF_DEFAUT || MOTIFS_PROPOSES.indexOf(cle) === -1) {
+        return construireIcone(MOTIF_DEFAUT);
+    }
+    return '<img class="motif-img" src="assets/motifs/' + cle + '.webp"'
+         + ' width="168" height="168" loading="lazy" decoding="async"'
+         + ' alt="" aria-hidden="true">';
+}
+
+
+/* ---------------------------------------------------------------------
    MESSAGES — dernière liste lue au guichet, gardée en mémoire.
    POURQUOI : quand quelqu'un clique « Modifier mon message », il faut
    retrouver le texte et le motif de la ligne sans redemander le registre.
@@ -929,14 +914,16 @@ function construireCondoleance(m, rang) {
     const motif = MOTIFS_PROPOSES.indexOf(m.motif) === -1 ? MOTIF_DEFAUT : m.motif;
 
     return '<article class="mot" style="--rang:' + Math.min(rang, 12) + '">'
-         + '<span class="mot-motif">' + construireIcone(motif) + "</span>"
+         + '<span class="mot-motif">' + construireMotif(motif) + "</span>"
          + '<p class="mot-texte">' + texte + "</p>"
          + '<p class="mot-signe">'
          + '<span class="mot-nom">' + echapper(nomAffiche(m)) + "</span>"
          + (m.date ? '<span class="mot-date">' + echapper(m.date) + "</span>" : "")
          + "</p>"
-         + '<button type="button" class="mot-modifier" data-ligne="' + m.ligne + '">'
-         + DICO.condo_modifier + "</button>"
+         + (Number.isFinite(Number(m.ligne))
+              ? '<button type="button" class="mot-modifier" data-ligne="' + m.ligne + '">'
+                + DICO.condo_modifier + "</button>"
+              : "")
          + "</article>";
 }
 
@@ -976,6 +963,16 @@ async function chargerCondoleances() {
         if (compteur) {
             compteur.textContent = MESSAGES.length + " "
                 + (MESSAGES.length > 1 ? DICO.condo_compte_plusieurs : DICO.condo_compte_un);
+        }
+
+        // Le guichet d'avant la 00.28.00 ne renvoie pas le numéro de
+        // ligne : la modification est alors impossible, et les boutons ne
+        // sont pas rendus. On le dit dans la console plutôt que de
+        // laisser chercher, et on ne montre rien aux visiteurs.
+        if (MESSAGES.length && !Number.isFinite(Number(MESSAGES[0].ligne))) {
+            console.warn("Livre de condoléances : le guichet ne renvoie pas "
+              + "le numéro de ligne. Le Code.gs de la 00.29.00 n'est pas publié. "
+              + "Voir OUTILS/condoleances/INSTALLATION.txt, étape 2.");
         }
     } catch (err) {
         boite.innerHTML = '<p class="mot-attente">' + DICO.condo_erreur + "</p>";
@@ -1133,7 +1130,7 @@ function poserMotifs() {
     boite.innerHTML = MOTIFS_PROPOSES.map(function (nom) {
         return '<label class="motif">'
              + '<input type="radio" name="motif" value="' + nom + '">'
-             + '<span class="motif-dessin">' + construireIcone(nom)
+             + '<span class="motif-dessin">' + construireMotif(nom)
              + '<span class="motif-nom">' + DICO["motif_" + nom] + "</span>"
              + "</span>"
              + "</label>";

@@ -761,11 +761,23 @@ body.condoleances {
 
 .mot-motif .ico { width: 34px; height: 34px; }
 
+/* Motif en image dans l'angle d'une carte. Une image ne prend pas la
+   couleur du texte : son attenuation passe donc par l'opacite, la ou les
+   tracés utilisaient une couleur transparente. 0.62 mesure a l'oeil comme
+   le filigrane des tracés, sans faire disparaitre les petales. */
+.mot-motif .motif-img {
+  display: block;
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  opacity: 0.62;
+}
+
 .mot-texte {
   font-size: 0.94rem;
   line-height: 1.6;
   color: var(--tiare);
-  padding-right: 42px;
+  padding-right: 50px;
 }
 
 /* Bouton de modification, pose en bas de chaque carte. Discret au repos :
@@ -917,7 +929,7 @@ body.condoleances {
   place-items: center;
   gap: 4px;
   width: 100%;
-  min-height: 86px;
+  min-height: 98px;
   padding: 10px 4px 8px;
   border: 1px solid rgba(250, 246, 236, 0.16);
   border-radius: 11px;
@@ -925,9 +937,24 @@ body.condoleances {
   transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
 }
 
-/* Dessin porte de 24 a 48 px : c'est la raison d'etre de la refonte, six
-   motifs au lieu de douze pour que chacun soit reellement lisible. */
-.motif-dessin .ico { width: 48px; height: 48px; }
+/* Dessin porte de 24 a 56 px : c'est la raison d'etre de la refonte, six
+   motifs au lieu de douze pour que chacun soit reellement lisible.
+   Les motifs proposes sont des images ; « sans » reste un trace, mais il
+   n'est jamais propose, donc jamais rendu ici. */
+.motif-dessin .ico { width: 56px; height: 56px; }
+
+.motif-dessin .motif-img {
+  display: block;
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+  opacity: 0.82;
+  transition: opacity 0.15s ease;
+}
+
+/* Une image ne change pas de couleur quand elle est cochee : c'est son
+   opacite pleine, plus la bordure de la tuile, qui signalent le choix. */
+.motif input:checked + .motif-dessin .motif-img { opacity: 1; }
 
 /* Nom du motif, place SOUS le dessin, a l'interieur de la tuile.
    Les trois remises a zero ne sont pas decoratives : .motif est un
