@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!-- documentation.html — manuel de reprise du projet — CSS Moorea Tahiti
-     version 00.39.00 — 17 août 2026
+     version 00.40.00 — 18 août 2026
 
      RENOMME A LA 00.38.00 : ce fichier s'appelait outils.html. Le nom
      outils.html designe desormais la BOITE A OUTILS, dans OUTILS.
@@ -81,7 +81,7 @@ th{color:var(--sable);font-weight:700;font-size:.8rem;text-transform:uppercase;l
 <div class="page">
 
 <h1>Manuel de reprise</h1>
-<p class="sous">Portail de liens et livre de condoléances — CSS Moorea Tahiti — version 00.39.00, 17 août 2026.<br>
+<p class="sous">Portail de liens et livre de condoléances — CSS Moorea Tahiti — version 00.40.00, 18 août 2026.<br>
 Ce document décrit la chaîne entière, dans l'ordre où elle se parcourt. Il est écrit pour quelqu'un qui n'a pas participé.</p>
 
 <div class="som">
@@ -403,11 +403,22 @@ Cela crée une <b>nouvelle adresse</b>. Le portail continuerait alors d'interrog
 
 <ol>
 <li>Double-clic. Il va chercher les messages tout seul auprès du guichet.</li>
-<li>Choisir le mode : <b>une seule page, sans saut</b> pour transmettre le livre ; <b>A4 paginé</b> pour imprimer.</li>
+<li>Choisir le mode. <b>Ce choix commande la destination</b>, voir l'encadré ci-dessous.</li>
 <li><kbd>Ctrl</kbd>+<kbd>P</kbd>, puis dans la fenêtre de Chrome : Destination <b>Enregistrer au format PDF</b>, Marges <b>Aucune</b>, et surtout <b>Graphiques d'arrière-plan</b> coché.</li>
 </ol>
 
-<div class="avert">Sans « Graphiques d'arrière-plan », le fond sombre disparaît et le texte sable devient illisible sur blanc. C'est l'erreur la plus fréquente.</div>
+<div class="jamais"><b>LE MODE ET LA DESTINATION VONT ENSEMBLE.</b><br>
+Mesuré sur le même document, en mode « une seule page » :
+<table>
+<tr><th>destination</th><th>résultat</th></tr>
+<tr><td>Chrome — Enregistrer au format PDF</td><td><b>1 page</b> de 210 × 2550 mm ✔</td></tr>
+<tr><td>Microsoft Print to PDF</td><td>9 feuilles ✘</td></tr>
+<tr><td>imprimante Lexmark CX410</td><td>5 feuilles ✘</td></tr>
+</table>
+Une imprimante, réelle ou virtuelle Windows, <b>impose son format papier</b> et ignore la taille de page demandée. Seul le moteur PDF interne de Chrome l'honore.<br>
+Donc : <b>une seule page</b> uniquement avec le PDF de Chrome, pour transmettre. <b>A4 paginé</b> pour tout le reste, imprimante comprise — aucune carte n'y est jamais coupée.</div>
+
+<div class="avert">Sans <b>« Graphiques d'arrière-plan »</b>, le fond sombre disparaît. Mesuré : la luminance moyenne d'une page passe de <b>27,4</b> à <b>135,7</b> sur 255, et les dates deviennent illisibles. C'est l'erreur la plus fréquente.</div>
 
 <ul>
 <li>Le mode continu mesure la hauteur réelle et en fait la hauteur de la page : un PDF d'<b>une seule page</b>, aucune carte coupée. Sur 69 messages : 210 × 2439 mm.</li>

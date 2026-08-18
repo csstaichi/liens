@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!-- outils.html — boîte à outils du projet — CSS Moorea Tahiti
-     version 00.39.00 — 17 août 2026
+     version 00.40.00 — 18 août 2026
 
      DEPLACE DANS SITE A LA 00.39.00. Ce fichier MONTE DESORMAIS SUR GITHUB et
      repond sur https://csstaichi.github.io/liens/outils.html
@@ -36,12 +36,25 @@
      COMMENT IL S'ALIMENTE
      Il interroge le meme guichet Apps Script que le site. Verifie : le
      guichet renvoie access-control-allow-origin: *, une page ouverte en
-     file:// peut donc le lire. Si le reseau manque, un champ permet de
-     coller a la main la reponse du guichet.
+     file:// peut donc le lire.
+     Le champ de secours, qui permettait de coller la reponse a la main, a
+     ete RETIRE a la 00.40.00 : ce fichier etant desormais servi par
+     GitHub, qui peut l'ouvrir a forcement le reseau. Il occupait 90 px de
+     hauteur pour rien.
+
+     LA DESTINATION COMMANDE LE MODE — mesure faite sur trois destinations,
+     meme document, meme mode « une seule page » :
+         Chrome, Enregistrer au format PDF  -> 1 page de 210 x 2550 mm
+         Microsoft Print to PDF             -> 9 feuilles
+         imprimante Lexmark CX410           -> 5 feuilles
+     Une imprimante, reelle ou virtuelle Windows, IMPOSE son format papier
+     et ignore la taille de page demandee. Seul le moteur PDF interne de
+     Chrome l'honore. D'ou l'avertissement affiche par l'outil.
 
      LES DEUX MODES D'IMPRESSION DU LIVRE
      CONTINU  une seule page, aussi haute que le contenu, AUCUN saut de
               page, aucune carte coupee. Mode par defaut.
+              NE VAUT QU'AVEC LE PDF DE CHROME.
               Mesure : 45 mm par message. Le format PDF plafonne a
               5080 mm, soit environ 112 messages. Au-dela, l'outil
               previent et bascule en A4.
@@ -90,10 +103,8 @@ body {
 
 /* --- Bandeau de commande, JAMAIS imprimé ---------------------------- */
 .commande {
-  position: sticky;
-  top: 0;
-  z-index: 9;
-  padding: 16px 18px;
+  /* Volontairement NON collant : voir le commentaire du bandeau. */
+  padding: 14px 18px 16px;
   background: #12312C;
   border-bottom: 1px solid var(--carte-bord);
 }
@@ -119,14 +130,24 @@ body {
 /* Le bloc de la documentation est encadré : les deux outils n'ont rien à
    voir l'un avec l'autre, et rien ne serait pire que de cliquer sur l'un
    en croyant lancer l'autre. */
+/* Une seule ligne : le bouton, puis la phrase a cote. Le cadre suffit a
+   separer les deux outils, sans consommer de hauteur. */
 .bloc-doc {
-  margin-top: 6px;
-  padding: 12px 14px 14px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+  align-items: center;
+  margin-top: 10px;
+  padding: 10px 12px;
   border: 1px solid var(--carte-bord);
   border-radius: 11px;
   background: rgba(10, 21, 18, 0.45);
 }
-.bloc-doc .titre-bloc { margin-top: 0; }
+
+.bloc-doc .apres { font-size: 0.84rem; color: var(--sable); }
+.bloc-doc .apres a { color: var(--lagon-clair); }
+.bloc-doc .etat { flex-basis: 100%; margin-top: 0; }
+.bloc-doc .etat:empty { display: none; }
 .bloc-doc a { color: var(--lagon-clair); }
 
 button, select {
@@ -147,32 +168,20 @@ button:hover { background: rgba(201, 191, 166, 0.14); }
 .etat--erreur { color: #E68C32; }
 
 .consignes {
-  margin: 10px 0 0;
-  padding: 10px 12px;
-  border: 1px solid var(--carte-bord);
-  border-radius: 9px;
+  margin: 8px 0 0;
   font-size: 0.82rem;
-  line-height: 1.5;
+  line-height: 1.45;
   color: var(--sable);
 }
 .consignes b { color: var(--tiare); }
 
-.secours { margin-top: 10px; }
-.secours textarea {
-  width: 100%;
-  height: 90px;
-  padding: 8px;
-  border: 1px solid var(--carte-bord);
-  border-radius: 9px;
-  background: rgba(10, 21, 18, 0.6);
-  color: var(--tiare);
-  font-family: monospace;
-  font-size: 0.78rem;
-}
-
 /* --- Le document lui-même ------------------------------------------- */
+/* 794 px = 210 mm a 96 ppp, la largeur reelle d'une page A4. A l'ecran,
+   le document a donc exactement la largeur qu'il aura une fois imprime :
+   ce qu'on voit est ce qu'on obtient. Jusqu'a la 00.40.00 il etait
+   plafonne a 560 px, plus etroit que le resultat. */
 .feuille {
-  max-width: var(--colonne);
+  max-width: 794px;
   margin: 0 auto;
   padding: 26px 18px 34px;
 }
@@ -265,23 +274,22 @@ button:hover { background: rgba(201, 191, 166, 0.14); }
 <body>
 
 <!-- Bandeau de commande. Il ne s'imprime pas : c'est l'outil, pas le
-     document. -->
+     document.
+     IL N'EST PLUS COLLANT depuis la 00.40.00. Mesure qui l'a fait changer :
+     il occupait 561 px et restait en place au defilement, ne laissant que
+     199 px au document sur un ecran de 760 px, soit 26 %. Un outil ne doit
+     pas ecraser ce qu'il sert a produire. -->
 <div class="commande">
   <h1>Boîte à outils</h1>
 
-  <!-- Second outil, posé avant le premier parce qu'il ne demande aucun
-       réglage : un clic, et le document part à l'impression. -->
+  <!-- Documentation, pose en premier parce qu'il ne demande aucun reglage :
+       un clic, et le document part a l'impression. -->
   <div class="bloc-doc">
-    <p class="titre-bloc">Exporter la documentation</p>
-    <p class="etat">Le manuel de reprise, dix-huit sections, en PDF A4 paginé.
-      Il s'ouvre dans un onglet et lance l'impression tout seul.</p>
     <button type="button" id="doc">Exporter la documentation</button>
+    <span class="apres">le manuel de reprise, 18 sections, en A4 paginé —
+      <a href="https://csstaichi.github.io/liens/documentation.html?imprimer=1"
+         target="_blank" rel="noopener">onglet vide ?</a></span>
     <p class="etat" id="etat-doc"></p>
-    <!-- Recours si le fichier a été déplacé seul, sans son voisin. La
-         version en ligne est la même, publiée sur GitHub. -->
-    <p class="etat"><a
-       href="https://csstaichi.github.io/liens/documentation.html?imprimer=1"
-       target="_blank" rel="noopener">Onglet vide ? Ouvrir la version en ligne</a></p>
   </div>
 
   <p class="titre-bloc">Exporter le livre de condoléances</p>
@@ -297,21 +305,13 @@ button:hover { background: rgba(201, 191, 166, 0.14); }
 
   <p class="etat" id="etat">Chargement…</p>
 
-  <div class="consignes">
-    Dans la fenêtre d'impression de Chrome, trois réglages, sinon le rendu
-    est faux :<br>
-    Destination <b>Enregistrer au format PDF</b> —
-    Marges <b>Aucune</b> —
-    <b>Graphiques d'arrière-plan</b> coché.<br>
-    Sans le dernier, le fond sombre disparaît et le texte sable devient
-    illisible sur blanc.
-  </div>
-
-  <div class="secours">
-    <p class="etat">Si le réseau manque : ouvrez l'adresse du guichet dans
-      Chrome, copiez toute la réponse, collez-la ici, puis rechargez.</p>
-    <textarea id="colle" placeholder='{"messages":[…]}'></textarea>
-  </div>
+  <!-- Une seule consigne, celle qui casse vraiment le rendu. Mesuree :
+       sans la case, la luminance moyenne d'une page passe de 27,4 a 135,7
+       sur 255, et les dates deviennent illisibles. Les deux autres
+       reglages, destination et marges, sont evidents et ont ete retires. -->
+  <p class="consignes">Dans la fenêtre d'impression, cochez
+    <b>Graphiques d'arrière-plan</b>. Sans elle, le fond sombre disparaît
+    et les dates deviennent illisibles.</p>
 </div>
 
 <div class="feuille" id="feuille"></div>
@@ -433,7 +433,8 @@ function reglerPage() {
 
   if (mode === "a4") {
     regle.textContent = "@page { size: A4; margin: 0; }";
-    dire(MESSAGES.length + " messages — mode A4, aucune carte coupée.");
+    dire(MESSAGES.length + " messages — mode A4, aucune carte coupée. "
+       + "Convient à toutes les destinations, imprimante comprise.");
     return;
   }
 
@@ -453,21 +454,18 @@ function reglerPage() {
 
   regle.textContent = "@page { size: " + largeurMm + "mm " + hauteurMm + "mm; margin: 0; }";
   dire(MESSAGES.length + " messages — une seule page de " + largeurMm
-     + " x " + hauteurMm + " mm, sans aucun saut.");
+     + " x " + hauteurMm + " mm, sans aucun saut. "
+     + "Ce mode n'a de sens qu'avec la destination « Enregistrer au format "
+     + "PDF » de Chrome : une imprimante, même virtuelle, impose son format "
+     + "papier et repaginera. Pour imprimer, choisissez A4 paginé.");
 }
 
 async function charger() {
   dire("Chargement…");
-  const colle = $("colle").value.trim();
 
   try {
-    let donnees;
-    if (colle) {
-      donnees = JSON.parse(colle);
-    } else {
-      const r = await fetch(GUICHET, { method: "GET" });
-      donnees = await r.json();
-    }
+    const r = await fetch(GUICHET, { method: "GET" });
+    const donnees = await r.json();
     MESSAGES = donnees.messages || [];
     if (!MESSAGES.length) throw new Error("aucun message");
     dessiner();
@@ -482,8 +480,8 @@ async function charger() {
     reglerPage();
   } catch (err) {
     dire("Lecture impossible : " + err.message
-       + ". Ouvrez l'adresse du guichet dans Chrome, copiez la réponse, "
-       + "collez-la dans le champ ci-dessous, puis rechargez.", true);
+       + ". Le guichet n'a pas répondu. Vérifiez le réseau, puis cliquez "
+       + "« Recharger les messages ».", true);
   }
 }
 
