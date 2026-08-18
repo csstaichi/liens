@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<!-- documentation.html — manuel de reprise du projet — CSS Moorea Tahiti
+     version 00.39.00 — 17 août 2026
+
+     RENOMME A LA 00.38.00 : ce fichier s'appelait outils.html. Le nom
+     outils.html designe desormais la BOITE A OUTILS, dans OUTILS.
+
+     DEPLACE DANS SITE A LA 00.39.00 : ce fichier MONTE DESORMAIS SUR GITHUB et
+     repond sur https://csstaichi.github.io/liens/documentation.html
+     Il ne contient plus aucune adresse electronique, seulement des roles,
+     et il porte une balise robots noindex.
+
+     SON NOM EST FIGE : il est devenu une adresse, et OUTILS/outils.html
+     l'appelle par ce nom. Il ne porte donc pas le numero de version dans
+     son NOM, comme les cinq autres pages, mais dans son en-tete.
+
+     A CHAQUE LIVRAISON QUI LE MODIFIE : le retelever avec le reste de
+     SITE, sinon la version en ligne restera en arriere sans que rien ne
+     le signale.
+
+     CE FICHIER NE MONTE PAS SUR GITHUB. Il reste dans OUTILS.
+     Double-clic pour l'ouvrir. Ctrl+P pour en faire un PDF.
+
+     À QUOI IL SERT : permettre à Teva, ou à n'importe qui d'autre, de
+     reprendre le projet dans six mois ou dans trois ans sans rien
+     reconstituer de mémoire. Il décrit la chaîne entière, dans l'ordre,
+     et dit à chaque étape ce qu'il ne faut surtout pas faire.
+-->
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Ce document décrit l'organisation interne du projet. Il n'a rien à
+     faire dans un moteur de recherche, même publié. La balise supprime
+     aussi l'aperçu dans Messenger et WhatsApp : sans importance ici, ce
+     fichier n'est jamais partagé comme lien. -->
+<meta name="robots" content="noindex, nofollow">
+<title>Manuel de reprise — CSS Moorea Tahiti</title>
+<style>
+:root{
+  --fond:#0A1512; --carte:rgba(18,30,28,.78); --bord:rgba(250,246,236,.13);
+  --tiare:#FAF6EC; --sable:#C9BFA6; --lagon:#6ECFBE; --orange:#E68C32; --corail:#D2564A;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--fond);color:var(--tiare);
+  font-family:system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.6;font-size:15px}
+.page{max-width:820px;margin:0 auto;padding:28px 20px 60px}
+h1{font-size:1.9rem;line-height:1.15;margin:0 0 6px}
+h2{font-size:1.25rem;margin:44px 0 10px;padding-top:16px;border-top:1px solid var(--bord);color:var(--lagon)}
+h3{font-size:1rem;margin:22px 0 6px;color:var(--tiare)}
+p,li{color:var(--tiare)}
+.sous{color:var(--sable);font-size:.9rem;margin:0 0 22px}
+ul,ol{padding-left:20px;margin:8px 0}
+li{margin:4px 0}
+code,kbd{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.86em;
+  background:rgba(250,246,236,.08);padding:1px 5px;border-radius:4px}
+pre{background:rgba(10,21,18,.7);border:1px solid var(--bord);border-radius:10px;
+  padding:12px 14px;overflow-x:auto;font-size:.82rem;color:var(--sable)}
+.avert,.jamais,.note{border-radius:10px;padding:12px 14px;margin:12px 0;font-size:.93rem}
+.avert{border:1px solid var(--orange);background:rgba(230,140,50,.08)}
+.jamais{border:1px solid var(--corail);background:rgba(210,86,74,.08)}
+.note{border:1px solid var(--bord);background:var(--carte);color:var(--sable)}
+.avert b,.jamais b{color:var(--tiare)}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.9rem}
+th,td{text-align:left;padding:7px 9px;border-bottom:1px solid var(--bord);vertical-align:top}
+th{color:var(--sable);font-weight:700;font-size:.8rem;text-transform:uppercase;letter-spacing:.06em}
+.som{background:var(--carte);border:1px solid var(--bord);border-radius:12px;padding:14px 18px;margin:20px 0}
+.som ol{columns:2;column-gap:26px;margin:0}
+.som a{color:var(--lagon);text-decoration:none}
+.som a:hover{text-decoration:underline}
+@media print{
+  body{background:#fff;color:#111}
+  h2{color:#0E6F66} .som{display:none}
+  pre,.note{background:#f4f4f2;color:#333;border-color:#ccc}
+  h2{break-after:avoid} h3{break-after:avoid} .avert,.jamais,pre,table{break-inside:avoid}
+  @page{size:A4;margin:14mm}
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<h1>Manuel de reprise</h1>
+<p class="sous">Portail de liens et livre de condoléances — CSS Moorea Tahiti — version 00.39.00, 17 août 2026.<br>
+Ce document décrit la chaîne entière, dans l'ordre où elle se parcourt. Il est écrit pour quelqu'un qui n'a pas participé.</p>
+
+<div class="som">
+<ol>
+<li><a href="#a1">La chaîne, d'un coup d'œil</a></li>
+<li><a href="#a2">Les comptes et les accès</a></li>
+<li><a href="#a3">Namecheap — le nom de domaine</a></li>
+<li><a href="#a4">Google Sites — le site public</a></li>
+<li><a href="#a5">Les blocs de code intégrés</a></li>
+<li><a href="#a6">GitHub — où vit le portail</a></li>
+<li><a href="#a7">Les fichiers du portail</a></li>
+<li><a href="#a8">La feuille Google — le registre</a></li>
+<li><a href="#a9">Apps Script — le guichet</a></li>
+<li><a href="#a10">Déployer, et retrouver le lien</a></li>
+<li><a href="#a11">Les alertes par courriel</a></li>
+<li><a href="#a12">L'export PDF</a></li>
+<li><a href="#a13">Les images pour les réseaux</a></li>
+<li><a href="#a14">Diffuser, et à qui</a></li>
+<li><a href="#a15">Mettre à jour : l'ordre</a></li>
+<li><a href="#a16">Les neuf contrôles</a></li>
+<li><a href="#a17">Évolutions possibles</a></li>
+<li><a href="#a18">Redémarrage à froid</a></li>
+</ol>
+</div>
+
+
+<h2 id="a1">1. La chaîne, d'un coup d'œil</h2>
+
+<p>Cinq briques indépendantes. Aucune ne peut remplacer l'autre, et il faut savoir laquelle on touche avant de toucher quoi que ce soit.</p>
+
+<table>
+<tr><th>Brique</th><th>Rôle</th><th>Où</th></tr>
+<tr><td><b>Namecheap</b></td><td>le nom de domaine <code>csstahitimoorea.org</code></td><td>namecheap.com</td></tr>
+<tr><td><b>Google Sites</b></td><td>le site de l'association, celui que voient les visiteurs</td><td>sites.google.com</td></tr>
+<tr><td><b>GitHub Pages</b></td><td>le portail de liens et le livre de condoléances, en pages autonomes</td><td>csstaichi.github.io/liens/</td></tr>
+<tr><td><b>Feuille Google</b></td><td>les messages du livre, un par ligne</td><td>Drive</td></tr>
+<tr><td><b>Apps Script</b></td><td>le guichet : il lit et écrit la feuille pour le compte des visiteurs</td><td>attaché à la feuille</td></tr>
+</table>
+
+<h3>Qui parle à qui</h3>
+<pre>visiteur ──▶ csstaichi.github.io/liens/condoleances.html   (page, sur GitHub)
+                     │
+                     └─▶ script.google.com/…/exec           (guichet, Apps Script)
+                                  │
+                                  └─▶ feuille Google        (les messages)
+
+visiteur ──▶ csstahitimoorea.org  (Google Sites)
+                     └─ contient des blocs qui affichent les pages GitHub</pre>
+
+<div class="avert"><b>La règle qui explique tout le montage.</b> La page publique du portail ne doit <b>jamais</b> citer <code>csstahitimoorea.org</code>. C'est pour cela que le portail est hébergé sur <code>github.io</code> et non sur le domaine de l'association : sur le domaine, l'adresse elle-même trahirait le site.</div>
+
+
+<h2 id="a2">2. Les comptes et les accès</h2>
+
+<table>
+<tr><th>Service</th><th>Identifiant</th><th>Détenu par</th></tr>
+<tr><td>Google (Sites, Drive, Apps Script, Gmail)</td><td>le compte du <b>propriétaire</b> — celui qui détient Sites, Drive, Apps Script et Gmail</td><td>bureau</td></tr>
+<tr><td>GitHub</td><td>compte <code>csstaichi</code>, même adresse</td><td>bureau</td></tr>
+<tr><td>Namecheap</td><td>compte propriétaire du domaine</td><td>bureau</td></tr>
+<tr><td>Alertes du livre</td><td>envoyées à l'<b>administrateur réseau et informatique</b> de gestion et de communication. Adresse déclarée en tête d'<code>Alertes.gs</code>, à changer là et nulle part ailleurs</td><td>administrateur</td></tr>
+</table>
+
+<div class="jamais"><b>Impératif de continuité.</b> Les identifiants des trois comptes doivent être connus d'<b>au moins deux</b> membres du bureau. Un seul détenteur, et le projet meurt avec son absence. C'est le risque le plus élevé de tout ce dossier, et il n'est pas technique.</div>
+
+
+<h2 id="a3">3. Namecheap — le nom de domaine</h2>
+
+<p>Namecheap ne sert qu'à une chose ici : faire pointer <code>csstahitimoorea.org</code> vers Google Sites. Il n'héberge rien.</p>
+
+<h3>Ce qu'il faut surveiller</h3>
+<ul>
+<li><b>La date d'expiration.</b> Un domaine non renouvelé cesse de répondre du jour au lendemain, et se rachète très cher pendant la période de récupération. Activer le renouvellement automatique, et vérifier que la carte enregistrée est valide.</li>
+<li><b>L'adresse de contact du titulaire.</b> Les avis d'expiration y sont envoyés. Si elle est celle d'un ancien membre, personne ne verra l'avertissement.</li>
+<li><b>La protection de la confidentialité</b> (WhoisGuard), incluse chez Namecheap. La laisser active : sinon l'adresse et le téléphone du titulaire sont publics.</li>
+</ul>
+
+<h3>Où sont réglés les enregistrements</h3>
+<p>Namecheap → <b>Domain List</b> → <b>Manage</b> → onglet <b>Advanced DNS</b>. C'est là que se trouvent les enregistrements qui envoient le domaine vers Google Sites.</p>
+
+<div class="avert"><b>Avant de modifier quoi que ce soit ici</b>, faire une capture d'écran de la table complète. Une ligne effacée par erreur coupe le site, et rien n'indique ce qu'elle contenait. La propagation d'une correction prend de quelques minutes à quelques heures.</div>
+
+<div class="note">Le portail GitHub, lui, <b>ne dépend pas du domaine</b>. Si Namecheap tombe, <code>csstaichi.github.io/liens/</code> continue de fonctionner, livre de condoléances compris. C'est une conséquence heureuse du montage, pas un hasard.</div>
+
+
+<h2 id="a4">4. Google Sites — le site public</h2>
+
+<p>C'est le site de l'association : présentation, plannings, actualités. Il est modifiable par n'importe qui du bureau, sans code.</p>
+
+<h3>Ce qu'il faut savoir avant d'y toucher</h3>
+<ul>
+<li>Une modification n'est visible qu'après <b>Publier</b>, en haut à droite. Tant qu'on n'a pas publié, on est seul à voir ses changements.</li>
+<li>Google Sites n'a pas d'historique de versions utilisable. Avant une refonte, dupliquer le site : <b>⋮ → Dupliquer le site</b>.</li>
+<li><b>Paramètres → Visibilité</b> : ne pas laisser cochée l'option qui empêche l'indexation. Elle avait été activée par erreur et la page d'accueil n'apparaissait plus dans Google.</li>
+</ul>
+
+
+<h2 id="a5">5. Les blocs de code intégrés</h2>
+
+<p>Les pages du portail sont affichées <b>à l'intérieur</b> du site Google, dans des cadres. C'est ce qui permet d'avoir un contenu que Google Sites ne sait pas faire, sans quitter le site.</p>
+
+<h3>Comment poser un bloc</h3>
+<ol>
+<li>Ouvrir la page voulue, en mode édition.</li>
+<li><b>Insérer → Intégrer</b> → onglet <b>« Code intégré »</b>. <b>Surtout pas « Par URL »</b>, qui ne produirait qu'une vignette de lien.</li>
+<li>Coller le bloc, <b>Suivant</b>, <b>Insérer</b>.</li>
+<li>Étirer le cadre sur <b>toute la largeur</b> de la page : la largeur n'est pas fixée par le code, elle est fixée par la grille de Google Sites.</li>
+</ol>
+
+<h3>Les quatre blocs, hauteurs mesurées</h3>
+<p>La hauteur d'un cadre est <b>figée en pixels</b>, la même sur téléphone et sur ordinateur. C'est donc la mesure à 360 px de large qui commande, la plus haute. Sinon une barre de défilement apparaît à l'intérieur du cadre sur téléphone.</p>
+
+<table>
+<tr><th>Page</th><th>360 px</th><th>412 px</th><th>≥ 600 px</th><th>Hauteur à poser</th></tr>
+<tr><td>adherents</td><td>1758</td><td>1657</td><td>1524</td><td><b>1800</b></td></tr>
+<tr><td>plannings</td><td>2262</td><td>2134</td><td>1989</td><td><b>2300</b></td></tr>
+<tr><td>ressources</td><td>1594</td><td>1492</td><td>1413</td><td><b>1640</b></td></tr>
+<tr><td>condoleances</td><td colspan="3">croît avec les messages, ~130 px par message</td><td><b>3600</b></td></tr>
+</table>
+
+<pre>&lt;iframe src="https://csstaichi.github.io/liens/adherents.html"
+        width="100%" height="1800"
+        style="border:0; display:block" loading="lazy"
+        title="Liens CSS Moorea Tahiti"&gt;&lt;/iframe&gt;
+
+&lt;iframe src="https://csstaichi.github.io/liens/plannings.html"
+        width="100%" height="2300"
+        style="border:0; display:block" loading="lazy"
+        title="Plannings CSS Moorea Tahiti"&gt;&lt;/iframe&gt;
+
+&lt;iframe src="https://csstaichi.github.io/liens/ressources.html"
+        width="100%" height="1640"
+        style="border:0; display:block" loading="lazy"
+        title="Ressources CSS Moorea Tahiti"&gt;&lt;/iframe&gt;
+
+&lt;iframe src="https://csstaichi.github.io/liens/condoleances.html"
+        width="100%" height="3600"
+        style="border:0; display:block" loading="lazy"
+        title="Livre de condoléances CSS Moorea Tahiti"&gt;&lt;/iframe&gt;</pre>
+
+<div class="avert"><b>Après tout ajout de bouton</b>, rallonger la hauteur à la main : environ 76 px par bouton sur la page adhérents, environ 130 px par message sur le livre. Rien ne le fait tout seul.</div>
+
+
+<h2 id="a6">6. GitHub — où vit le portail</h2>
+
+<table>
+<tr><td>Hébergeur</td><td>GitHub Pages, gratuit, sans limite de durée</td></tr>
+<tr><td>Compte</td><td><code>csstaichi</code></td></tr>
+<tr><td>Dépôt</td><td><code>csstaichi/liens</code>, <b>public</b> — obligatoire pour Pages en offre gratuite</td></tr>
+<tr><td>Réglage</td><td>Settings → Pages → Deploy from a branch → <code>main</code> → <code>/ (root)</code></td></tr>
+<tr><td>Adresse</td><td><a href="https://github.com/csstaichi/liens">github.com/csstaichi/liens</a></td></tr>
+</table>
+
+<h3>Téléverser une mise à jour</h3>
+<ol>
+<li>Modifier les fichiers <b>en local</b>, jamais directement sur GitHub.</li>
+<li>Ouvrir <code>index.html</code> en double-cliquant, pour voir le résultat avant toute mise en ligne.</li>
+<li>Dépôt → <b>Add file → Upload files</b> → glisser les fichiers modifiés → <b>Commit changes</b>.</li>
+<li>Attendre <b>deux à trois minutes</b>, le temps de la publication.</li>
+<li>Recharger en vidant le cache : <kbd>Ctrl</kbd>+<kbd>F5</kbd>.</li>
+<li>Vérifier le <b>numéro de version</b> affiché en bas de page. S'il n'a pas changé, le téléversement n'a pas abouti.</li>
+</ol>
+
+<div class="jamais"><b>Ne jamais glisser le dossier <code>SITE</code> lui-même.</b> C'est son <b>contenu</b> qui monte : les cinq <code>.html</code>, <code>liens.js</code>, <code>styles.css</code>, et le dossier <code>assets</code>. Glisser <code>SITE</code> créerait un sous-dossier et casserait toutes les adresses.</div>
+
+<h3>Supprimer un fichier</h3>
+<p>Un téléversement <b>n'efface jamais</b> un fichier absent de l'envoi. Pour supprimer : ouvrir le fichier sur GitHub → icône corbeille → <b>Commit changes</b>. À faire pour <code>assets/fond.png</code>, <code>assets/fond-flou.jpg</code> et <code>assets/motifs/bouquet.webp</code> s'ils y sont encore.</p>
+
+<div class="note"><b>Le dépôt est public.</b> Tout ce qui y monte est lisible par n'importe qui, robots compris. Ne jamais y écrire d'adresse électronique en clair, de numéro de téléphone, ni de mot de passe. Aucun verrou écrit dans une page web ne restreint quoi que ce soit : le code d'une page est lisible par quiconque l'ouvre.</div>
+
+
+<h2 id="a7">7. Les fichiers du portail</h2>
+
+<table>
+<tr><th>Fichier</th><th>Contient</th></tr>
+<tr><td><code>index.html</code></td><td>page publique — <b>ce nom est obligatoire</b>, voir plus bas</td></tr>
+<tr><td><code>adherents.html</code></td><td>page adhérents</td></tr>
+<tr><td><code>plannings.html</code></td><td>les six cours de la semaine</td></tr>
+<tr><td><code>ressources.html</code></td><td>liens externes</td></tr>
+<tr><td><code>condoleances.html</code></td><td>livre de condoléances</td></tr>
+<tr><td><code>outils.html</code></td><td>la boîte à outils : export PDF du livre et de ce document. Non indexée, liée depuis aucune page</td></tr>
+<tr><td><code>documentation.html</code></td><td>ce document. Non indexé, lié depuis aucune page</td></tr>
+<tr><td><code>documentation.html</code></td><td>ce manuel — publié depuis la 00.39.00, non indexé, non lié</td></tr>
+<tr><td><code>liens.js</code></td><td><b>tout</b> le contenu et tout le moteur : adresses, libellés, textes, version</td></tr>
+<tr><td><code>styles.css</code></td><td>toute la mise en forme</td></tr>
+<tr><td><code>assets/</code></td><td>images, logo, polices, motifs</td></tr>
+</table>
+
+<p><b>Point essentiel :</b> les pages HTML ne contiennent <b>aucun texte visible</b>. Ce sont des gabarits. Tout ce qui s'affiche vient de <code>liens.js</code>. C'est ce qui permet de tout modifier en un seul endroit.</p>
+
+<h3>Les quatre modifications courantes</h3>
+<ul>
+<li><b>Changer une adresse</b> — <code>liens.js</code>, bloc <code>LIENS</code>, ligne <code>url</code>.</li>
+<li><b>Changer un texte de bouton</b> — même entrée, lignes <code>libelle</code> et <code>precision</code>. Contrainte mesurée : <code>precision</code> ne doit pas dépasser <b>28 caractères</b> sur les pages publique et adhérents, sinon le bouton passe de 68 à 102 px et casse le rythme.</li>
+<li><b>Ajouter un bouton</b> — créer l'entrée dans <code>LIENS</code>, puis ajouter sa clé dans <code>JEUX.publique</code>, <code>JEUX.adherents</code> ou <code>SECTIONS</code>. Une entrée qui n'est dans aucune liste n'apparaît nulle part.</li>
+<li><b>Retirer un bouton</b> — enlever sa clé de la liste. <b>Ne pas supprimer l'entrée</b> : elle ne gêne pas et resservira peut-être.</li>
+</ul>
+
+<h3>Le numéro de version</h3>
+<p>Déclaré <b>une seule fois</b>, en haut de <code>liens.js</code>, et affiché en bas de chaque page. Il sert à savoir d'un coup d'œil quelle livraison est réellement en ligne, sans ouvrir le code source. Sur ce dossier, une correction a été cherchée vingt minutes alors qu'elle n'avait simplement pas été téléversée.</p>
+
+<h3>Pourquoi l'adresse publique n'a pas de <code>.html</code></h3>
+<p>Tout serveur web, quand l'adresse se termine par un dossier, y cherche un fichier nommé <code>index.html</code> et le sert sans le nommer. Convention universelle. C'est pour cela que la page publique <b>doit</b> s'appeler <code>index.html</code> : la renommer casserait l'adresse courte.</p>
+
+
+<h2 id="a8">8. La feuille Google — le registre</h2>
+
+<p>Le classeur <b>« CSS-Livre de condoléances »</b>, dans le Drive du compte de l'association. Onglet <code>condoleances</code>.</p>
+
+<div class="jamais"><b>NE JAMAIS SUPPRIMER CE FICHIER, NI LE DÉPLACER HORS DU DRIVE, NI LE RENOMMER SANS PRÉCAUTION.</b><br>
+Le script Apps Script y est <b>attaché</b>. Supprimer le classeur détruit le script, le déploiement et l'adresse du guichet inscrite dans <code>liens.js</code>. Le livre entier s'arrête, et rien ne se récupère à part les messages, s'ils ont été exportés.<br>
+Le mettre dans un dossier du Drive est sans danger. Le mettre à la corbeille ne l'est pas.</div>
+
+<h3>Les sept colonnes</h3>
+<table>
+<tr><th>Col.</th><th>Nom</th><th>Contenu</th></tr>
+<tr><td>A</td><td>date</td><td>horodatage du dépôt, écrit par le script</td></tr>
+<tr><td>B</td><td>prenom</td><td>obligatoire depuis la 00.37.00</td></tr>
+<tr><td>C</td><td>nom</td><td>obligatoire, mis en <b>majuscules</b> par le guichet</td></tr>
+<tr><td>D</td><td>message</td><td>le texte, retours à la ligne conservés</td></tr>
+<tr><td>E</td><td>motif</td><td>une des six clés, ou <code>sans</code></td></tr>
+<tr><td>F</td><td>visible</td><td><code>non</code> masque la ligne. Vide ou autre = publiée</td></tr>
+<tr><td>G</td><td>modifiable</td><td><code>non</code> interdit la modification. Vide ou autre = autorisée</td></tr>
+</table>
+
+<h3>Modérer, au quotidien</h3>
+<ul>
+<li><b>Retirer un message</b> : colonne F, écrire <code>non</code>. Il disparaît au rechargement suivant. Aucune livraison nécessaire.</li>
+<li><b>Verrouiller un message</b> : colonne G, écrire <code>non</code>. Le bouton « Modifier mon message » disparaît, et le guichet refuse la modification même si quelqu'un forge la requête.</li>
+<li><b>Corriger un nom ou un texte</b> : directement dans la cellule.</li>
+</ul>
+
+<div class="avert"><b>Ne jamais supprimer une ligne au milieu.</b> Les numéros de ligne servent d'identifiant : une suppression décale tout ce qui suit, et quelqu'un dont la page est restée ouverte modifierait alors le message du voisin. Pour retirer un message, écrire <code>non</code> en colonne F.</div>
+
+<h3>L'onglet <code>historique</code></h3>
+<p>Créé tout seul à la première modification. Il conserve l'état d'une ligne <b>avant</b> chaque réécriture : horodatage, ligne, prénom, nom, message, motif, modifiable. C'est le seul endroit où retrouver un texte écrasé. Ne jamais le supprimer.</p>
+<p>Attention : une correction faite <b>dans la feuille</b> n'y passe pas. Seules les modifications venues de la page y sont archivées.</p>
+
+
+<h2 id="a9">9. Apps Script — le guichet</h2>
+
+<p>Le projet s'appelle <b>« CSS Livre de condoléances »</b>. On y accède par <b>Extensions → Apps Script</b> depuis la feuille. Il contient deux fichiers.</p>
+
+<table>
+<tr><th>Fichier</th><th>Rôle</th><th>Redéploiement ?</th></tr>
+<tr><td><code>Code.gs</code></td><td>le guichet : <code>doGet</code> lit, <code>doPost</code> écrit</td><td><b>oui</b>, c'est le fichier publié</td></tr>
+<tr><td><code>Alertes.gs</code></td><td>les courriels d'alerte</td><td><b>non</b>, les déclencheurs lisent le code enregistré</td></tr>
+</table>
+
+<h3>Ce que fait Code.gs, et pourquoi</h3>
+<ul>
+<li><b>Il tourne sous le compte de l'association</b>, pas sous celui du visiteur. C'est ce qui permet d'écrire dans la feuille sans donner à personne l'accès au Drive.</li>
+<li><b>Verrou d'écriture.</b> Sans lui, deux envois tombant dans la même seconde pouvaient lire la même « dernière ligne » et l'un écraser l'autre. Éprouvé : cinq envois simultanés, cinq lignes distinctes.</li>
+<li><b>Champ piège.</b> Un champ masqué qu'un humain ne remplit jamais et qu'un robot remplit presque toujours. S'il est rempli, le script répond « ok » sans rien écrire.</li>
+<li><b>Le corps est envoyé en <code>text/plain</code></b> et non en <code>application/json</code> : c'est ce qui évite la requête préliminaire CORS, qu'Apps Script ne sait pas traiter. Le contenu reste du JSON, seul l'en-tête change. <b>Ne pas « corriger » cela.</b></li>
+</ul>
+
+<div class="jamais"><b>Un projet Apps Script partage UNE SEULE portée globale entre tous ses fichiers.</b> Redéclarer dans <code>Alertes.gs</code> un nom déjà pris dans <code>Code.gs</code> — <code>ONGLET</code>, <code>MOTIFS</code>, <code>COLONNES</code> — provoque une erreur de syntaxe qui casse <b>tout</b> le projet, <code>doPost</code> compris, donc le livre entier. C'est pourquoi tous les noms d'<code>Alertes.gs</code> commencent par <code>ALERTE_</code>.</div>
+
+
+<h2 id="a10">10. Déployer, et retrouver le lien</h2>
+
+<p>Publier une nouvelle version de <code>Code.gs</code> demande cinq clics, et il y en a un à ne pas manquer.</p>
+
+<ol>
+<li>Coller le nouveau <code>Code.gs</code>, <kbd>Ctrl</kbd>+<kbd>S</kbd> pour enregistrer. <b>Sans cela, « Nouvelle version » figerait l'ancien code.</b></li>
+<li>Bouton bleu <b>Déployer</b> → <b>Gérer les déploiements</b>.</li>
+<li>Cliquer le <b>crayon</b>, en haut à droite du cadre Configuration. Tant qu'il n'est pas cliqué, les champs sont en lecture seule.</li>
+<li>Liste <b>Version</b> → <b>Nouvelle version</b>. Description utile : le numéro de livraison.</li>
+<li>Vérifier sans y toucher : <b>Exécuter en tant que : Moi</b> — <b>Qui a accès : Tout le monde</b>.</li>
+<li><b>Déployer</b>.</li>
+</ol>
+
+<div class="jamais"><b>NE JAMAIS CLIQUER « Nouveau déploiement ».</b><br>
+Cela crée une <b>nouvelle adresse</b>. Le portail continuerait alors d'interroger l'ancien guichet, et <b>rien ne semblerait cassé</b> : les anciens messages s'afficheraient encore. C'est le pire des cas, celui qui se cherche longtemps.</div>
+
+<h3>Retrouver l'adresse du guichet</h3>
+<ul>
+<li><b>Depuis Apps Script</b> : Déployer → Gérer les déploiements → le déploiement <b>Actif</b> → champ <b>URL</b> → Copier. Ignorer ceux listés sous « Archivé ».</li>
+<li><b>Depuis le code</b> : <code>liens.js</code>, constante <code>CONDOLEANCES_URL</code>.</li>
+<li>Elle se termine toujours par <code>/exec</code>. Une adresse en <code>/dev</code> n'est accessible qu'à vous et ne marchera pour personne d'autre.</li>
+</ul>
+
+<h3>Vérifier qu'un déploiement a abouti, sans rien installer</h3>
+<p>Ouvrir l'adresse du guichet dans un navigateur. La réponse doit contenir <code>"ligne":</code> devant chaque message. Si elle n'en contient pas, c'est l'ancien code qui répond.</p>
+
+<div class="avert"><b>L'adresse est écrite à DEUX endroits</b> : <code>SITE/liens.js</code> (constante <code>CONDOLEANCES_URL</code>) et <code>OUTILS/…&nbsp;export_condoleances.html</code> (constante <code>GUICHET</code>). Si elle change un jour, la reporter aux deux, sinon l'outil d'export lira l'ancien registre <b>sans afficher la moindre erreur</b>.</div>
+
+
+<h2 id="a11">11. Les alertes par courriel</h2>
+
+<p>Un courriel à chaque message déposé, et un courriel à chaque message modifié montrant ce qu'il disait <b>avant</b>. Destinataire déclaré en tête d'<code>Alertes.gs</code>.</p>
+
+<h3>Installer</h3>
+<ol>
+<li>Apps Script → <b>+</b> à côté de Fichiers → <b>Script</b> → le nommer <code>Alertes</code>.</li>
+<li>Effacer le <code>function myFunction() {}</code> par défaut, coller le fichier, <kbd>Ctrl</kbd>+<kbd>S</kbd>.</li>
+<li>Choisir <b>installerAlertes</b> dans la liste des fonctions — pas <code>alerter</code> — puis <b>Exécuter</b>.</li>
+<li>Autoriser : Paramètres avancés → « Accéder à … (non sécurisé) ». L'avertissement « application non validée » est celui que Google met sur tout script personnel.</li>
+<li>Un courriel « alertes activées » doit arriver.</li>
+</ol>
+
+<h3>Ce qu'il faut savoir</h3>
+<ul>
+<li><b>Deux déclencheurs</b> sont posés : <code>onChange</code>, immédiat mais que Google fait sauter de temps en temps, et un horaire toutes les 5 minutes qui rattrape. Les deux appellent la même fonction, écrite pour tourner à vide : aucun doublon possible.</li>
+<li>Les messages <b>déjà présents</b> ne déclenchent rien : l'installation enregistre l'état du moment comme point de départ.</li>
+<li>Une <b>suppression de lignes</b> ne provoque aucun courriel : le compteur se recale en silence.</li>
+<li>Une correction faite <b>dans la feuille</b> n'est pas signalée.</li>
+<li>Les <b>règles de notification de Google Sheets</b> ne conviennent pas : elles ne se déclenchent pas sur les écritures faites par un script. Ne pas perdre de temps à les essayer.</li>
+<li>Quota d'un compte Gmail gratuit : <b>100 courriels par jour</b> depuis un script.</li>
+</ul>
+
+<h3>Arrêter</h3>
+<p>Quand le livre sera clos : choisir <b>desinstallerAlertes</b> et Exécuter. Sinon les courriels continueront indéfiniment.</p>
+
+
+<h2 id="a12">12. L'export PDF</h2>
+
+<p>Outil local : <code>OUTILS/…&nbsp;export_condoleances.html</code>. <b>Il ne monte pas sur GitHub</b> — c'est ce qui le réserve au bureau.</p>
+
+<ol>
+<li>Double-clic. Il va chercher les messages tout seul auprès du guichet.</li>
+<li>Choisir le mode : <b>une seule page, sans saut</b> pour transmettre le livre ; <b>A4 paginé</b> pour imprimer.</li>
+<li><kbd>Ctrl</kbd>+<kbd>P</kbd>, puis dans la fenêtre de Chrome : Destination <b>Enregistrer au format PDF</b>, Marges <b>Aucune</b>, et surtout <b>Graphiques d'arrière-plan</b> coché.</li>
+</ol>
+
+<div class="avert">Sans « Graphiques d'arrière-plan », le fond sombre disparaît et le texte sable devient illisible sur blanc. C'est l'erreur la plus fréquente.</div>
+
+<ul>
+<li>Le mode continu mesure la hauteur réelle et en fait la hauteur de la page : un PDF d'<b>une seule page</b>, aucune carte coupée. Sur 69 messages : 210 × 2439 mm.</li>
+<li>Le format PDF plafonne à <b>5080 mm</b>, soit environ 112 messages. Au-delà, l'outil prévient et bascule en A4.</li>
+<li>L'ordre est <b>inverse</b> de celui du site : le premier message déposé vient en premier. Un document se lit d'un bout à l'autre.</li>
+<li>Polices et motifs sont appelés en ligne, pour que l'outil reste un seul fichier déplaçable. Sans réseau, le texte reste complet mais perd son habillage.</li>
+</ul>
+
+
+<h2 id="a13">13. Les images pour les réseaux</h2>
+
+<p>Quand une adresse est partagée sur Facebook, Messenger ou WhatsApp, un cartouche s'affiche : une image, un titre, une description. Ce cartouche vient de balises posées dans la page.</p>
+
+<table>
+<tr><th>Page</th><th>Image d'aperçu</th></tr>
+<tr><td>publique, adhérents, ressources</td><td><code>assets/partage-00.37.00.jpg</code></td></tr>
+<tr><td>plannings</td><td><code>assets/partage-plannings-00.37.00.jpg</code></td></tr>
+<tr><td>condoléances</td><td><code>assets/partage-condoleances-00.37.00.jpg</code></td></tr>
+</table>
+
+<ul>
+<li>Format imposé : <b>1200 × 630 px</b>. C'est le seul que les trois applications acceptent sans recadrer.</li>
+<li>Les deux premières se refabriquent par <code>python3 OUTILS/gen_partage.py</code>, <b>depuis n'importe où</b> : le script trouve <code>SITE</code> tout seul. La troisième est composée à partir d'une image fournie par l'association.</li>
+<li><b>Ne jamais faire figurer la page adhérents</b> dans un aperçu : il circule partout.</li>
+<li>Le livre de condoléances a sa <b>propre</b> image, sans aucun bouton. Un cartouche montrant « Boutique » et « Cotisation » sous un lien de deuil est une faute, et elle a été commise.</li>
+</ul>
+
+<div class="jamais"><b>UNE CARTE MODIFIÉE DOIT CHANGER DE NOM DE FICHIER.</b><br>
+Facebook garde <b>deux caches distincts</b> : celui de la <b>page</b>, que « Re-collecter » vide, et celui de l'<b>image</b>, indexé sur son <b>adresse</b>, que « Re-collecter » <b>ne vide pas</b>.<br>
+Refabriquer une carte sous le même nom ne sert donc à rien : Facebook ressortira sa copie d'il y a des mois, indéfiniment, quel que soit le nombre de re-collectes. Constaté sur ce dossier, et cherché longtemps — le fichier en ligne était pourtant le bon, vérifié pixel à pixel.<br>
+C'est pourquoi les cartes portent le numéro de version dans leur nom. Après un changement : reporter le nouveau nom dans <code>og:image</code> et <code>twitter:image</code> des pages concernées, téléverser, <b>puis</b> re-collecter.</div>
+
+<h3>Forcer le rafraîchissement chez Facebook</h3>
+<ol>
+<li><code>developers.facebook.com/tools/debug</code>, connecté avec le compte administrateur de la page.</li>
+<li>Coller l'adresse, <b>Déboguer</b>, puis <b>Re-collecter</b>, une ou deux fois.</li>
+<li>À faire <b>après</b> le téléversement, jamais avant : sinon l'outil relit l'ancienne image et la remet en cache pour des semaines.</li>
+</ol>
+
+<h3>Deux messages du débogueur à ignorer</h3>
+<ul>
+<li><b>« fb:app_id manquant »</b> — Facebook le réclame à tous les sites. Sans effet sur l'aperçu. Ne pas créer d'application pour cela.</li>
+<li><b>« Code de réponse 206 »</b> — particularité du serveur GitHub, qui répond par un contenu partiel. Les balises ont bien été lues.</li>
+</ul>
+
+<h3>WhatsApp — le cas particulier</h3>
+<div class="avert">L'aperçu est fabriqué par <b>le téléphone qui envoie</b>, pendant la frappe. Trois causes d'échec, dans l'ordre de fréquence :
+<ol>
+<li><b>Message transféré</b> : WhatsApp recopie l'aperçu d'origine et ne relit jamais la page.</li>
+<li><b>Publication Facebook déjà ouverte</b> : le cartouche y est <b>attaché</b>. Re-collecter ne le change pas. Il faut supprimer l'aperçu par sa croix, effacer l'adresse du texte, la recoller, et attendre que le nouveau cadre se forme.</li>
+<li><b>Envoi trop rapide</b> : il faut deux à cinq secondes pour que le cadre se construise. Envoyé avant, le message part sans cartouche, et c'est définitif.</li>
+<li><b>WhatsApp Web</b> : échoue souvent. Utiliser le téléphone.</li>
+</ol>
+<b>La bonne méthode</b> : coller l'adresse <b>seule</b>, attendre que le cadre apparaisse, <b>puis</b> taper le texte au-dessus, dans le même message.</div>
+
+<p>WhatsApp n'a pas d'outil de purge. Son cache se vide seul en quelques jours. Pour tester tout de suite, ajouter <code>?v=2</code> à l'adresse : même page, adresse neuve pour WhatsApp. Ne pas diffuser cette variante.</p>
+
+<div class="note"><b>Une balise <code>noindex</code> supprime l'aperçu</b> dans Messenger et WhatsApp : leur robot d'aperçu la respecte en supprimant le cartouche. C'est le compromis qui a fait retirer le <code>noindex</code> de la page adhérents. Ne pas en remettre sans savoir ce qu'on perd.</div>
+
+
+<h2 id="a14">14. Diffuser, et à qui</h2>
+
+<table>
+<tr><th>Adresse</th><th>Contenu</th><th>Où la mettre</th></tr>
+<tr><td><code>/liens/</code></td><td>7 boutons publics, aucune adresse du domaine</td><td>bouton d'appel à l'action de la page Facebook, légendes des publications</td></tr>
+<tr><td><code>/liens/adherents.html</code></td><td>10 boutons, site compris</td><td>message épinglé des groupes WhatsApp et Messenger. <b>Jamais sur la page Facebook publique.</b></td></tr>
+<tr><td><code>/liens/plannings.html</code></td><td>les six cours</td><td>intégrée au site, publiable aussi sur Facebook</td></tr>
+<tr><td><code>/liens/ressources.html</code></td><td>10 liens externes</td><td>intégrée au site</td></tr>
+<tr><td><code>/liens/condoleances.html</code></td><td>le livre</td><td>groupes WhatsApp et Messenger, page Facebook</td></tr>
+</table>
+
+<h3>Ce manuel</h3>
+<p>Il répond sur <code>csstaichi.github.io/liens/documentation.html</code> depuis la 00.39.00. Il n'est <b>lié depuis aucune page</b> et porte une balise <code>noindex</code> : il n'apparaîtra pas dans Google. C'est un document de travail atteignable en connaissant son adresse, pas une page du site.</p>
+<p>Il ne contient aucune adresse électronique, seulement des rôles. Le jour où quelqu'un a besoin de savoir <b>quel</b> compte détient quoi, il pose la question au président : sans les identifiants, connaître l'adresse ne sert de toute façon à rien.</p>
+
+<h3>Pourquoi le livre n'est lié depuis aucune page du portail</h3>
+<p>Un lien de deuil au milieu de « Boutique » et « Cotisation » n'a pas sa place. Le livre est atteignable en connaissant son adresse : <b>lien non annoncé, pas lien secret</b>. Le dépôt étant public et la page sans <code>noindex</code>, Google peut l'indexer.</p>
+
+<div class="note"><b>La raison de fond du livre</b>, à ne pas oublier en le reprenant : dans un groupe de messagerie, s'exprimer et déranger sont le même geste. Un message fait sonner soixante téléphones, et certains quittent la conversation. Une page, elle, ne dérange personne : on y va, elle ne vient pas. C'est pourquoi il ne faut <b>pas</b> relancer plusieurs fois dans les groupes — ce serait refaire sonner les téléphones que le livre servait à laisser tranquilles.</div>
+
+
+<h2 id="a15">15. Mettre à jour : l'ordre</h2>
+
+<p>L'ordre n'est pas indifférent. Dans l'autre sens, la page neuve interrogerait l'ancien guichet, et des fonctions resteraient muettes sans qu'aucune erreur ne s'affiche.</p>
+
+<ol>
+<li><b>La feuille</b> — colonnes, en-têtes, données. À la main.</li>
+<li><b>Le guichet</b> — coller <code>Code.gs</code>, enregistrer, <b>mettre à jour</b> le déploiement existant.</li>
+<li><b>Le site</b> — téléverser le contenu de <code>SITE</code> sur GitHub.</li>
+<li><b>Les aperçus</b> — repasser dans le débogueur Facebook si une image ou un titre a changé.</li>
+<li><b>Google Sites</b> — rallonger les hauteurs de cadre si le contenu s'est allongé.</li>
+</ol>
+
+<h3>Les numéros de version</h3>
+<ul>
+<li><b>Estampille d'identité</b> — ce que le fichier prétend être : <code>const VERSION</code>, en-tête « Version 00.xx.00 », commentaire de première ligne. Elle monte à <b>chaque</b> livraison, dans <b>tous</b> les fichiers, même ceux dont le contenu n'a pas bougé.</li>
+<li><b>Mention d'historique</b> — quand une décision a été prise : « colonne portée de 460 à 560 px à la 00.18.00 ». Elle ne se réécrit <b>jamais</b> : c'est la mémoire du dossier.</li>
+<li>Deux livraisons différentes ne portent jamais le même numéro.</li>
+<li>Les fichiers dont le nom n'est pas écrit en dur dans le code portent le numéro dans leur <b>nom</b> : le CSV, l'outil d'export. Les fichiers de <code>SITE</code>, dont les noms sont écrits dans le code et dans les adresses, le portent dans leur <b>en-tête</b>.</li>
+</ul>
+
+
+<h2 id="a16">16. Les neuf contrôles avant chaque mise en ligne</h2>
+<ol>
+<li><b>Syntaxe</b> — JavaScript et Apps Script vérifiés, console du navigateur vide.</li>
+<li><b>Fichiers de configuration</b> — sans objet sur ce projet.</li>
+<li><b>Balises</b> — le bon nombre de boutons, de cartes et de vignettes s'affiche.</li>
+<li><b>Identifiants perdus</b> — aucune clé disparue par rapport à la version précédente.</li>
+<li><b>Rendu à 360 et 1280 px</b> — mesuré <b>et regardé à l'œil</b> : une mesure de hauteur ne voit pas une couleur cassée.</li>
+<li><b>Ressources</b> — dans les deux sens : chaque ressource appelée existe, et chaque ressource présente est appelée.</li>
+<li><b>Livré = dossier de travail.</b></li>
+<li><b>Taille du zip.</b></li>
+<li><b>Cohérence des numéros et santé des documents</b> — <code>python3 OUTILS/verif_versions.py 00.37.00</code>, quatre passes, rend 0 si tout passe.</li>
+</ol>
+
+
+<h2 id="a17">17. Évolutions possibles</h2>
+
+<h3>Cloudflare devant le domaine</h3>
+<p>Gratuit. On délègue les serveurs de noms de Namecheap à Cloudflare, puis on gère tout depuis Cloudflare.</p>
+<ul>
+<li><b>Ce que ça apporte</b> : certificat automatique, cache mondial donc chargement plus rapide depuis la Polynésie, protection contre les attaques, statistiques de fréquentation sans mouchard, et surtout des <b>redirections</b> — par exemple <code>csstahitimoorea.org/liens</code> vers le portail GitHub.</li>
+<li><b>Ce que ça coûte</b> : une brique de plus à comprendre, et un point de panne supplémentaire. Une erreur de réglage coupe le site.</li>
+<li><b>Le piège</b> : ne PAS activer le proxy (nuage orange) sur les enregistrements qui pointent vers Google Sites. Google sert son propre certificat ; le proxy provoque une boucle de redirections. Laisser ces lignes en « DNS only ».</li>
+<li><b>Ce que ça ne change pas</b> : le portail resterait sur GitHub. Cloudflare ne ferait que fabriquer une adresse plus courte.</li>
+</ul>
+<div class="avert">Si un jour le portail est servi <b>sous le domaine de l'association</b>, la règle de fond du montage tombe : l'adresse trahirait le site. Ce serait acceptable pour les plannings et les ressources, <b>jamais</b> pour la page publique.</div>
+
+<h3>Namecheap — autres options</h3>
+<ul>
+<li><b>Redirection d'URL</b> incluse : Namecheap sait à lui seul rediriger <code>liens.csstahitimoorea.org</code> vers le portail, sans Cloudflare. Plus simple, mais sans cache ni statistiques.</li>
+<li><b>Adresses de courriel au domaine</b>, du type <code>adressefonctionnellespersonnalisees.org</code>. Payant, et impose de déplacer les enregistrements MX. À ne faire que si le bureau change souvent de main.</li>
+</ul>
+
+<h3>Domaine propre pour le portail</h3>
+<p>GitHub Pages accepte un domaine personnalisé : Settings → Pages → Custom domain, plus un fichier <code>CNAME</code> à la racine du dépôt. Gratuit, certificat automatique. Utile si <code>csstaichi.github.io</code> devait un jour disparaître.</p>
+
+<h3>Le livre au-delà de l'événement</h3>
+<ul>
+<li><b>Le clore</b> : lancer <code>desinstallerAlertes</code>, puis retirer le formulaire de dépôt en laissant les messages visibles.</li>
+<li><b>L'archiver</b> : produire le PDF continu, le déposer dans le Drive de l'association, et le mentionner dans le compte rendu d'assemblée.</li>
+<li><b>Le réutiliser</b> : le montage est réutilisable tel quel pour un autre décès. Créer une <b>nouvelle feuille</b> et un <b>nouveau projet</b> Apps Script, jamais réutiliser ceux-ci : les messages de deux deuils ne se mélangent pas.</li>
+</ul>
+
+
+<h2 id="a18">18. Redémarrage à froid — la liste de reprise</h2>
+
+<p>Quelqu'un qui reprend le dossier sans rien connaître, dans l'ordre :</p>
+<ol>
+<li>Lire le <b>MEMO_PORTAIL</b> du zip le plus récent. C'est la notice de référence.</li>
+<li>Lire la <b>PASSATION</b> du même zip : elle dit ce qui est fait, ce qui ne l'est pas, et pourquoi.</li>
+<li>Ouvrir <code>https://csstaichi.github.io/liens/</code> et noter le numéro de version en bas de page. C'est la livraison réellement en ligne.</li>
+<li>Ouvrir l'adresse du guichet dans un navigateur : si la réponse contient <code>"ligne":</code>, le guichet est à jour.</li>
+<li>Ouvrir la feuille, vérifier les sept colonnes et l'onglet <code>historique</code>.</li>
+<li>Vérifier dans Apps Script qu'il n'existe qu'<b>un seul</b> déploiement actif.</li>
+<li>Vérifier la date d'expiration du domaine chez Namecheap.</li>
+<li>Vérifier que les identifiants des trois comptes sont connus d'au moins deux personnes.</li>
+</ol>
+
+<h3>Les quatre pièges qui ont réellement coûté du temps</h3>
+<ol>
+<li>Une correction cherchée vingt minutes alors qu'elle n'avait pas été téléversée. <b>Toujours vérifier le numéro en bas de page.</b></li>
+<li>Un guichet resté à l'ancienne version : les messages s'affichaient, mais les motifs étaient tous remplacés par « ? » et les boutons de modification absents. <b>Rien ne semblait cassé.</b></li>
+<li>Un aperçu WhatsApp absent parce que le message avait été <b>transféré</b>, et non écrit.</li>
+<li>Un fichier image resté dans <code>assets</code> sans être appelé nulle part, monté sur GitHub à chaque téléversement pendant plusieurs livraisons.</li>
+</ol>
+
+<p class="sous" style="margin-top:38px;text-align:center">
+Association CSS Moorea Tahiti — manuel de reprise, version 00.39.00.<br>
+Ce fichier reste dans OUTILS. Il ne monte pas sur GitHub.</p>
+
+</div>
+<script>
+/* ---------------------------------------------------------------------
+   Impression à la demande. La boîte à outils ouvre ce document avec
+   ?imprimer=1 : il lance alors lui-même l'impression.
+   POURQUOI ce détour, et non un appel direct depuis outils.html : deux
+   fichiers ouverts en file:// sont, pour le navigateur, deux origines
+   étrangères. outils.html ne peut donc pas appeler print() sur ce
+   document. Il peut seulement l'ouvrir ; le document se charge du reste.
+   --------------------------------------------------------------------- */
+if (new URLSearchParams(location.search).has("imprimer")) {
+    const lancer = () => setTimeout(() => window.print(), 350);
+    if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(lancer);
+    } else {
+        window.addEventListener("load", lancer);
+    }
+}
+</script>
+
+</body>
+</html>

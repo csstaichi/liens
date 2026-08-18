@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<!-- outils.html — boîte à outils du projet — CSS Moorea Tahiti
+     version 00.39.00 — 17 août 2026
+
+     DEPLACE DANS SITE A LA 00.39.00. Ce fichier MONTE DESORMAIS SUR GITHUB et
+     repond sur https://csstaichi.github.io/liens/outils.html
+     Il fonctionne indifferemment en ligne et par double-clic en local.
+
+     CE QU'IL FAIT
+     Deux exports en PDF :
+       - le livre de condoleances, lu au guichet et mis en page ici ;
+       - la documentation, c'est-a-dire le fichier documentation.html.
+
+     CE QUE LE DEPLACEMENT CHANGE, ET QU'IL FAUT ASSUMER
+     Tant que ce fichier restait sur l'ordinateur du bureau, lui seul
+     pouvait exporter. En ligne, n'importe qui connaissant l'adresse le
+     peut. Cela ne revele RIEN : les messages sont deja tous visibles sur
+     condoleances.html, et le PDF ne fait que les mettre en page. Mais la
+     restriction d'usage n'existe plus. Decision du bureau, prise en
+     connaissance de cause.
+     La page porte une balise noindex : elle ne remontera pas dans Google.
+
+     LE COUPLE outils.html / documentation.html
+     Ce fichier appelle documentation.html par son nom, en CHEMIN RELATIF.
+     Les deux doivent donc rester dans le MEME dossier — ce qui est le cas
+     dans SITE, comme sur GitHub.
+     Aucun des deux ne porte le numero de version dans son NOM : ce nom
+     est ecrit en dur dans le code et est devenu une adresse, exactement
+     comme les cinq pages du portail. Ils le portent dans leur en-tete.
+
+     IL N'EN EXISTE QU'UN SEUL EXEMPLAIRE, dans SITE. Ne pas en garder de
+     copie dans OUTILS : deux copies divergeraient sans qu'on le voie.
+
+     RENOMME A LA 00.38.00 : ce fichier s'appelait export_condoleances.html.
+
+     COMMENT IL S'ALIMENTE
+     Il interroge le meme guichet Apps Script que le site. Verifie : le
+     guichet renvoie access-control-allow-origin: *, une page ouverte en
+     file:// peut donc le lire. Si le reseau manque, un champ permet de
+     coller a la main la reponse du guichet.
+
+     LES DEUX MODES D'IMPRESSION DU LIVRE
+     CONTINU  une seule page, aussi haute que le contenu, AUCUN saut de
+              page, aucune carte coupee. Mode par defaut.
+              Mesure : 45 mm par message. Le format PDF plafonne a
+              5080 mm, soit environ 112 messages. Au-dela, l'outil
+              previent et bascule en A4.
+     A4       pour imprimer sur papier. Aucune carte n'est jamais coupee
+              en deux, grace a break-inside: avoid.
+-->
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Boîte à outils — CSS Moorea Tahiti</title>
+
+<style>
+/* =====================================================================
+   Les polices et les motifs sont appelés sur le site en ligne, par
+   adresse absolue. POURQUOI : cet outil doit rester UN SEUL FICHIER,
+   déplaçable et envoyable tel quel. Les copier à côté imposerait de
+   transporter un dossier, et de le tenir à jour à chaque changement de
+   motif.
+   CONSÉQUENCE À CONNAÎTRE : sans réseau, le rendu perd ses polices et ses
+   motifs. Le texte, lui, reste complet.
+   ===================================================================== */
+@import url("https://csstaichi.github.io/liens/assets/polices.css");
+
+:root {
+  --arriere-plan: #0A1512;   /* fond de la page condoléances */
+  --carte-fond:   rgba(18, 30, 28, 0.78);
+  --carte-bord:   rgba(250, 246, 236, 0.13);
+  --tiare:        #FAF6EC;   /* blanc cassé, texte principal */
+  --sable:        #C9BFA6;   /* beige, texte secondaire */
+  --lagon-clair:  #6ECFBE;   /* turquoise clair, sur-titre */
+  --rayon:        14px;
+  --colonne:      560px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--arriere-plan);
+  color: var(--tiare);
+  font-family: "Karla", system-ui, sans-serif;
+  -webkit-print-color-adjust: exact;   /* Chrome */
+  print-color-adjust: exact;           /* standard */
+}
+
+/* --- Bandeau de commande, JAMAIS imprimé ---------------------------- */
+.commande {
+  position: sticky;
+  top: 0;
+  z-index: 9;
+  padding: 16px 18px;
+  background: #12312C;
+  border-bottom: 1px solid var(--carte-bord);
+}
+
+.commande h1 {
+  margin: 0 0 10px;
+  font-family: "Fraunces", Georgia, serif;
+  font-weight: 600;
+  font-size: 1.25rem;
+}
+
+.rangee { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+
+.titre-bloc {
+  margin: 18px 0 6px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--lagon-clair);
+}
+
+/* Le bloc de la documentation est encadré : les deux outils n'ont rien à
+   voir l'un avec l'autre, et rien ne serait pire que de cliquer sur l'un
+   en croyant lancer l'autre. */
+.bloc-doc {
+  margin-top: 6px;
+  padding: 12px 14px 14px;
+  border: 1px solid var(--carte-bord);
+  border-radius: 11px;
+  background: rgba(10, 21, 18, 0.45);
+}
+.bloc-doc .titre-bloc { margin-top: 0; }
+.bloc-doc a { color: var(--lagon-clair); }
+
+button, select {
+  font-family: inherit;
+  font-size: 0.9rem;
+  padding: 9px 14px;
+  min-height: 40px;
+  border: 1px solid var(--sable);
+  border-radius: 9px;
+  background: transparent;
+  color: var(--tiare);
+  cursor: pointer;
+}
+
+button:hover { background: rgba(201, 191, 166, 0.14); }
+
+.etat { margin-top: 10px; font-size: 0.85rem; color: var(--sable); }
+.etat--erreur { color: #E68C32; }
+
+.consignes {
+  margin: 10px 0 0;
+  padding: 10px 12px;
+  border: 1px solid var(--carte-bord);
+  border-radius: 9px;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: var(--sable);
+}
+.consignes b { color: var(--tiare); }
+
+.secours { margin-top: 10px; }
+.secours textarea {
+  width: 100%;
+  height: 90px;
+  padding: 8px;
+  border: 1px solid var(--carte-bord);
+  border-radius: 9px;
+  background: rgba(10, 21, 18, 0.6);
+  color: var(--tiare);
+  font-family: monospace;
+  font-size: 0.78rem;
+}
+
+/* --- Le document lui-même ------------------------------------------- */
+.feuille {
+  max-width: var(--colonne);
+  margin: 0 auto;
+  padding: 26px 18px 34px;
+}
+
+.entete { text-align: center; margin-bottom: 26px; }
+
+.sur-titre {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--lagon-clair);
+  margin-bottom: 10px;
+}
+
+.titre {
+  font-family: "Fraunces", Georgia, serif;
+  font-weight: 600;
+  font-size: 2.1rem;
+  line-height: 1.08;
+  letter-spacing: -0.015em;
+  margin: 0 0 10px;
+}
+
+.arret { font-size: 0.82rem; color: var(--sable); }
+
+.mot {
+  position: relative;
+  padding: 16px 18px 14px;
+  margin-bottom: 14px;
+  border: 1px solid var(--carte-bord);
+  border-radius: var(--rayon);
+  background: var(--carte-fond);
+  /* Une carte n'est JAMAIS coupée entre deux pages. C'est la règle qui
+     rend le mode A4 acceptable : un message de condoléances scindé en
+     deux perd son sens et sa dignité. */
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+.mot-motif {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  width: 40px;
+  height: 40px;
+  opacity: 0.62;
+}
+.mot-motif img { width: 100%; height: 100%; object-fit: contain; }
+
+.mot-texte {
+  margin: 0;
+  font-size: 0.94rem;
+  line-height: 1.6;
+  color: var(--tiare);
+  padding-right: 50px;
+  white-space: pre-wrap;   /* les retours à la ligne des auteurs comptent */
+}
+
+.mot-signe {
+  margin: 10px 0 0;
+  padding-top: 9px;
+  border-top: 1px solid rgba(250, 246, 236, 0.08);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  align-items: baseline;
+}
+
+.mot-nom { flex: 1 1 auto; font-size: 0.85rem; font-weight: 700; color: var(--sable); }
+.mot-date { font-size: 0.76rem; color: rgba(201, 191, 166, 0.78); }
+
+.pied {
+  margin-top: 22px;
+  text-align: center;
+  font-size: 0.76rem;
+  color: rgba(201, 191, 166, 0.7);
+}
+
+/* --- Impression ------------------------------------------------------ */
+@media print {
+  .commande { display: none !important; }
+  body { background: var(--arriere-plan); }
+  .feuille { max-width: none; margin: 0; padding: 14mm 16mm; }
+  /* La règle @page est réécrite par le script selon le mode choisi. */
+}
+</style>
+</head>
+
+<body>
+
+<!-- Bandeau de commande. Il ne s'imprime pas : c'est l'outil, pas le
+     document. -->
+<div class="commande">
+  <h1>Boîte à outils</h1>
+
+  <!-- Second outil, posé avant le premier parce qu'il ne demande aucun
+       réglage : un clic, et le document part à l'impression. -->
+  <div class="bloc-doc">
+    <p class="titre-bloc">Exporter la documentation</p>
+    <p class="etat">Le manuel de reprise, dix-huit sections, en PDF A4 paginé.
+      Il s'ouvre dans un onglet et lance l'impression tout seul.</p>
+    <button type="button" id="doc">Exporter la documentation</button>
+    <p class="etat" id="etat-doc"></p>
+    <!-- Recours si le fichier a été déplacé seul, sans son voisin. La
+         version en ligne est la même, publiée sur GitHub. -->
+    <p class="etat"><a
+       href="https://csstaichi.github.io/liens/documentation.html?imprimer=1"
+       target="_blank" rel="noopener">Onglet vide ? Ouvrir la version en ligne</a></p>
+  </div>
+
+  <p class="titre-bloc">Exporter le livre de condoléances</p>
+
+  <div class="rangee">
+    <button type="button" id="recharger">Recharger les messages</button>
+    <select id="mode">
+      <option value="continu">Une seule page, sans saut</option>
+      <option value="a4">A4 paginé, sans carte coupée</option>
+    </select>
+    <button type="button" id="imprimer">Enregistrer en PDF</button>
+  </div>
+
+  <p class="etat" id="etat">Chargement…</p>
+
+  <div class="consignes">
+    Dans la fenêtre d'impression de Chrome, trois réglages, sinon le rendu
+    est faux :<br>
+    Destination <b>Enregistrer au format PDF</b> —
+    Marges <b>Aucune</b> —
+    <b>Graphiques d'arrière-plan</b> coché.<br>
+    Sans le dernier, le fond sombre disparaît et le texte sable devient
+    illisible sur blanc.
+  </div>
+
+  <div class="secours">
+    <p class="etat">Si le réseau manque : ouvrez l'adresse du guichet dans
+      Chrome, copiez toute la réponse, collez-la ici, puis rechargez.</p>
+    <textarea id="colle" placeholder='{"messages":[…]}'></textarea>
+  </div>
+</div>
+
+<div class="feuille" id="feuille"></div>
+
+<script>
+/* =====================================================================
+   Adresse du guichet. C'est la MÊME que celle de liens.js, constante
+   CONDOLEANCES_URL. Si le script Apps Script est un jour redéployé en
+   créant un nouveau déploiement, elle change : la reporter ici aussi,
+   sinon cet outil continuera de lire l'ancien registre sans rien dire.
+   ===================================================================== */
+const GUICHET = "https://script.google.com/macros/s/AKfycbwzxGArSt_95p59gVqkmWtQoOCFaA2vGASlOJDSqdTGV6aPLsLUjRYVDBHtP-q1dD2ulw/exec";
+
+/* Motifs. Mêmes clés et mêmes fichiers que le site : ne pas les
+   renommer ici sans les renommer là-bas. */
+const MOTIFS = ["coeur", "ruban", "chrysantheme", "couronne", "arbre", "billets"];
+const BASE_MOTIFS = "https://csstaichi.github.io/liens/assets/motifs/";
+
+/* Plafond du format PDF : 200 pouces, soit 5080 mm. Au-delà, Chrome
+   tronque sans prévenir. On préfère prévenir et basculer en A4. */
+const PLAFOND_MM = 5080;
+
+let MESSAGES = [];
+
+const $ = (id) => document.getElementById(id);
+
+function dire(texte, erreur) {
+  const e = $("etat");
+  e.textContent = texte;
+  e.className = erreur ? "etat etat--erreur" : "etat";
+}
+
+/* Le texte des messages n'est JAMAIS inséré en HTML : il est posé comme
+   texte, par textContent. Un message contenant des chevrons resterait
+   ainsi du texte, et non des balises. */
+function carte(m) {
+  const art = document.createElement("article");
+  art.className = "mot";
+
+  const motif = MOTIFS.indexOf(m.motif) === -1 ? null : m.motif;
+  if (motif) {
+    const span = document.createElement("span");
+    span.className = "mot-motif";
+    const img = document.createElement("img");
+    img.src = BASE_MOTIFS + motif + ".webp";
+    img.alt = "";
+    span.appendChild(img);
+    art.appendChild(span);
+  }
+
+  const p = document.createElement("p");
+  p.className = "mot-texte";
+  p.textContent = m.message || "";
+  art.appendChild(p);
+
+  const signe = document.createElement("p");
+  signe.className = "mot-signe";
+
+  const nom = document.createElement("span");
+  nom.className = "mot-nom";
+  nom.textContent = ((m.prenom || "") + " " + (m.nom || "")).trim() || "Nom masqué";
+  signe.appendChild(nom);
+
+  if (m.date) {
+    const d = document.createElement("span");
+    d.className = "mot-date";
+    d.textContent = m.date;
+    signe.appendChild(d);
+  }
+
+  art.appendChild(signe);
+  return art;
+}
+
+function dessiner() {
+  const f = $("feuille");
+  f.textContent = "";
+
+  const entete = document.createElement("header");
+  entete.className = "entete";
+  entete.innerHTML = '<p class="sur-titre">CSS Moorea Tahiti</p>'
+                   + '<h2 class="titre">Livre de condoléances</h2>';
+  const arret = document.createElement("p");
+  arret.className = "arret";
+  const now = new Date();
+  const dd = (n) => (n < 10 ? "0" + n : "" + n);
+  arret.textContent = MESSAGES.length + " message"
+    + (MESSAGES.length > 1 ? "s" : "") + " — registre arrêté le "
+    + dd(now.getDate()) + "/" + dd(now.getMonth() + 1) + "/" + now.getFullYear();
+  entete.appendChild(arret);
+  f.appendChild(entete);
+
+  /* Ordre d'impression INVERSE de celui de la page : sur un document
+     destiné à être lu d'un bout à l'autre, on veut le premier message
+     déposé en premier. Le site, lui, met les derniers arrivés en tête,
+     ce qui est juste pour une page qu'on rouvre régulièrement. */
+  MESSAGES.slice().reverse().forEach((m) => f.appendChild(carte(m)));
+
+  const pied = document.createElement("p");
+  pied.className = "pied";
+  pied.textContent = "Association CSS Moorea Tahiti — csstaichi.github.io/liens/condoleances.html";
+  f.appendChild(pied);
+}
+
+/* ---------------------------------------------------------------------
+   reglerPage — fixe le format de la page imprimée.
+   En mode continu, on mesure la hauteur réelle du document et on en fait
+   la hauteur de la page : le PDF n'a alors qu'une seule page, donc aucun
+   saut possible. La mesure est faite après le rendu, jamais estimée.
+   --------------------------------------------------------------------- */
+function reglerPage() {
+  const mode = $("mode").value;
+  let regle = document.getElementById("regle-page");
+  if (!regle) {
+    regle = document.createElement("style");
+    regle.id = "regle-page";
+    document.head.appendChild(regle);
+  }
+
+  if (mode === "a4") {
+    regle.textContent = "@page { size: A4; margin: 0; }";
+    dire(MESSAGES.length + " messages — mode A4, aucune carte coupée.");
+    return;
+  }
+
+  const f = $("feuille");
+  const hauteurPx = Math.ceil(f.getBoundingClientRect().height) + 40;
+  const hauteurMm = Math.ceil(hauteurPx / 96 * 25.4);
+  const largeurMm = 210;
+
+  if (hauteurMm > PLAFOND_MM) {
+    $("mode").value = "a4";
+    regle.textContent = "@page { size: A4; margin: 0; }";
+    dire("Document trop haut pour une page unique : " + hauteurMm + " mm, "
+       + "au-delà du plafond de " + PLAFOND_MM + " mm du format PDF. "
+       + "Basculé en A4 paginé.", true);
+    return;
+  }
+
+  regle.textContent = "@page { size: " + largeurMm + "mm " + hauteurMm + "mm; margin: 0; }";
+  dire(MESSAGES.length + " messages — une seule page de " + largeurMm
+     + " x " + hauteurMm + " mm, sans aucun saut.");
+}
+
+async function charger() {
+  dire("Chargement…");
+  const colle = $("colle").value.trim();
+
+  try {
+    let donnees;
+    if (colle) {
+      donnees = JSON.parse(colle);
+    } else {
+      const r = await fetch(GUICHET, { method: "GET" });
+      donnees = await r.json();
+    }
+    MESSAGES = donnees.messages || [];
+    if (!MESSAGES.length) throw new Error("aucun message");
+    dessiner();
+    /* Les motifs sont des images : on attend qu'elles soient posées avant
+       de mesurer, sinon la hauteur calculée serait celle d'un document
+       incomplet, et la page unique se retrouverait trop courte. */
+    await Promise.all([...document.images].map((i) =>
+      i.complete ? Promise.resolve() : new Promise((ok) => {
+        i.onload = ok; i.onerror = ok;
+      })));
+    if (document.fonts && document.fonts.ready) await document.fonts.ready;
+    reglerPage();
+  } catch (err) {
+    dire("Lecture impossible : " + err.message
+       + ". Ouvrez l'adresse du guichet dans Chrome, copiez la réponse, "
+       + "collez-la dans le champ ci-dessous, puis rechargez.", true);
+  }
+}
+
+/* ---------------------------------------------------------------------
+   Export de la documentation.
+   On se contente d'OUVRIR documentation.html avec ?imprimer=1 : c'est ce
+   fichier-là qui lance sa propre impression.
+   POURQUOI ce détour : deux fichiers ouverts en file:// sont, pour le
+   navigateur, deux origines étrangères. Appeler print() sur l'onglet
+   ouvert lèverait une erreur de sécurité. Chacun imprime chez soi.
+   --------------------------------------------------------------------- */
+function exporterDocumentation() {
+    const e = $("etat-doc");
+    // Chemin relatif du zip : OUTILS et SITE sont côte à côte.
+    const onglet = window.open("documentation.html?imprimer=1", "_blank");
+
+    if (!onglet) {
+        e.textContent = "Le navigateur a bloqué l'ouverture de l'onglet. "
+            + "Autorisez les fenêtres surgissantes pour ce fichier, ou ouvrez "
+            + "documentation.html à la main puis faites Ctrl+P.";
+        e.className = "etat etat--erreur";
+        return;
+    }
+    e.textContent = "Onglet ouvert. Si la page reste vide, les dossiers SITE "
+        + "et OUTILS ne sont plus côte à côte : utilisez le lien vers la "
+        + "version en ligne, juste en dessous.";
+    e.className = "etat";
+}
+
+$("doc").addEventListener("click", exporterDocumentation);
+$("recharger").addEventListener("click", charger);
+$("mode").addEventListener("change", reglerPage);
+$("imprimer").addEventListener("click", () => { reglerPage(); window.print(); });
+
+charger();
+</script>
+
+</body>
+</html>
