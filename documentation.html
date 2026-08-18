@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!-- documentation.html — manuel de reprise du projet — CSS Moorea Tahiti
-     version 00.40.00 — 18 août 2026
+     version 00.41.00 — 18 août 2026
 
      RENOMME A LA 00.38.00 : ce fichier s'appelait outils.html. Le nom
      outils.html designe desormais la BOITE A OUTILS, dans OUTILS.
@@ -68,10 +68,30 @@ th{color:var(--sable);font-weight:700;font-size:.8rem;text-transform:uppercase;l
 .som ol{columns:2;column-gap:26px;margin:0}
 .som a{color:var(--lagon);text-decoration:none}
 .som a:hover{text-decoration:underline}
+/* ---------------------------------------------------------------------
+   IMPRESSION.
+   Le document est clair a l'impression et sombre a l'ecran. Il ne suffit
+   PAS de reteindre body : les regles d'ecran posent une couleur sur p,
+   li, h3, .sous, th et code, et elles l'emportent sur body par
+   specificite. Jusqu'a la 00.40.00 ces textes restaient donc en beige
+   tres pale, presque invisibles sur le blanc de la page. Le texte etait
+   bien present — 29 203 caracteres extraits du PDF dans les deux cas —
+   mais illisible a l'oeil. C'est le genre de defaut qu'aucune mesure de
+   hauteur ne voit.
+   Toute couleur ajoutee en haut de cette feuille doit donc etre reprise
+   ICI.
+   --------------------------------------------------------------------- */
 @media print{
   body{background:#fff;color:#111}
-  h2{color:#0E6F66} .som{display:none}
+  h1,h2,h3,p,li,td,strong,b{color:#111}
+  h2{color:#0E6F66}
+  .sous,th{color:#555}
+  code,kbd{background:#eee;color:#111}
+  a{color:#111}
+  .som{display:none}
   pre,.note{background:#f4f4f2;color:#333;border-color:#ccc}
+  .avert,.jamais{color:#111;border-color:#999;background:#f7f7f5}
+  .avert b,.jamais b{color:#111}
   h2{break-after:avoid} h3{break-after:avoid} .avert,.jamais,pre,table{break-inside:avoid}
   @page{size:A4;margin:14mm}
 }
@@ -81,7 +101,7 @@ th{color:var(--sable);font-weight:700;font-size:.8rem;text-transform:uppercase;l
 <div class="page">
 
 <h1>Manuel de reprise</h1>
-<p class="sous">Portail de liens et livre de condoléances — CSS Moorea Tahiti — version 00.40.00, 18 août 2026.<br>
+<p class="sous">Portail de liens et livre de condoléances — CSS Moorea Tahiti — version 00.41.00, 18 août 2026.<br>
 Ce document décrit la chaîne entière, dans l'ordre où elle se parcourt. Il est écrit pour quelqu'un qui n'a pas participé.</p>
 
 <div class="som">
@@ -424,6 +444,9 @@ Donc : <b>une seule page</b> uniquement avec le PDF de Chrome, pour transmettre.
 <li>Le mode continu mesure la hauteur réelle et en fait la hauteur de la page : un PDF d'<b>une seule page</b>, aucune carte coupée. Sur 69 messages : 210 × 2439 mm.</li>
 <li>Le format PDF plafonne à <b>5080 mm</b>, soit environ 112 messages. Au-delà, l'outil prévient et bascule en A4.</li>
 <li>L'ordre est <b>inverse</b> de celui du site : le premier message déposé vient en premier. Un document se lit d'un bout à l'autre.</li>
+<li><b>Le nom du fichier PDF est composé tout seul</b> : <code>20260818 Livre de Condoléances GIROUILLE B 00.41.00</code> — la date du jour, le nom du registre, le numéro de version. Chrome propose comme nom de fichier le titre du document ; l'outil le compose juste avant d'imprimer, puis le remet en état.</li>
+<li>L'en-tête du document porte la <b>date, l'heure et la version</b>. L'heure compte : un message peut arriver après l'export, et deux exports du même jour ne se distingueraient pas autrement.</li>
+<li>Le manuel de reprise est nommé de même : <code>00.41.00 Manuel de reprise CSS Moorea Tahiti</code>.</li>
 <li>Polices et motifs sont appelés en ligne, pour que l'outil reste un seul fichier déplaçable. Sans réseau, le texte reste complet mais perd son habillage.</li>
 </ul>
 
@@ -601,6 +624,13 @@ Ce fichier reste dans OUTILS. Il ne monte pas sur GitHub.</p>
    document. Il peut seulement l'ouvrir ; le document se charge du reste.
    --------------------------------------------------------------------- */
 if (new URLSearchParams(location.search).has("imprimer")) {
+    /* Le nom du fichier PDF proposé par Chrome est le TITRE du document.
+       On le versionne donc avant d'imprimer, pour qu'on sache toujours à
+       quelle livraison le manuel se rattache. Le titre est remis en état
+       ensuite, pour que l'onglet reste lisible. */
+    const titreEcran = document.title;
+    document.title = "00.41.00 Manuel de reprise CSS Moorea Tahiti";
+    window.addEventListener("afterprint", () => { document.title = titreEcran; });
     const lancer = () => setTimeout(() => window.print(), 350);
     if (document.fonts && document.fonts.ready) {
         document.fonts.ready.then(lancer);

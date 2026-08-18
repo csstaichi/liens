@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!-- outils.html — boîte à outils du projet — CSS Moorea Tahiti
-     version 00.40.00 — 18 août 2026
+     version 00.41.00 — 18 août 2026
 
      DEPLACE DANS SITE A LA 00.39.00. Ce fichier MONTE DESORMAIS SUR GITHUB et
      repond sur https://csstaichi.github.io/liens/outils.html
@@ -265,7 +265,15 @@ button:hover { background: rgba(201, 191, 166, 0.14); }
 @media print {
   .commande { display: none !important; }
   body { background: var(--arriere-plan); }
-  .feuille { max-width: none; margin: 0; padding: 14mm 16mm; }
+  /* LE DOCUMENT GARDE EXACTEMENT SA LARGEUR D'ÉCRAN À L'IMPRESSION.
+     Défaut trouvé à la 00.41.00 : la règle d'impression posait
+     max-width: none et padding 16mm, soit une colonne de 673 px, alors
+     que la hauteur du mode continu est mesurée à l'écran sur une colonne
+     de 758 px. Plus étroite, la colonne renvoie le texte à la ligne plus
+     souvent, le document s'allonge, et la « page unique » débordait sur
+     une seconde page. Mesuré : 2 pages au lieu d'une.
+     Toute modification de cette largeur doit donc valoir POUR LES DEUX. */
+  .feuille { margin: 0 auto; }
   /* La règle @page est réécrite par le script selon le mode choisi. */
 }
 </style>
@@ -323,6 +331,18 @@ button:hover { background: rgba(201, 191, 166, 0.14); }
    créant un nouveau déploiement, elle change : la reporter ici aussi,
    sinon cet outil continuera de lire l'ancien registre sans rien dire.
    ===================================================================== */
+/* ---------------------------------------------------------------------
+   NOM DU FICHIER PDF.
+   Chrome propose comme nom de fichier le TITRE du document. Sans rien
+   faire, le PDF du livre s'appelait donc « Boîte à outils — CSS Moorea
+   Tahiti », ce qui ne dit ni de quoi il s'agit, ni de quand il date, ni à
+   quelle livraison il se rattache.
+   On compose donc le titre juste avant d'imprimer, puis on le remet en
+   état : AAAAMMJJ, le nom du registre, le numéro de version.
+   --------------------------------------------------------------------- */
+const NOM_REGISTRE = "Livre de Condoléances GIROUILLE B";
+const VERSION_OUTIL = "00.41.00";
+
 const GUICHET = "https://script.google.com/macros/s/AKfycbwzxGArSt_95p59gVqkmWtQoOCFaA2vGASlOJDSqdTGV6aPLsLUjRYVDBHtP-q1dD2ulw/exec";
 
 /* Motifs. Mêmes clés et mêmes fichiers que le site : ne pas les
@@ -394,13 +414,19 @@ function dessiner() {
   entete.className = "entete";
   entete.innerHTML = '<p class="sur-titre">CSS Moorea Tahiti</p>'
                    + '<h2 class="titre">Livre de condoléances</h2>';
+  /* L'HEURE compte autant que la date : un message peut arriver après
+     l'export, et deux exports du même jour ne se distingueraient pas.
+     La version est portée dans le corps du document, et pas seulement
+     dans son nom de fichier, parce qu'un fichier se renomme. */
   const arret = document.createElement("p");
   arret.className = "arret";
   const now = new Date();
-  const dd = (n) => (n < 10 ? "0" + n : "" + n);
+  const dd = deuxChiffres;
   arret.textContent = MESSAGES.length + " message"
     + (MESSAGES.length > 1 ? "s" : "") + " — registre arrêté le "
-    + dd(now.getDate()) + "/" + dd(now.getMonth() + 1) + "/" + now.getFullYear();
+    + dd(now.getDate()) + "/" + dd(now.getMonth() + 1) + "/" + now.getFullYear()
+    + " à " + dd(now.getHours()) + " h " + dd(now.getMinutes())
+    + " — version " + VERSION_OUTIL;
   entete.appendChild(arret);
   f.appendChild(entete);
 
@@ -514,7 +540,34 @@ function exporterDocumentation() {
 $("doc").addEventListener("click", exporterDocumentation);
 $("recharger").addEventListener("click", charger);
 $("mode").addEventListener("change", reglerPage);
-$("imprimer").addEventListener("click", () => { reglerPage(); window.print(); });
+/* Deux chiffres, pour que le tri par nom de fichier reste juste. */
+function deuxChiffres(n) { return n < 10 ? "0" + n : "" + n; }
+
+/** AAAAMMJJ de l'instant, pour préfixer le nom du fichier. */
+function horodatageCourt() {
+    const d = new Date();
+    return "" + d.getFullYear() + deuxChiffres(d.getMonth() + 1)
+              + deuxChiffres(d.getDate());
+}
+
+/**
+ * Imprime le livre sous un nom parlant, puis remet le titre de l'onglet.
+ * Le titre est remis en état sur afterprint, et non tout de suite : Chrome
+ * lit le titre au moment où la fenêtre d'impression s'ouvre, et le relire
+ * après un changement immédiat donnerait l'ancien nom.
+ */
+function imprimerLivre() {
+    reglerPage();
+    const titreEcran = document.title;
+    document.title = horodatageCourt() + " " + NOM_REGISTRE + " " + VERSION_OUTIL;
+    window.addEventListener("afterprint", function remettre() {
+        document.title = titreEcran;
+        window.removeEventListener("afterprint", remettre);
+    });
+    window.print();
+}
+
+$("imprimer").addEventListener("click", imprimerLivre);
 
 charger();
 </script>
